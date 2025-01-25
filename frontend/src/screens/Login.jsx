@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import "@fontsource/poppins";
 import logo from '../assets/logo_blue.png';
+import pagkaki from '../assets/login.png';
+import squirrel from '../assets/sq_twohands.png';
 import LockIcon from '@mui/icons-material/Lock';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -24,12 +26,14 @@ const LoginPage = () => {
       sx={{
         minHeight: '100vh',
         display: 'flex',
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         background: '#0457a4',
+        
       }}
     >
-      <Container sx={{alignItems: 'flex-start', width: 550}}>
+      <Container sx={{alignItems: 'flex-start', width: 550, marginRight: '590px'}}>
         <Card
           sx={{
             borderRadius: '35px',
@@ -105,7 +109,7 @@ const LoginPage = () => {
                 Sign In
               </Button>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <IconButton color="inherit" href="#!">
                 <FacebookIcon />
               </IconButton>
@@ -113,13 +117,24 @@ const LoginPage = () => {
                 <GoogleIcon />
               </IconButton>
             </Box>
-            <Typography variant="body2" sx={{ mt: 4 }}>
+            <Typography variant="body2" sx={{ mt: 2 }}>
               Sign in with Google
             </Typography>
           </CardContent>
         </Card>
         
       </Container>
+        
+        <Typography sx={{marginRight: '100px', color:'white'}}>
+          sdkjashgfdsj ngjshcjhgfhgsh
+        </Typography>
+        
+        <Box sx={{position: 'absolute', marginTop: '180px', marginRight: '140px'}}>
+          <img src={squirrel} height={400} />
+        </Box>
+        <Box sx={{position: 'absolute', marginLeft: 115, marginBottom: 30}}>
+          <img src={pagkaki} height={180}/>
+        </Box>
     </Box>
   );
 };

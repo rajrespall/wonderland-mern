@@ -11,131 +11,156 @@ import {
   Link,
   IconButton,
   Icon,
+  CssBaseline,
 } from '@mui/material';
 import "@fontsource/poppins";
 import logo from '../assets/logo_blue.png';
 import pagkaki from '../assets/login.png';
 import squirrel from '../assets/sq_twohands.png';
+import Background from '../assets/bg_signin.png';
 import LockIcon from '@mui/icons-material/Lock';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 
 const LoginPage = () => {
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#0457a4',
-        
-      }}
-    >
-      <Container sx={{alignItems: 'flex-start', width: 550, marginRight: '590px'}}>
-        <Card
-          sx={{
-            borderRadius: '35px',
-            backgroundColor: 'white', 
-            color: 'black',
-            textAlign: 'center',
-          }}
+    <>
+      <CssBaseline />
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundImage: `url(${Background})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <Grid
+          container
+          spacing={4}
+          alignItems="center"
+          justifyContent="center"
+          position= 'relative'
+          
+          sx={{ px: 2 }}
         >
-          <CardContent sx={{ p: 4}}>
-            <img src={logo} width="300" />
-            <Typography variant="h5" fontWeight="bold" gutterBottom sx={{marginTop: 5, color: '#5da802', fontWeight: 750}}>
-                <Icon sx={{mr: '5px'}}>
-                    <LockIcon sx={{fontSize: '30px', color: "#0457a4"}}/> 
-                </Icon>
-              SIGN IN
-            </Typography>
-            <Box component="form" noValidate sx={{ mt: 3 }}>
-              <TextField
-                fullWidth
-                id="outlined-password-input"
-                label="username"
-                type="email"
-                autoComplete="current-password"
-                InputLabelProps={{style:{color: '#5da802', fontWeight: 500}
-                }}
-                InputProps={{
-                  style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4'},
-                }}
-                sx={{
-                  mb: 3,
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                }}  
-              />
-              
-              <TextField
-                fullWidth
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                InputLabelProps={{style:{color: '#5da802'}
-                }}
-                InputProps={{
-                  style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' },
-                }}
-                sx={{
-                  mb: 1,
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                }}
-              />
-               <Typography variant="body2" align='center' sx={{ color: '#5da802' }}>
-                Don't have an account?{' '}
-              <Link href="#!" color="text.secondary" fontWeight="bold" sx={{color: '#5da802'}}>
-                Sign Up
-              </Link>
-            </Typography>
-              <Button
-                fullWidth
-                variant="filled"
-                sx={{
-                    mt: 4,
-                    backgroundColor: '#5da802',
-                    borderRadius: '30px',
-                    fontWeight: 'bold',
-                    height: '50px',
-                    color: '#fcf230',
-                    '&:hover': {
+          {/* Login Form Section */}
+          <Grid item xs={12} sm={10} md={6} lg={4} sx={{marginRight:"300px"}}>
+            <img src={squirrel} alt="Squirrel" style={{ height: '400px', position: 'absolute', marginTop:"160px", marginLeft: "420px" }} />
+            <Card
+              sx={{
+                borderRadius: '35px',
+                backgroundColor: 'white',
+                color: 'black',
+                textAlign: 'center',
+                boxShadow: 3,
+              }}
+            >
+              <CardContent sx={{ p: 4 }}>
+                <img src={logo} width="70%" alt="Logo" />
+                <Typography
+                  variant="h5"
+                  fontWeight="bold"
+                  gutterBottom
+                  sx={{ mt: 5, color: '#5da802', fontWeight: 750 }}
+                >
+                  <Icon sx={{ mr: 1 }}>
+                    <LockIcon sx={{ fontSize: '30px', color: '#0457a4' }} />
+                  </Icon>
+                  SIGN IN
+                </Typography>
+                <Box component="form" noValidate sx={{ mt: 3 }}>
+                  <TextField
+                    fullWidth
+                    label="Username"
+                    type="email"
+                    InputLabelProps={{
+                      style: { color: '#5da802', fontWeight: 500 },
+                    }}
+                    InputProps={{
+                      style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' },
+                    }}
+                    sx={{
+                      mb: 3,
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    }}
+                  />
+
+                  <TextField
+                    fullWidth
+                    label="Password"
+                    type="password"
+                    InputLabelProps={{
+                      style: { color: '#5da802' },
+                    }}
+                    InputProps={{
+                      style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' },
+                    }}
+                    sx={{
+                      mb: 1,
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    }}
+                  />
+                  <Typography variant="body2" align="center" sx={{ color: '#5da802' }}>
+                    Don't have an account?{' '}
+                    <Link href="#!" fontWeight="bold" sx={{ color: '#5da802' }}>
+                      Sign Up
+                    </Link>
+                  </Typography>
+                  <Button
+                    fullWidth
+                    sx={{
+                      mt: 4,
+                      backgroundColor: '#5da802',
+                      borderRadius: '30px',
+                      fontWeight: 'bold',
+                      height: '50px',
+                      color: '#fcf230',
+                      '&:hover': {
                         color: '#5da802',
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                    },
-                }}
-              >
-                Sign In
-              </Button>
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      },
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                  <IconButton color="inherit" href="#!">
+                    <FacebookIcon />
+                  </IconButton>
+                  <IconButton color="inherit" href="#!">
+                    <GoogleIcon />
+                  </IconButton>
+                </Box>
+                <Typography variant="body2" sx={{ mt: 2 }}>
+                  Sign in with Google
+                </Typography>
+              </CardContent>
+            
+            </Card>
+
+          </Grid>
+
+          {/* Decorative Section */}
+          <Grid item xs={12} sm={10} md={6} lg={4}>
+            <Box textAlign="right" sx={{mt: 15}}>
+              <Box sx={{marginBottom: "220px"}}>
+                <img src={pagkaki} alt="Pagkaki" style={{ maxWidth: '90%',  marginLeft: "60px"}} />
+              <Typography sx={{ color: 'white', mb: 3, mt: 4, fontFamily: "Poppins", fontSize: "18px"}}>
+                Inspirational Text Here Inspirational Text Here Inspirational Text Here jasdhaj gfgfj
+                Inspirational Text Here Inspirational Text Here Inspirational Text Here sdkjashdh jadkjashfjasjfgjasg
+                Inspirational Text Here Inspirational Text Here
+              </Typography>
+              </Box>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-              <IconButton color="inherit" href="#!">
-                <FacebookIcon />
-              </IconButton>
-              <IconButton color="inherit" href="#!">
-                <GoogleIcon />
-              </IconButton>
-            </Box>
-            <Typography variant="body2" sx={{ mt: 2 }}>
-              Sign in with Google
-            </Typography>
-          </CardContent>
-        </Card>
-        
-      </Container>
-        
-        <Typography sx={{marginRight: '100px', color:'white'}}>
-          sdkjashgfdsj ngjshcjhgfhgsh
-        </Typography>
-        
-        <Box sx={{position: 'absolute', marginTop: '180px', marginRight: '140px'}}>
-          <img src={squirrel} height={400} />
-        </Box>
-        <Box sx={{position: 'absolute', marginLeft: 115, marginBottom: 30}}>
-          <img src={pagkaki} height={180}/>
-        </Box>
-    </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </>
   );
 };
 

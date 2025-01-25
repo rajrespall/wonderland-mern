@@ -5,13 +5,16 @@ import viteLogo from '/vite.svg'
 import NavigationBar from './components/NavigationBar'
 import Home from './screens/Home'
 import LoginPage from './screens/Login'
+import Register from './screens/Register'
 
 function App() {
 
   return (
     <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LoginPage />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/register' element={<Register />} />
         </Routes>
     </BrowserRouter>
   )

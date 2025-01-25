@@ -21,7 +21,7 @@ import Background from '../assets/bg_signin.png';
 import LockIcon from '@mui/icons-material/Lock';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
-import ButtonAppBar from '../components/LoginNav';
+import ButtonAppBar from '../components/SignNav';
 
 const LoginPage = () => {
   return (
@@ -77,8 +77,8 @@ const LoginPage = () => {
                 <Box component="form" noValidate sx={{ mt: 3 }}>
                   <TextField
                     fullWidth
-                    label="username"
-                    type="username"
+                    label="Username"
+                    type="email"
                     InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" },}}
                     InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' },}}
                     sx={{
@@ -101,7 +101,7 @@ const LoginPage = () => {
 
                   <TextField
                     fullWidth
-                    label="password"
+                    label="Password"
                     type="password"
                     InputLabelProps={{style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px"  },}}
                     InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', },}}

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 
-export default function ButtonAppBar() {
+export default function RegisterNav() {
   return (
     <Box sx={{ flexGrow: 1, position: 'absolute', width: '100%'}}>
       <AppBar position="static" sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>

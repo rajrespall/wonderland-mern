@@ -1,12 +1,23 @@
-import { Box } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
 import React from 'react'
 import NavigationBar from '../components/NavigationBar'
+import Background from '../assets/bg_main.png'
+import FunPlace from '../assets/funplace.png'
+import FunPlaceHero from '../components/FunPlaceHero'
 
 const Home = () => {
     return (
-        <Box sx={{ height: '1000px', width: '100%', backgroundColor: '#0457a4' }}>
+        <Box 
+            sx={{ 
+            minHeight: '100vh',
+            backgroundImage:`url(${Background})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'}}>
             <NavigationBar />
+            <FunPlaceHero />
         </Box>
+        
     )
 }
 

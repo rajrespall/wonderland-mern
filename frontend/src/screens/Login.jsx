@@ -35,7 +35,7 @@ const LoginPage = () => {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundImage: `url(${Background})`,
-          backgroundSize: 'cover',
+          backgroundSize: 'cover', 
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         }}

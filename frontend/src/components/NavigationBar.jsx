@@ -47,11 +47,12 @@ const NavigationBar = () => {
               color: '#b80201',
               backgroundColor: '#fcf230',
               '&:hover': {
-                color: '#0457a4',
+                color: '#fcf230',
+                backgroundColor: 'transparent',
               },
               borderRadius: '20px'
             }}>
-              Login
+              Sign In
             </Button>
             </Box>
       </Toolbar>  

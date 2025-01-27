@@ -62,7 +62,9 @@ const LoginPage = () => {
               }}
             >
               <CardContent sx={{ p: 4 }}>
+                <Box component="a" href="/">
                 <img src={logo} width="70%" alt="Logo" />
+                </Box>
                 <Typography
                   variant="h5"
                   fontWeight="bold"

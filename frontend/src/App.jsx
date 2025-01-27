@@ -6,6 +6,8 @@ import NavigationBar from './components/NavigationBar'
 import Home from './screens/Home'
 import LoginPage from './screens/Login'
 import Register from './screens/Register'
+import WhosUsing from './screens/WhosUsing'
+import GetStarted from './screens/GetStarted'
 
 function App() {
 
@@ -15,6 +17,9 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/whosusing' element={<WhosUsing />} />
+          <Route path='/getstarted' element={<GetStarted />} />
+
         </Routes>
     </BrowserRouter>
   )

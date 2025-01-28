@@ -67,7 +67,6 @@ const UserSelection = () => {
         sx={{
           textAlign: "center",
           color: "#fcf230",
-          fontFamily: "Luckiest Guy",
         }}
       >
         <Box>

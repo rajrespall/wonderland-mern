@@ -23,7 +23,46 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 import ButtonAppBar from '../components/LoginNav';
 
+//store imports for states
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+
 const LoginPage = () => {
+  //states for login form start here
+  const navigate = useNavigate();
+  const { login, googleLogin, loading, error } = useAuthStore();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await login(formData.email, formData.password);
+      navigate('/whosusing');
+    } catch (err) {
+      console.error('Login error:', err);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await googleLogin();
+      navigate('/whosusing');
+    } catch (err) {
+      console.error('Google login error:', err);
+    }
+  };
+
   return (
     <>
       <CssBaseline />
@@ -76,11 +115,14 @@ const LoginPage = () => {
                   </Icon>
                   SIGN IN
                 </Typography>
-                <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
                   <TextField
                     fullWidth
-                    label="username"
-                    type="username"
+                    name="email"
+                    label="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" },}}
                     InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' },}}
                     sx={{
@@ -103,8 +145,11 @@ const LoginPage = () => {
 
                   <TextField
                     fullWidth
+                    name="password"
                     label="password"
                     type="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     InputLabelProps={{style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px"  },}}
                     InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', },}}
                     sx={{
@@ -124,6 +169,13 @@ const LoginPage = () => {
                       },
                     }}  
                   />
+
+                  {error && (
+                    <Typography color="error" sx={{ mt: 2 }}>
+                      {error}
+                    </Typography>
+                  )}
+
                   <Typography variant="body2" align="center" sx={{ color: '#5da802' }}>
                     Don't have an account?{' '}
                     <Link href="/register" fontWeight="bold" sx={{ color: '#5da802' }}>
@@ -131,7 +183,9 @@ const LoginPage = () => {
                     </Link>
                   </Typography>
                   <Button
+                    type="submit"
                     fullWidth
+                    disabled={loading}
                     sx={{
                       mt: 4,
                       backgroundColor: '#5da802',
@@ -145,14 +199,14 @@ const LoginPage = () => {
                       },
                     }}
                   >
-                    Sign In
+                    {loading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                   <IconButton color="inherit" href="#!">
                     <FacebookIcon />
                   </IconButton>
-                  <IconButton color="inherit" href="#!">
+                  <IconButton onClick={handleGoogleLogin} color="inherit" href="#!">
                     <GoogleIcon />
                   </IconButton>
                 </Box>

@@ -30,9 +30,9 @@ const Assessment = () => {
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
           backgroundColor: 'rgba(4, 87, 164, 0.1)',
-          padding: "20px",
+          paddingLeft: 10,
+          paddingRight: 10
         }}
       >
         <Button
@@ -47,7 +47,7 @@ const Assessment = () => {
             borderRadius:'30px',}}
         />
 
-        <Box sx={{ width: "50%", padding: "20px" }}>
+        <Box sx={{ width: "50%", padding: '20px'}}>
           <MediaCard />
           <Typography
             variant="body1"
@@ -65,6 +65,7 @@ const Assessment = () => {
             borderRadius: "20px",
             textAlign: "center",
             backgroundColor: "white",
+            ml: '100px'
           }}
         >
           <Box component="img" src={Logo} alt="Wonderland Logo" sx={{ width: "250px", mb: 2 }} />
@@ -117,10 +118,14 @@ const Assessment = () => {
             variant="contained"
             fullWidth
             sx={{
-              backgroundColor: "green",
-              color: "white",
-              borderRadius: "25px",
-              padding: "12px",
+              textTransform: 'none',
+              fontFamily: 'Poppins',
+              fontSize: '14px',
+              backgroundColor: "#5da802",
+              color: "#fcf230",
+              borderRadius: "20px",
+              width: '100%',
+              padding: "10px 20px",
               fontWeight: "bold",
               "&:hover": { backgroundColor: "darkgreen" },
             }}

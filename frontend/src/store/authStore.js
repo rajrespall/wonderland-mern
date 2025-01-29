@@ -80,13 +80,19 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  logout: () => {
-    localStorage.removeItem('user');
-    set({ 
-      user: null,
-      isAuthenticated: false,
-      error: null 
-    });
+  logout: async () => {
+    try {
+      await axios.post('http://localhost:5000/api/auth/logout');
+      localStorage.removeItem('user');
+      set({ 
+        user: null,
+        isAuthenticated: false,
+        error: null 
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    }
   }
 }));
 

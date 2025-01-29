@@ -69,4 +69,14 @@ const loginWithEmail = async (req, res) => {
   }
 };
 
-module.exports = { googleLogin, registerWithEmail, loginWithEmail };
+const logout = async (req, res) => {
+  try {
+      await auth.signOut();
+      res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+      console.error('Logout error:', error);
+      res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { googleLogin, registerWithEmail, loginWithEmail, logout };

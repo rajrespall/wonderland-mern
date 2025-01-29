@@ -88,7 +88,6 @@ const LoginPage = () => {
           
           sx={{ px: 2 }}
         >
-          {/* Login Form Section */}
           <Grid item xs={12} sm={10} md={6} lg={4} sx={{marginRight:"300px"}}>
             <img src={squirrel} alt="Squirrel" style={{ height: '400px', position: 'absolute', marginTop:"170px", marginLeft: "420px" }} />
             <Card
@@ -219,7 +218,6 @@ const LoginPage = () => {
 
           </Grid>
 
-          {/* Decorative Section */}
           <Grid item xs={12} sm={10} md={6} lg={4}>
             <Box textAlign="right" sx={{mt: 15}}>
               <Box sx={{marginBottom: "220px"}}>

@@ -1,13 +1,11 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import NavigationBar from './components/NavigationBar'
 import Home from './screens/Home'
 import LoginPage from './screens/Login'
 import Register from './screens/Register'
 import WhosUsing from './screens/WhosUsing'
 import GetStarted from './screens/GetStarted'
+import Assessment from './screens/Assessment'
 
 function App() {
 
@@ -19,6 +17,8 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/whosusing' element={<WhosUsing />} />
           <Route path='/getstarted' element={<GetStarted />} />
+          <Route path='/assessment' element={<Assessment />} />
+
 
         </Routes>
     </BrowserRouter>

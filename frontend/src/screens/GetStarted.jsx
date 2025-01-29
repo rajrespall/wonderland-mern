@@ -23,7 +23,7 @@ const GetStarted = () => {
     >
       <Box component="img" src={Logo} alt="Logo" sx={{ width: "500px", mb: 2 }} />
 
-      <Box component="img" src={Squirrel} alt="Squirrel" sx={{ width: "250px", marginRight: "20px", position: 'absolute', mt: '225px', marginRight: '540px'}} />
+      <Box component="img" src={Squirrel} alt="Squirrel" sx={{ width: "250px", position: 'absolute', mt: '225px', marginRight: '540px'}} />
       <Paper
         elevation={3}
         sx={{

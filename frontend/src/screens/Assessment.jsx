@@ -8,7 +8,8 @@ import {
   CssBaseline,
   MenuItem
 } from "@mui/material";
-
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Logo from "../assets/logo_blue.png"; 
@@ -16,6 +17,7 @@ import MediaCard from "../components/Assess";
 
 const Assessment = () => {
   const [diagnosisYear, setDiagnosisYear] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const years = [];
   for (let year = 2000; year <= new Date().getFullYear(); year++) {
@@ -44,14 +46,21 @@ const Assessment = () => {
             marginRight: '1180px',
             fontWeight: 'bold',
             position: 'absolute',
-            borderRadius:'30px',}}
+            borderRadius:'30px',
+          }}
         />
 
         <Box sx={{ width: "50%", padding: '20px'}}>
           <MediaCard />
           <Typography
             variant="body1"
-            sx={{ color: "#0457a4", mt: 2, fontFamily: 'Poppins', fontSize: '20px', mr: 2 }}
+            sx={{
+              color: "#0457a4",
+              mt: 2,
+              fontFamily: 'Poppins',
+              fontSize: '20px',
+              mr: 2
+            }}
           >
             Now that your eyes are open, make the sun jealous with your burning passion to start the day. Make the sun jealous or stay in bed.
           </Typography>
@@ -79,14 +88,49 @@ const Assessment = () => {
             sx={textFieldStyles}
           />
 
-          <TextField
-            fullWidth
-            name="birthdate"
-            label="Date of birth"
-            InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
-            InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
-            sx={textFieldStyles}
-          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100px',
+              }}
+            >
+              <DatePicker
+                label="Date of birth"
+                value={selectedDate}
+                onChange={(newValue) => setSelectedDate(newValue)}
+                renderInput={(params) => <TextField {...params}/>}
+                
+                sx={{
+                  mb: 3,
+                  width: '100%',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  '& .MuiInputLabel-root': {
+                    color: '#5da802',
+                    fontFamily: 'Poppins', 
+                    fontWeight: 600,
+                    fontSize: '16px', 
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#0457a4',
+                      borderWidth: '2px',
+                      borderRadius: '50px'
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#5da802',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#5da802',
+                    },
+                    
+                  },
+                }}
+              />
+            </Box>
+          </LocalizationProvider>
 
           <TextField
             fullWidth
@@ -118,6 +162,7 @@ const Assessment = () => {
             variant="contained"
             fullWidth
             sx={{
+              mt:3,
               textTransform: 'none',
               fontFamily: 'Poppins',
               fontSize: '14px',

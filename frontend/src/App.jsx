@@ -6,6 +6,12 @@ import Register from './screens/Register'
 import WhosUsing from './screens/WhosUsing'
 import GetStarted from './screens/GetStarted'
 import Assessment from './screens/Assessment'
+import Question1 from './screens/Communication'
+import Question2 from './screens/SocialInteraction'
+import Question3 from './screens/Sensory'
+import Question4 from './screens/Emotional'
+import Question5 from './screens/Routines'
+import OtherSymptoms from './screens/Others'
 
 function App() {
 
@@ -18,7 +24,12 @@ function App() {
           <Route path='/whosusing' element={<WhosUsing />} />
           <Route path='/getstarted' element={<GetStarted />} />
           <Route path='/assessment' element={<Assessment />} />
-
+          <Route path='/communication' element={<Question1 />} />
+          <Route path='/social-interaction' element={<Question2 />} />
+          <Route path='/sensory' element={<Question3 />} />
+          <Route path='/emotional' element={<Question4 />} />
+          <Route path='/routines' element={<Question5 />} />
+          <Route path='/others' element={<OtherSymptoms />} />
 
         </Routes>
     </BrowserRouter>

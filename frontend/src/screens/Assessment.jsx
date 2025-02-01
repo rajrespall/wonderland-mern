@@ -69,7 +69,7 @@ const Assessment = () => {
         <Paper
           elevation={3}
           sx={{
-            width: "450px",
+            width: "500px",
             padding: "30px",
             borderRadius: "20px",
             textAlign: "center",
@@ -94,7 +94,6 @@ const Assessment = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                minHeight: '100px',
               }}
             >
               <DatePicker
@@ -148,7 +147,7 @@ const Assessment = () => {
             value={diagnosisYear}
             onChange={(e) => setDiagnosisYear(e.target.value)}
             sx={textFieldStyles}
-            InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "14px" } }}
+            InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
             InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
           >
             {years.map((year) => (

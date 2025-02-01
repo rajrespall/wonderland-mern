@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
+import { auth } from '../config/firebase';
+import { signOut } from 'firebase/auth';
 
 const useAuthStore = create((set) => ({
   user: JSON.parse(localStorage.getItem('user')) || null,
@@ -81,8 +83,16 @@ const useAuthStore = create((set) => ({
 
   logout: async () => {
     try {
+      // Firebase signout
+      await signOut(auth);
+      
+      // Backend logout
       await axios.post('http://localhost:5000/api/auth/logout');
+      
+      // Clear local storage
       localStorage.removeItem('user');
+      
+      // Reset store state
       set({ 
         user: null,
         isAuthenticated: false,
@@ -93,6 +103,8 @@ const useAuthStore = create((set) => ({
       throw error;
     }
   }
+
+
 }));
 
 export default useAuthStore;

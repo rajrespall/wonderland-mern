@@ -6,7 +6,23 @@ import ParentIcon from "../assets/parent.png";
 import Logo from "../assets/logo_red.png"; 
 import User from "../assets/whosusing.png"
 
+import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+
 const UserSelection = () => {
+
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <>
     <CssBaseline />
@@ -45,6 +61,7 @@ const UserSelection = () => {
               About Us
             </Button>
             <Button
+              onClick={handleLogout}
               sx={{
                 fontWeight: 'bold', 
                 textTransform: "none",

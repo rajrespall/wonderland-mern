@@ -1,5 +1,6 @@
-const { initializeApp } = require("firebase/app");
-const { getAuth, GoogleAuthProvider } = require("firebase/auth");
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXgvYzEhG3xrlvBD1WvNZHObBREy8AI3s",
@@ -14,7 +15,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);  
-const googleProvider = new GoogleAuthProvider();  
 
-module.exports = { auth, googleProvider };
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+export { auth, googleProvider };

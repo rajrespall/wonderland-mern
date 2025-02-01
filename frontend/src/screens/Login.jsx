@@ -19,7 +19,7 @@ import pagkaki from '../assets/login.png';
 import squirrel from '../assets/sq_twohands.png';
 import Background from '../assets/bg_signin.png';
 import LockIcon from '@mui/icons-material/Lock';
-import FacebookIcon from '@mui/icons-material/Facebook';
+// import FacebookIcon from '@mui/icons-material/Facebook'; comment ko lang baka need pa
 import GoogleIcon from '@mui/icons-material/Google';
 import ButtonAppBar from '../components/LoginNav';
 
@@ -27,6 +27,10 @@ import ButtonAppBar from '../components/LoginNav';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+
+//firebase imports
+import { auth } from '../config/firebase';
+import {  GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const LoginPage = () => {
   //states for login form start here
@@ -54,14 +58,30 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async (event) => {
+    event.preventDefault();
+  
     try {
-      await googleLogin();
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+  
+      const idToken = await user.getIdToken();
+      console.log("Google ID Token:", idToken); 
+  
+      await googleLogin(idToken); // ibabalik sa zustand action
+  
       navigate('/whosusing');
     } catch (err) {
-      console.error('Google login error:', err);
+      if (err.code === 'auth/popup-blocked') {
+        console.error('Popup was blocked by the browser!');
+      } else {
+        console.error('Google login error:', err);
+      }
     }
   };
+  
+
 
   return (
     <>
@@ -202,16 +222,33 @@ const LoginPage = () => {
                   </Button>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                  <IconButton color="inherit" href="#!">
-                    <FacebookIcon />
-                  </IconButton>
-                  <IconButton onClick={handleGoogleLogin} color="inherit" href="#!">
-                    <GoogleIcon />
-                  </IconButton>
+                  <Button
+                    onClick={handleGoogleLogin}
+                    variant="outlined"
+                    color="inherit"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: '#fff',
+                      borderRadius: '30px',
+                      fontWeight: 'bold',
+                      height: '50px',
+                      width: '80%',
+                      transition: 'background-color 0.3s, transform 0.3s', 
+                      '&:hover': {
+                        backgroundColor: '#f4f4f4', 
+                        transform: 'scale(1.05)', 
+                      },
+                    }}
+                  >
+                    <GoogleIcon sx={{ marginRight: 2 }} />
+                    Sign in with Google
+                  </Button>
                 </Box>
-                <Typography variant="body2" sx={{ mt: 2 }}>
+                  {/* comment ko lang baka gamitin pa */}
+                {/* <Typography variant="body2" sx={{ mt: 2 }}>
                   Sign in with Google
-                </Typography>
+                </Typography> */}
               </CardContent>
             
             </Card>

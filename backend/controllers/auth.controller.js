@@ -1,16 +1,51 @@
-const { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
-const { auth, googleProvider } = require("../config/firebase.js");
+const { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth"); 
+const { auth, googleProvider } = require("../config/firebase.js");  
 const User = require("../models/user.model.js");
+const  adminAuth  = require('firebase-admin'); 
+
+
+adminAuth.initializeApp({
+  credential: adminAuth.credential.cert(require('../config/serviceAccountKey.json')),
+});
 
 const googleLogin = async (req, res) => {
+  const { idToken } = req.body;  // pag kuha ng id token sa frontend 
+
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-    res.status(200).json({ user });
+    // Verify the ID token with Firebase Admin SDK
+    const decodedToken = await adminAuth.auth().verifyIdToken(idToken);  // Verifying the token using adminAuth
+    const firebaseUid = decodedToken.uid;  // Extract the UID from the decoded token
+
+    // Check pag may user na
+    let user = await User.findOne({ firebaseUid });
+    
+    if (!user) {
+      //Pag wala edi create 
+      user = await User.create({
+        username: decodedToken.name || 'No Name',  // default name pag  walang name na proprovide 
+        email: decodedToken.email,  // Store the user's email from the token
+        password: 'firebase_managed',  //Password/firebase_manage
+        firebaseUid: firebaseUid  // Firebase UID
+      });
+    }
+
+    // User details
+    res.status(200).json({
+      user: {
+        id: user._id,  // MongoDB user ID
+        username: user.username,
+        email: user.email,
+        firebaseUid: firebaseUid  // Firebase UID
+      }
+    });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+
+    console.error("Google login failed:", error);
+    res.status(400).json({ error: 'Google login failed' });  
   }
 };
+
+
 
 const registerWithEmail = async (req, res) => {
   const { username, email, password } = req.body;

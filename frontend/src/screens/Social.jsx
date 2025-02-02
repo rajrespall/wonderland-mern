@@ -84,6 +84,7 @@ const [loading, setLoading] = useState(true);
             sx={{
               backgroundColor: "#5da802",
               color: "#fcf230",
+              fontFamily: 'Poppins',
               fontSize: "16px",
               fontWeight: "bold",
               borderRadius: "20px",

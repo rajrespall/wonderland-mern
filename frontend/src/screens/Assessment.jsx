@@ -6,11 +6,12 @@ import {
   Typography,
   Paper,
   CssBaseline,
-  MenuItem
+  MenuItem,
+  IconButton
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Logo from "../assets/logo_blue.png"; 
 import MediaCard from "../components/Assess";
@@ -33,24 +34,28 @@ const Assessment = () => {
           display: "flex",
           alignItems: "center",
           backgroundColor: 'rgba(4, 87, 164, 0.1)',
-          paddingLeft: 10,
-          paddingRight: 10
+          paddingLeft: 5,
+          paddingRight: 5
         }}
       >
-        <Button
-          startIcon={<ArrowBackIcon />}
-          sx={{
-            color: "#5da802",
-            textTransform: "none",
-            mb: '640px',
-            marginRight: '1180px',
-            fontWeight: 'bold',
-            position: 'absolute',
-            borderRadius:'30px',
-          }}
-        />
 
-        <Box sx={{ width: "50%", padding: '20px'}}>
+          <IconButton
+            href="/getstarted"
+            sx={{
+              textTransform: "none",
+              mb: '600px',
+              marginRight: '1180px',
+              position: 'absolute',
+              borderRadius:'30px',
+              color: "#5da802",
+              fontSize: "40px",
+              fontWeight: "bold",
+            }}
+          >
+            <KeyboardBackspaceRoundedIcon fontSize="inherit" />
+          </IconButton>
+
+        <Box sx={{ width: "50%", padding: '80px'}}>
           <MediaCard />
           <Typography
             variant="body1"

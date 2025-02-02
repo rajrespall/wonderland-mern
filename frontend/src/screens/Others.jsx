@@ -94,6 +94,7 @@ const OtherSymptoms = () => {
             sx={{
               backgroundColor: "#5da802",
               color: "#fcf230",
+              fontFamily: 'Poppins',
               fontSize: "16px",
               fontWeight: "bold",
               borderRadius: "20px",
@@ -169,6 +170,7 @@ const OtherSymptoms = () => {
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
+            href='/whosusing'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             sx={{

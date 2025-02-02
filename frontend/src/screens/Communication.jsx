@@ -90,6 +90,7 @@ const Question1 = () => {
             sx={{
               backgroundColor: "#5da802",
               color: "#fcf230",
+              fontFamily: 'Poppins',
               fontSize: "16px",
               fontWeight: "bold",
               borderRadius: "20px",
@@ -100,7 +101,7 @@ const Question1 = () => {
               ml: 2,
             }}
           >
-            {selectedAnswers.filter(answer => answer !== null).length} of {questions.length}
+            {currentQuestion + 1} of {questions.length}
           </Box>
         </Box>
 

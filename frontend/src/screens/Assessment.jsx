@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   TextField,
@@ -19,11 +20,16 @@ import MediaCard from "../components/Assess";
 const Assessment = () => {
   const [diagnosisYear, setDiagnosisYear] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
+  const navigate = useNavigate();
 
   const years = [];
   for (let year = 2000; year <= new Date().getFullYear(); year++) {
     years.push(year);
   }
+
+  const handleNextPage = () => {
+    navigate('/communication');
+  };
 
   return (
     <>
@@ -165,6 +171,7 @@ const Assessment = () => {
           <Button
             variant="contained"
             fullWidth
+            onClick = {handleNextPage}
             sx={{
               mt:3,
               textTransform: 'none',

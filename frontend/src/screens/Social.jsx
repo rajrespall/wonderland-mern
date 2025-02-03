@@ -101,7 +101,7 @@ const [loading, setLoading] = useState(true);
         
         <Box sx={{ display: "flex", alignItems: "center", mb: 2}}>
           <IconButton
-            href="/assessment"
+            href="/communication"
             sx={{
               color: "#5da802",
               fontSize: "40px",

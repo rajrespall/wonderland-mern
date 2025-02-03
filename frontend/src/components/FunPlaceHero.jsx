@@ -37,15 +37,14 @@ const FunPlaceHero = () => {
           </Box>
           <Typography
             sx={{
-              fontSize: { xs: '16px', sm: '18px', md: '22px' }, 
+              fontSize: { xs: '16px', sm: '18px', md: '20px' }, 
               color: 'white',
               fontFamily: 'Poppins',
-              textAlign: { xs: 'center', md: 'left' }, 
+              textAlign: { xs: 'justify', md: 'justify' }, 
               mt: 2,
             }}
           >
-            Now that your eyes are open, make the sun jealous with your burning passion to start the day. Make the sun jealous or stay in bed.
-          </Typography>
+          Jump into a world of colorful adventures, exciting games, and playful learning! Wonderland is a safe and happy space where kids with autism can explore, create, and grow at their own pace. Let’s play, learn, and have fun together!           </Typography>
         </Grid>
 
         <Grid

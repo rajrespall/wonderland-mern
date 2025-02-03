@@ -102,7 +102,7 @@ const Question4 = () => {
         
         <Box sx={{ display: "flex", alignItems: "center", mb: 2}}>
           <IconButton
-            href="/assessment"
+            href="/sensory"
             sx={{
               color: "#5da802",
               fontSize: "40px",

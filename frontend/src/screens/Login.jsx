@@ -19,28 +19,25 @@ import pagkaki from '../assets/login.png';
 import squirrel from '../assets/sq_twohands.png';
 import Background from '../assets/bg_signin.png';
 import LockIcon from '@mui/icons-material/Lock';
-// import FacebookIcon from '@mui/icons-material/Facebook'; comment ko lang baka need pa
 import GoogleIcon from '@mui/icons-material/Google';
 import ButtonAppBar from '../components/LoginNav';
 
-//store imports for states
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
-//firebase imports
 import { auth } from '../config/firebase';
 import {  GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const LoginPage = () => {
-  //states for login form start here
+
   const navigate = useNavigate();
   const { login, googleLogin, loading, error } = useAuthStore();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -81,7 +78,6 @@ const LoginPage = () => {
     }
   };
   
-
 
   return (
     <>

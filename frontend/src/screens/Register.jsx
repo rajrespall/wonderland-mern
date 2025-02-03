@@ -19,17 +19,15 @@ import create from '../assets/signup.png';
 import squirrel from '../assets/sq_notebook.png';
 import Background2 from '../assets/bg_signup.png';
 import LockIcon from '@mui/icons-material/Lock';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import RegisterNav from '../components/RegNav';
 
-//state imports
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
 
 const Register = () => {
-  //states for register form start here
   const navigate = useNavigate();
   const { register, loading, error } = useAuthStore();
   const [formData, setFormData] = useState({
@@ -80,11 +78,10 @@ const Register = () => {
           
           sx={{ px: 2 }}
         >
-          {/* Login Form Section */}
           <Grid item xs={12} sm={10} md={6} lg={4} sx={{marginRight:"300px"}}>
             <img src={squirrel} alt="Squirrel" style={{ height: '400px', position: 'absolute', marginTop:"170px", marginLeft: "460px" }} />
-                <IconButton href="/login" sx={{mt: '22px', position: 'absolute',  color: '#5da802', marginLeft: '15px', fontSize: '30px'}}>
-                  <ArrowBackIcon sx={{}}/>
+                <IconButton href="/login" sx={{mt: '16px', position: 'absolute',  color: '#5da802', marginLeft: '15px', fontSize: '30px'}}>
+                <KeyboardBackspaceRoundedIcon fontSize="inherit" />
                 </IconButton>
             <Card
               sx={{
@@ -222,7 +219,6 @@ const Register = () => {
 
           </Grid>
 
-          {/* Decorative Section */}
           <Grid item xs={12} sm={10} md={6} lg={4}>
             <Box textAlign="right" sx={{mt: 15}}>
               <Box sx={{marginBottom: "220px"}}>

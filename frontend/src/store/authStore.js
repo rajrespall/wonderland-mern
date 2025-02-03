@@ -64,7 +64,7 @@ const useAuthStore = create((set) => ({
   googleLogin: async (idToken) => {
     try {
       set({ loading: true, error: null });
-  //send sa backend yung idToken para ma verify sa firebase if legit yung token or hindi 
+      //send sa backend yung idToken para ma verify sa firebase if legit yung token or hindi 
       const response = await axios.post('http://localhost:5000/api/auth/google-login', { idToken });
   
       // Sinave ko yung user data sa  local storage and state

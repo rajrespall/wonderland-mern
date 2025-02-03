@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -12,17 +12,30 @@ import {
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import Logo from "../assets/logo_blue.png"; 
 import MediaCard from "../components/Assess";
+import Spinner from "../components/Spinner";
 
 const Assessment = () => {
+  const [loading, setLoading] = useState(true);
   const [diagnosisYear, setDiagnosisYear] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
 
   const years = [];
   for (let year = 2000; year <= new Date().getFullYear(); year++) {
     years.push(year);
+  }
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 400);
+  }, []);
+
+  if (loading) {
+    return <Spinner />;
   }
 
   return (
@@ -163,6 +176,7 @@ const Assessment = () => {
           </TextField>
 
           <Button
+            href='/communication'
             variant="contained"
             fullWidth
             sx={{
@@ -178,7 +192,7 @@ const Assessment = () => {
               fontWeight: "bold",
               "&:hover": { backgroundColor: "darkgreen" },
             }}
-            endIcon={<ArrowForwardIcon />}
+            endIcon={<ArrowForwardRoundedIcon />}
           >
             Next page
           </Button>

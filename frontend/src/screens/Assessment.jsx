@@ -17,19 +17,69 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Logo from "../assets/logo_blue.png"; 
 import MediaCard from "../components/Assess";
 
+import useInfoStore from '../store/infoStore';
+
 const Assessment = () => {
   const [diagnosisYear, setDiagnosisYear] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const navigate = useNavigate();
 
+  const genderChoices = [
+    { value: 'male', label: 'Male' },
+    { value: 'female', label: 'Female' }
+  ];
   const years = [];
   for (let year = 2000; year <= new Date().getFullYear(); year++) {
     years.push(year);
   }
 
-  const handleNextPage = () => {
-    navigate('/communication');
+  const { createGeneralInfo, loading, error } = useInfoStore();
+  const [formData, setFormData] = useState({
+    childName: '',
+    dateOfBirth: null,
+    gender: '',
+    diagnosisYear: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
+
+  const handleDateChange = (date) => {
+    setFormData({
+      ...formData,
+      dateOfBirth: date
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (!formData.childName || !formData.dateOfBirth || !formData.gender || !formData.diagnosisYear) {
+        alert('Please fill all fields');
+        return;
+      }
+
+      const payload = {
+        ...formData,
+        dateOfBirth: formData.dateOfBirth.toISOString(),
+      };
+
+      await createGeneralInfo(payload);
+      navigate('/communication');
+    } catch (err) {
+      console.error('Error saving general info:', err);
+      if (err.response?.status === 401) {
+        alert('Please login again');
+        navigate('/login');
+      } else {
+        alert('Failed to save information');
+      }
+    }
+};
 
   return (
     <>
@@ -92,8 +142,10 @@ const Assessment = () => {
 
           <TextField
             fullWidth
-            name="name"
+            name="childName"
             label="Child's full name"
+            value={formData.childName}
+            onChange={handleChange}
             InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
             InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
             sx={textFieldStyles}
@@ -109,8 +161,8 @@ const Assessment = () => {
             >
               <DatePicker
                 label="Date of birth"
-                value={selectedDate}
-                onChange={(newValue) => setSelectedDate(newValue)}
+                value={formData.dateOfBirth}
+                onChange={handleDateChange}
                 renderInput={(params) => <TextField {...params}/>}
                 
                 sx={{
@@ -143,20 +195,30 @@ const Assessment = () => {
           </LocalizationProvider>
 
           <TextField
+            select
             fullWidth
             name="gender"
             label="Gender"
+            value={formData.gender}
+            onChange={handleChange}
             InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
-            InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
+            InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' } }}
             sx={textFieldStyles}
-          />
+          >
+            {genderChoices.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
 
           <TextField
             select
             fullWidth
             label="When was your child diagnosed with autism?"
-            value={diagnosisYear}
-            onChange={(e) => setDiagnosisYear(e.target.value)}
+            name="diagnosisYear"
+            value={formData.diagnosisYear}
+            onChange={handleChange}
             sx={textFieldStyles}
             InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
             InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
@@ -171,7 +233,8 @@ const Assessment = () => {
           <Button
             variant="contained"
             fullWidth
-            onClick = {handleNextPage}
+            onClick = {handleSubmit}
+            disabled = {loading}
             sx={{
               mt:3,
               textTransform: 'none',
@@ -187,7 +250,7 @@ const Assessment = () => {
             }}
             endIcon={<ArrowForwardIcon />}
           >
-            Next page
+            {loading ? 'Saving...' : 'Next page'}
           </Button>
         </Paper>
       </Box>

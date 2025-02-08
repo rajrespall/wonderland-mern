@@ -4,7 +4,6 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/repetitive.png';
 import Spinner from '../components/Spinner'; 
-import useStore from '../store/assStore';  
 import { useNavigate } from 'react-router-dom';  // Correct import for v6
 
 
@@ -40,7 +39,6 @@ const questions = [
 
 const Question5 = () => {
   const [loading, setLoading] = useState(true);
-  const {  submitAssessment } = useStore();  
   const navigate = useNavigate(); // Use the hook to get the navigate function
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
@@ -60,7 +58,7 @@ const Question5 = () => {
       setAnswers(updatedAnswers);
     
       // Store the selected answer numerically in localStorage (1-based index)
-      localStorage.setItem(`Rotutines_${currentQuestion}_answer`, index + 1);  // Store 1-based value
+      localStorage.setItem(`Routine_${currentQuestion}_answer`, index + 1);  // Store 1-based value
     
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
@@ -168,7 +166,7 @@ const Question5 = () => {
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             onClick={async () => {
-              await submitAssessment(); // Call the submitAssessment function from Zustand
+             
               navigate('/others');
           }}
             sx={{

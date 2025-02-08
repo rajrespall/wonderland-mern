@@ -17,6 +17,7 @@ const useAuthStore = create((set) => ({
         { email, password },
         { withCredentials: true }
       );
+      localStorage.setItem('user', JSON.stringify(response.data.user));
 
       set({
         user: response.data.user,

@@ -1,3 +1,4 @@
+// models/assess.model.js
 const mongoose = require("mongoose");
 
 const assessSchema = new mongoose.Schema({
@@ -8,27 +9,27 @@ const assessSchema = new mongoose.Schema({
         unique: true
     },
     communication: {
-        type: Number,  
+        type: [Number],  // Update to an array of numbers
         required: true
     },
     emotional: {
-        type: Number,  
+        type: [Number],  // Update to an array of numbers
         required: true
     },
     routine: {
-        type: Number,  
+        type: [Number],  // Update to an array of numbers
         required: true
     },
     sensory: {
-        type: Number,  
+        type: [Number],  // Update to an array of numbers
         required: true
     },
     social: {
-        type: Number,  
+        type: [Number],  // Update to an array of numbers
         required: true
     },
     others: {
-        type: String,  
+        type: [String],  // Update to an array of strings
         required: true
     }
 }, {

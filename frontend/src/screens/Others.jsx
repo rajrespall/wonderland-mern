@@ -53,16 +53,26 @@ const OtherSymptoms = () => {
     setTimeout(() => {
       setLoading(false);
     }, 400); 
-  }, []);
-  
-  const handleAnswer = (answer) => {
-    if (answers.includes(answer)) {
-      setAnswers(answers.filter(item => item !== answer));
-    } else {
-      setAnswers([...answers, answer]);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        useStore.getState().setUserId(parsedUser.id); // Update Zustand state
     }
-    setOthersAnswers(answers);  // Store updated answers in Zustand
-  };  
+}, []);
+  
+const handleAnswer = (answer) => {
+  let updatedAnswers;
+  if (answers.includes(answer)) {
+      updatedAnswers = answers.filter(item => item !== answer);
+  } else {
+      updatedAnswers = [...answers, answer];
+  }
+
+  setAnswers(updatedAnswers); // Update local state
+  setOthersAnswers(updatedAnswers); // Update Zustand store
+};
+
+
   
 
   // const handleSubmit = () => {
@@ -70,7 +80,7 @@ const OtherSymptoms = () => {
     
   // };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     const {
         userId,
         setCommunicationAnswers,
@@ -87,28 +97,32 @@ const OtherSymptoms = () => {
         return;
     }
 
-    // Fetch stored values from Local Storage (Ensure parsing for numbers)
+    // ✅ Retrieve answers properly from Local Storage
     const getAnswers = (prefix, count) => {
-        return Array.from({ length: count }, (_, index) => {
-            const value = localStorage.getItem(`${prefix}_${index}_answer`);
-            return value !== null ? Number(value) : null;
-        }).filter(answer => answer !== null);
+        let answers = [];
+        for (let i = 0; i < count; i++) {
+            const storedValue = localStorage.getItem(`${prefix}_${i}_answer`);
+            if (storedValue !== null) {
+                answers.push(JSON.parse(storedValue));  // Ensure correct data type
+            }
+        }
+        return answers;
     };
 
-    // Fetch all category answers
+    // ✅ Fetch stored values
     const communicationAnswers = getAnswers("Communication", 4);
     const emotionalAnswers = getAnswers("Emotional", 3);
-    const routineAnswers = getAnswers("Rotutines", 3);
+    const routineAnswers = getAnswers("Routine", 3);
     const sensoryAnswers = getAnswers("Sensory", 3);
     const socialAnswers = getAnswers("Social", 4);
 
-    // Collect 'others' answers (checkboxes & text input)
+    // ✅ Collect 'others' answers
     const othersAnswers = [...answers];
     if (other.trim() !== "") {
         othersAnswers.push(other);
     }
 
-    // Update Zustand store with latest data
+    // ✅ Store values in Zustand before submission
     setCommunicationAnswers(communicationAnswers);
     setEmotionalAnswers(emotionalAnswers);
     setRoutineAnswers(routineAnswers);
@@ -116,12 +130,28 @@ const OtherSymptoms = () => {
     setSocialAnswers(socialAnswers);
     setOthersAnswers(othersAnswers);
 
-    // Now, submit data via Zustand (this sends to backend)
-    submitAssessment();
+    // ✅ Debug: Log fetched values to verify correctness
+    console.log("Submitting data:", {
+        userId,
+        communicationAnswers,
+        emotionalAnswers,
+        routineAnswers,
+        sensoryAnswers,
+        socialAnswers,
+        othersAnswers
+    });
+    submitAssessment(); // Submit only when button is clicked
 
-    // Clear Local Storage after submission
-    localStorage.clear();
+    for (let i = 0; i < 4; i++) {
+      localStorage.removeItem(`Communication_${i}_answer`);
+      localStorage.removeItem(`Emotional_${i}_answer`);
+      localStorage.removeItem(`Routine_${i}_answer`);
+      localStorage.removeItem(`Sensory_${i}_answer`);
+      localStorage.removeItem(`Social_${i}_answer`);
+  }
+  localStorage.removeItem("Others_answers");
 };
+
 
 
 
@@ -232,7 +262,7 @@ const OtherSymptoms = () => {
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href='/whosusing'
+            // href='/whosusing'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             

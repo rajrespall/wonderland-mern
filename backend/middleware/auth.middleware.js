@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');    
 const User = require("../models/user.model.js");
-
 const verifyToken = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) return res.status(401).json({success: false, message: "Unauthorized- No token provided"});
@@ -8,7 +7,6 @@ const verifyToken = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if(!decoded) return res.status(401).json({success: false, message: "Unauthorized- Invalid token"});
-
         // Find user and attach to request
         User.findById(decoded.userId)
             .then(user => {
@@ -29,6 +27,4 @@ const verifyToken = (req, res, next) => {
         return res.status(500).json({success: false, message: "Server Error"});
     }
 };
-
-
 module.exports = verifyToken;

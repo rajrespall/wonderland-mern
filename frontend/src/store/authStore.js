@@ -38,12 +38,16 @@ const useAuthStore = create((set) => ({
   register: async (username, email, password) => {
     try {
       set({ loading: true, error: null });
+      
       const response = await axios.post(
         'http://localhost:5000/api/auth/register', 
-        {username},
-        {email},
-        {password},
-        { withCredentials: true }
+        { username, email, password }, // Fix: Send data as a single object
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
       );
 
       const userData = response.data.user;
@@ -63,7 +67,7 @@ const useAuthStore = create((set) => ({
       });
       throw error;
     }
-  },
+},
 
   googleLogin: async (idToken) => {
     try {

@@ -2,55 +2,65 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, LinearProgress, Card, CardMedia, IconButton, CssBaseline } from "@mui/material";
 import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Image from '../assets/sensory.png';
-import Spinner from '../components/Spinner'; 
+import Image from '../../assets/communication.png';
+import Spinner from '../../components/Spinner'; 
 
 const questions = [
   {
-    question: "Does your child show sensitivity to sounds, lights, textures, or smells?",
+    question: "Does your child speak? If yes, is their speech delayed or limited?",
     answers: [
-      "No sensitivities observed.",
-      "Mild sensitivity to certain stimuli.",
-      "Moderate sensitivity in multiple areas.",
-      "Severe sensitivity to various stimuli."
+      "No, they do not speak.",
+      "Yes, their speech is delayed.",
+      "Yes, their speech is limited.",
+      "Yes, they speak fluently."
     ]
   },
   {
-    question: "Are there specific sensory triggers that upset your child? If yes, please describe.",
+    question: "Does your child exhibit repetitive speech patterns (e.g., echolalia)?",
     answers: [
-      "No known triggers.",
-      "Yes, one or two specific triggers.",
-      "Yes, multiple triggers across different senses.",
-      "Yes, almost all sensory stimuli are triggering."
+      "Never",
+      "Rarely",
+      "Sometimes",
+      "Frequently"
     ]
   },
   {
-    question: "Does your child seek sensory input (e.g., spinning, jumping, touching objects repeatedly)?",
-    answers: ["Never", "Rarely", "Sometimes", "Frequently"]
+    question: "Does your child have difficulty understanding or processing spoken language?",
+    answers: [
+      "No difficulty.",
+      "Mild difficulty.",
+      "Moderate difficulty.",
+      "Severe difficulty."
+    ]
+  },
+  {
+    question: "How does your child indicate their needs or wants?",
+    answers: [
+      "Verbal communication.",
+      "Gestures (e.g., pointing, pulling).",
+      "Visual aids or assistive technology.",
+      "Non-verbal behaviors (e.g., crying, leading others)."
+    ]
   }
 ];
 
-const Question3 = () => {
+const Question1 = () => {
   const [loading, setLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState(Array(questions.length).fill(null));
-  const progress = ((currentQuestion + 1) / questions.length) * 100;
-  const allAnswered = answers.every(answer => answer !== null);
+  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(null));
+  const progress = ((selectedAnswers.filter(answer => answer !== null).length) / questions.length) * 100;
+  const allAnswered = selectedAnswers.every(answer => answer !== null);
 
   useEffect(() => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 400); 
-    }, []);
-  
-  const handleAnswer = (index) => {
-    const updatedAnswers = [...answers];
-    updatedAnswers[currentQuestion] = index;
-    setAnswers(updatedAnswers);
-    handleNext();
-  };
+    setTimeout(() => {
+      setLoading(false);
+    }, 400);
+  }, []);
 
-  const handleNext = () => {
+  const handleAnswerSelection = (index) => {
+    const updatedAnswers = [...selectedAnswers];
+    updatedAnswers[currentQuestion] = index;
+    setSelectedAnswers(updatedAnswers);
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
@@ -64,7 +74,7 @@ const Question3 = () => {
     <>
       <CssBaseline />
       <Box sx={{ backgroundColor: "#E6F0FA", minHeight: "100vh", p: 4 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2}}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <LinearProgress
             variant="determinate"
             value={progress}
@@ -94,32 +104,19 @@ const Question3 = () => {
             {currentQuestion + 1} of {questions.length}
           </Box>
         </Box>
-        
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2}}>
-          <IconButton
-            href="/social"
-            sx={{
-              color: "#5da802",
-              fontSize: "40px",
-              fontWeight: "bold",
-            }}
-          >
+
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <IconButton href="/assessment" sx={{ color: "#5da802", fontSize: "40px", fontWeight: "bold" }}>
             <KeyboardBackspaceRoundedIcon fontSize="inherit" />
           </IconButton>
-          <Card sx={{backgroundColor:'transparent', boxShadow: 'none', width: '340px'}}>
-            <CardMedia sx={{mt: 1}} component="img" image={Image} alt="Sample" />
+
+          <Card sx={{ backgroundColor: 'transparent', boxShadow: 'none', width: '250px' }}>
+            <CardMedia component="img" image={Image} alt="Sample" />
           </Card>
         </Box>
 
         <Typography
-          sx={{
-            mt: 5,
-            fontFamily: "Poppins",
-            color: "#0457a4",
-            fontSize: "28px",
-            textAlign: "center",
-            mb: 4,
-          }}
+          sx={{ mt: 5, fontFamily: "Poppins", color: "#0457a4", fontSize: "28px", textAlign: "center", mb: 4 }}
         >
           {questions[currentQuestion].question}
         </Typography>
@@ -131,14 +128,14 @@ const Question3 = () => {
               variant="contained"
               sx={{
                 height: '60px',
-                backgroundColor: "#0457a4",
+                backgroundColor: selectedAnswers[currentQuestion] === index ? "#034f99" : "#0457a4",
                 fontFamily: "Poppins",
                 fontSize: "20px",
                 textTransform: "none",
                 borderRadius: "10px",
                 "&:hover": { backgroundColor: "#034f99" },
               }}
-              onClick={() => handleAnswer(index)}
+              onClick={() => handleAnswerSelection(index)}
             >
               {answer}
             </Button>
@@ -147,12 +144,12 @@ const Question3 = () => {
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href='/emotional'
+            href='/social-interaction'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             sx={{
               width: '250px',
-              backgroundColor: "#5da802",
+              backgroundColor: allAnswered ? "#5da802" : "gray",
               fontFamily: "Poppins",
               fontSize: "16px",
               textTransform: "none",
@@ -162,7 +159,7 @@ const Question3 = () => {
               justifyContent: 'space-between',
               px: 3,
               py: 1,
-              "&:hover": { backgroundColor: "#4c9000" },
+              "&:hover": { backgroundColor: allAnswered ? "#4c9000" : "gray" },
             }}
             disabled={!allAnswered}
           >
@@ -174,4 +171,4 @@ const Question3 = () => {
   );
 };
 
-export default Question3;
+export default Question1;

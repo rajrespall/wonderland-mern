@@ -49,7 +49,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await login(formData.email, formData.password);
-      navigate('/whosusing');
+      navigate('/parenthome');
     } catch (err) {
       console.error('Login error:', err);
     }
@@ -68,7 +68,7 @@ const LoginPage = () => {
   
       await googleLogin(idToken); // ibabalik sa zustand action
   
-      navigate('/whosusing');
+      navigate('/parenthome');
     } catch (err) {
       if (err.code === 'auth/popup-blocked') {
         console.error('Popup was blocked by the browser!');

@@ -1,67 +1,58 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button, LinearProgress, Card, IconButton, CssBaseline, TextField, FormControlLabel, Checkbox, CardMedia } from "@mui/material";
+import { Box, Typography, Button, LinearProgress, Card, CardMedia, IconButton, CssBaseline } from "@mui/material";
 import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Image from '../assets/symptoms.png';
-import Spinner from '../components/Spinner'; 
+import Image from '../../assets/repetitive.png';
+import Spinner from '../../components/Spinner'; 
 
 const questions = [
   {
-    question: "Are there any other symptoms or behaviors that concern you?",
+    question: "Does your child engage in repetitive movements (e.g., hand-flapping, rocking)?",
     answers: [
-      "Difficulty maintaining eye contact.",
-      "Delayed speech or language development.",
-      "Nonverbal communication challenges.",
-      "Difficulty understanding social cues (e.g., tone, facial expressions).",
-      "Repetitive movements (e.g., hand-flapping, rocking).",
-      "Obsessive interest in specific topics or objects.",
-      "Unusual reactions to sensory stimuli (e.g., loud noises, bright lights).",
-      "Strong preference for routines and difficulty with changes.",
-      "Difficulty making or keeping friends.",
-      "Aggressive behaviors (e.g., hitting, biting).",
-      "Self-injurious behaviors (e.g., head-banging, biting self).",
-      "Difficulty regulating emotions (e.g., frequent meltdowns).",
-      "Difficulty transitioning between activities or environments.",
-      "Excessive reliance on specific rituals or routines.",
-      "Sensory-seeking behaviors (e.g., spinning, jumping).",
-      "Avoidance of physical touch.",
-      "Difficulty with fine or gross motor skills.",
-      "Picky eating or unusual eating habits.",
-      "Sleep disturbances or irregular sleep patterns.",
-      "Frequent anxiety or phobias.",
-      "Difficulty focusing or paying attention.",
-      "Tendency to wander or run away (elopement).",
-      "Excessive fear of certain situations or objects.",
-      "Unusual posture, gait, or motor patterns."
+      "Never",
+      "Rarely",
+      "Sometimes",
+      "Frequently"
+    ]
+  },
+  {
+    question: "Does your child have strong preferences for routines or rituals?",
+    answers: [
+      "No, they are flexible.",
+      "Sometimes, they show slight preferences.",
+      "Often, they have noticeable preferences.",
+      "Always, they insist on strict routines."
+    ]
+  },
+  {
+    question: "How does your child react to changes in their routine or environment?",
+    answers: [
+      "Adjusts well.",
+      "Mild discomfort but adapts eventually.",
+      "Becomes upset and takes time to adjust.",
+      "Experiences significant distress or meltdowns."
     ]
   }
 ];
 
-const OtherSymptoms = () => {
+const Question5 = () => {
   const [loading, setLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [other, setOther] = useState('');
+  const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const progress = ((currentQuestion + 1) / questions.length) * 100;
-  const allAnswered = answers.length > 0;
+  const allAnswered = answers.every(answer => answer !== null);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 400); 
-  }, []);
+      setTimeout(() => {
+        setLoading(false);
+      }, 400); 
+    }, []);
   
-  const handleAnswer = (answer) => {
-    if (answers.includes(answer)) {
-      setAnswers(answers.filter(item => item !== answer));
-    } else {
-      setAnswers([...answers, answer]);
-    }
-  };
-  
-
-  const handleSubmit = () => {
-    alert("Form submitted with answers: " + answers.join(", ") + (other ? ", Other: " + other : ""));
+  const handleAnswer = (index) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[currentQuestion] = index;
+    setAnswers(updatedAnswers);
+    handleNext();
   };
 
   const handleNext = () => {
@@ -111,7 +102,7 @@ const OtherSymptoms = () => {
         
         <Box sx={{ display: "flex", alignItems: "center", mb: 2}}>
           <IconButton
-            href="/assessment"
+            href="/emotional"
             sx={{
               color: "#5da802",
               fontSize: "40px",
@@ -138,39 +129,30 @@ const OtherSymptoms = () => {
           {questions[currentQuestion].question}
         </Typography>
 
-        <Box sx={{ display: "grid", gap: 2, maxWidth: "500px", margin: "auto", overflowY: "auto", maxHeight: "40vh", backgroundColor: 'white', padding: 3, borderRadius: '20px' }}>
+        <Box sx={{ display: "grid", gap: 2, maxWidth: "500px", margin: "auto" }}>
           {questions[currentQuestion].answers.map((answer, index) => (
-            <FormControlLabel
-            key={index}
-            control={
-              <Checkbox
-                checked={answers.includes(answer)}
-                onChange={() => handleAnswer(answer)}
-                color="primary"
-              />
-            }
-            label={answer}
-            sx={{
-              '& .MuiTypography-root': {
-                fontFamily: 'Poppins',
-                fontSize: '18px', 
-              },
-            }}
-          />
+            <Button
+              key={index}
+              variant="contained"
+              sx={{
+                height: '60px',
+                backgroundColor: "#0457a4",
+                fontFamily: "Poppins",
+                fontSize: "20px",
+                textTransform: "none",
+                borderRadius: "10px",
+                "&:hover": { backgroundColor: "#034f99" },
+              }}
+              onClick={() => handleAnswer(index)}
+            >
+              {answer}
+            </Button>
           ))}
-          <TextField
-            label="Other (please specify)"
-            variant="outlined"
-            fullWidth
-            value={other}
-            onChange={(e) => setOther(e.target.value)}
-            sx={{ mt: 2 }}
-          />
         </Box>
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href='/whosusing'
+            href='/others'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             sx={{
@@ -187,10 +169,9 @@ const OtherSymptoms = () => {
               py: 1,
               "&:hover": { backgroundColor: "#4c9000" },
             }}
-            onClick={handleSubmit}
             disabled={!allAnswered}
           >
-            Submit
+            Next page
           </Button>
         </Box>
       </Box>
@@ -198,4 +179,4 @@ const OtherSymptoms = () => {
   );
 };
 
-export default OtherSymptoms;
+export default Question5;

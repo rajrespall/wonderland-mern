@@ -4,15 +4,15 @@ import Home from './screens/Home'
 import LoginPage from './screens/Login'
 import Register from './screens/Register'
 import WhosUsing from './screens/WhosUsing'
-import GetStarted from './screens/GetStarted'
-import Assessment from './screens/Assessment'
-import Question1 from './screens/Communication'
-import Question2 from './screens/Social'
-import Question3 from './screens/Sensory'
-import Question4 from './screens/Emotional'
-import Question5 from './screens/Routines'
-import OtherSymptoms from './screens/Others'
-import ParentPage from './screens/Parent/ParentPage'
+import GetStarted from './screens/Assessment/GetStarted'
+import Assessment from './screens/Assessment/Assessment'
+import Question1 from './screens/Assessment/Communication'
+import Question2 from './screens/Assessment/Social'
+import Question3 from './screens/Assessment/Sensory'
+import Question4 from './screens/Assessment/Emotional'
+import Question5 from './screens/Assessment/Routines'
+import OtherSymptoms from './screens/Assessment/Others'
+import ParentHome from './screens/Parent/ParentHome'
 
 function App() {
 
@@ -20,7 +20,7 @@ function App() {
     <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/home' element={<ParentPage />} />
+          <Route path='/parenthome' element={<ParentHome />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<Register />} />
           <Route path='/whosusing' element={<WhosUsing />} />

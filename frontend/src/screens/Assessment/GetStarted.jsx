@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Button, Typography, Container, Paper, Card, CardMedia, CssBaseline } from "@mui/material";
-import Background from "../assets/bg_getstarted.png";
-import Logo from "../assets/logo_red.png"; 
-import Squirrel from "../assets/sq_twohands.png"; 
-import Image from '../assets/getstarted.png';
+import Background from "../../assets/bg_getstarted.png";
+import Logo from "../../assets/logo_red.png"; 
+import Squirrel from "../../assets/sq_twohands.png"; 
+import Image from '../../assets/getstarted.png';
 
 
 const GetStarted = () => {

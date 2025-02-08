@@ -14,11 +14,11 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
-import Logo from "../../assets/logo_blue.png"; 
-import MediaCard from "../../components/Assess";
-import Spinner from "../../components/Spinner";
+import Logo from "../assets/logo_blue.png"; 
+import MediaCard from "../components/Assess";
+import Spinner from "../components/Spinner";
 
-import useInfoStore from '../../store/infoStore';
+import useInfoStore from '../store/infoStore';
 
 const Assessment = () => {
   const [diagnosisYear, setDiagnosisYear] = useState("");

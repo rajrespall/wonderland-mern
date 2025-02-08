@@ -2,40 +2,41 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, LinearProgress, Card, CardMedia, IconButton, CssBaseline } from "@mui/material";
 import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Image from '../../assets/social_int.png';
-import Spinner from '../../components/Spinner'; 
+import Image from '../assets/emotional.png';
+import Spinner from '../components/Spinner'; 
 
 const questions = [
   {
-    question: "Does your child make eye contact when interacting with others?",
-    answers: ["Never", "Rarely", "Sometimes", "Frequently"]
-  },
-  {
-    question: "Does your child engage in pretend play or play alongside other children?",
-    answers: ["Never", "Rarely", "Sometimes", "Frequently"]
-  },
-  {
-    question: "How does your child respond to social cues (e.g., facial expressions, tone of voice)?",
+    question: "Does your child have difficulty expressing emotions?",
     answers: [
-      "Appropriately most of the time.",
-      "Inconsistently.",
-      "Struggles to interpret cues.",
-      "Does not respond to social cues."
+      "No, they express emotions clearly.",
+      "Mild difficulty in expressing emotions.",
+      "Moderate difficulty; they struggle in some situations.",
+      "Severe difficulty; emotions are often unclear or not expressed."
     ]
   },
   {
-    question: "Does your child seem uninterested in interacting with peers or family members?",
+    question: "How does your child cope with frustration or anxiety?",
     answers: [
-      "No, they are very social.",
-      "Sometimes, depending on the situation.",
-      "Often, they prefer being alone.",
-      "Always, they avoid social interactions."
+      "Self-regulates effectively.",
+      "Occasionally seeks support from others.",
+      "Often requires assistance to calm down.",
+      "Struggles significantly to cope, even with help."
+    ]
+  },
+  {
+    question: "Does your child experience meltdowns? If yes, what typically triggers them?",
+    answers: [
+      "Never.",
+      "Rarely, only in extreme situations.",
+      "Sometimes, in response to specific triggers.",
+      "Frequently, even with minor challenges."
     ]
   }
 ];
 
-const Question2 = () => {
-const [loading, setLoading] = useState(true);
+const Question4 = () => {
+  const [loading, setLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -101,7 +102,7 @@ const [loading, setLoading] = useState(true);
         
         <Box sx={{ display: "flex", alignItems: "center", mb: 2}}>
           <IconButton
-            href="/communication"
+            href="/sensory"
             sx={{
               color: "#5da802",
               fontSize: "40px",
@@ -110,8 +111,8 @@ const [loading, setLoading] = useState(true);
           >
             <KeyboardBackspaceRoundedIcon fontSize="inherit" />
           </IconButton>
-          <Card sx={{backgroundColor:'transparent', boxShadow: 'none', width: '280px'}}>
-            <CardMedia component="img" image={Image} alt="Sample" />
+          <Card sx={{backgroundColor:'transparent', boxShadow: 'none', width: '340px'}}>
+            <CardMedia sx={{mt: 1}} component="img" image={Image} alt="Sample" />
           </Card>
         </Box>
 
@@ -151,7 +152,7 @@ const [loading, setLoading] = useState(true);
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href="/sensory"
+            href='/routines'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             sx={{
@@ -178,4 +179,4 @@ const [loading, setLoading] = useState(true);
   );
 };
 
-export default Question2;
+export default Question4;

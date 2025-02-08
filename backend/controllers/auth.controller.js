@@ -2,7 +2,8 @@ const { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassw
 const { auth, googleProvider } = require("../config/firebase.js");  
 const User = require("../models/user.model.js");
 const  adminAuth  = require('firebase-admin'); 
-
+const jwt = require('jsonwebtoken');
+const { generateTokenandSetCookie } = require('../utils/generateTokenandSetCookie');
 
 adminAuth.initializeApp({
   credential: adminAuth.credential.cert(require('../config/serviceAccountKey.json')),
@@ -29,6 +30,7 @@ const googleLogin = async (req, res) => {
       });
     }
 
+    generateTokenandSetCookie(res, user._id);
     // User details
     res.status(200).json({
       user: {
@@ -45,8 +47,6 @@ const googleLogin = async (req, res) => {
   }
 };
 
-
-
 const registerWithEmail = async (req, res) => {
   const { username, email, password } = req.body;
   
@@ -62,6 +62,8 @@ const registerWithEmail = async (req, res) => {
           password: "firebase_managed", 
           firebaseUid: firebaseUser.uid
       });
+
+      generateTokenandSetCookie(res, newUser._id);
 
       res.status(201).json({
           user: {
@@ -90,6 +92,8 @@ const loginWithEmail = async (req, res) => {
           throw new Error('User not found in database');
       }
 
+      generateTokenandSetCookie(res, user._id);
+
       res.status(200).json({
           user: {
               id: user._id,
@@ -107,10 +111,11 @@ const loginWithEmail = async (req, res) => {
 const logout = async (req, res) => {
   try {
       await auth.signOut();
-      res.status(200).json({ message: "Logged out successfully" });
+      res.clearCookie("token");
+      res.status(200).json({ success: true, message: "Logged out successfully" });
   } catch (error) {
       console.error('Logout error:', error);
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ success: false, error: error.message });
   }
 };
 

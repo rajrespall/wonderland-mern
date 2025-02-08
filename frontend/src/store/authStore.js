@@ -5,25 +5,27 @@ import { signOut } from 'firebase/auth';
 
 const useAuthStore = create((set) => ({
   user: JSON.parse(localStorage.getItem('user')) || null,
-  isAuthenticated: !!localStorage.getItem('user'),
+  isAuthenticated: !!localStorage.getItem('user') || null,
   loading: false,
   error: null,
 
   login: async (email, password) => {
     try {
       set({ loading: true, error: null });
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password
-      });
-      const userData = response.data.user;
-      localStorage.setItem('user', JSON.stringify(userData));
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/login', 
+        { email, password },
+        { withCredentials: true }
+      );
+
       set({
-        user: userData,
+        user: response.data.user,
         isAuthenticated: true,
         loading: false 
       });
-      return userData;
+
+      return response.data.user;
+
     } catch (error) {
       set({ 
         error: error.response?.data?.error || 'Login failed',
@@ -36,12 +38,14 @@ const useAuthStore = create((set) => ({
   register: async (username, email, password) => {
     try {
       set({ loading: true, error: null });
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
-        username,
-        email,
-        password
-      });
-      
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/register', 
+        {username},
+        {email},
+        {password},
+        { withCredentials: true }
+      );
+
       const userData = response.data.user;
       localStorage.setItem('user', JSON.stringify(userData));
       
@@ -65,7 +69,11 @@ const useAuthStore = create((set) => ({
     try {
       set({ loading: true, error: null });
       //send sa backend yung idToken para ma verify sa firebase if legit yung token or hindi 
-      const response = await axios.post('http://localhost:5000/api/auth/google-login', { idToken });
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/google-login',
+        { idToken },
+        { withCredentials: true }
+      );
   
       // Sinave ko yung user data sa  local storage and state
       const userData = response.data.user;
@@ -87,9 +95,12 @@ const useAuthStore = create((set) => ({
       await signOut(auth);
       
       // Backend logout
-      await axios.post('http://localhost:5000/api/auth/logout');
+      await axios.post('http://localhost:5000/api/auth/logout', {}, {
+        withCredentials: true
+      });
       
       // Clear local storage
+      
       localStorage.removeItem('user');
       
       // Reset store state

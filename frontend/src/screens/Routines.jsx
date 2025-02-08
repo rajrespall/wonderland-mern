@@ -4,6 +4,9 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/repetitive.png';
 import Spinner from '../components/Spinner'; 
+import useStore from '../store/assStore';  
+import { useNavigate } from 'react-router-dom';  // Correct import for v6
+
 
 const questions = [
   {
@@ -37,6 +40,8 @@ const questions = [
 
 const Question5 = () => {
   const [loading, setLoading] = useState(true);
+  const {  submitAssessment } = useStore();  
+  const navigate = useNavigate(); // Use the hook to get the navigate function
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -48,18 +53,25 @@ const Question5 = () => {
       }, 400); 
     }, []);
   
-  const handleAnswer = (index) => {
-    const updatedAnswers = [...answers];
-    updatedAnswers[currentQuestion] = index;
-    setAnswers(updatedAnswers);
-    handleNext();
-  };
+    const handleAnswer = (index) => {
+      const updatedAnswers = [...answers];
+      updatedAnswers[currentQuestion] = index;
+    
+      setAnswers(updatedAnswers);
+    
+      // Store the selected answer numerically in localStorage (1-based index)
+      localStorage.setItem(`Rotutines_${currentQuestion}_answer`, index + 1);  // Store 1-based value
+    
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+      }
+    };
 
-  const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    }
-  };
+  // const handleNext = () => {
+  //   if (currentQuestion < questions.length - 1) {
+  //     setCurrentQuestion(currentQuestion + 1);
+  //   }
+  // };
 
   if (loading) {
     return <Spinner />;
@@ -152,9 +164,13 @@ const Question5 = () => {
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href='/others'
+            // href='/others'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
+            onClick={async () => {
+              await submitAssessment(); // Call the submitAssessment function from Zustand
+              navigate('/others');
+          }}
             sx={{
               width: '250px',
               backgroundColor: "#5da802",

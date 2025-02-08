@@ -5,22 +5,25 @@ const verifyToken = async (req, res, next) => {
     try {
         const token = req.cookies.token;
         if (!token) {
-            return res.status(401).json({success: false, message: "No token found"});
+            return res.status(401).json({ success: false, message: "No token found" });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId);
-        
+
         if (!user) {
-            return res.status(401).json({success: false, message: "User not found"});
+            return res.status(401).json({ success: false, message: "User not found" });
         }
 
         req.user = user;
+        console.log("Authenticated User:", req.user); // Debugging
+
         next();
     } catch (error) {
         console.error("Auth error:", error);
-        res.status(401).json({success: false, message: "Invalid token"});
+        res.status(401).json({ success: false, message: "Invalid token" });
     }
 };
+
 
 module.exports = verifyToken;

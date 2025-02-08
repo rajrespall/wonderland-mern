@@ -4,6 +4,9 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/communication.png';
 import Spinner from '../components/Spinner'; 
+import { useNavigate } from 'react-router-dom';  // Correct import for v6
+
+
 
 const questions = [
   {
@@ -48,7 +51,9 @@ const Question1 = () => {
   const [loading, setLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(null));
-  const progress = ((selectedAnswers.filter(answer => answer !== null).length) / questions.length) * 100;
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const navigate = useNavigate(); // Use the hook to get the navigate function
+
   const allAnswered = selectedAnswers.every(answer => answer !== null);
 
   useEffect(() => {
@@ -60,7 +65,12 @@ const Question1 = () => {
   const handleAnswerSelection = (index) => {
     const updatedAnswers = [...selectedAnswers];
     updatedAnswers[currentQuestion] = index;
+  
     setSelectedAnswers(updatedAnswers);
+  
+    // Store the selected answer numerically in localStorage (1-based index)
+    localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);  // Store 1-based value
+  
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
@@ -144,9 +154,13 @@ const Question1 = () => {
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href='/social-interaction'
+            // href='/social-interaction'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
+            onClick={async () => {
+        
+              navigate('/social-interaction');
+          }}
             sx={{
               width: '250px',
               backgroundColor: allAnswered ? "#5da802" : "gray",

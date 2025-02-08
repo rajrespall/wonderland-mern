@@ -4,6 +4,9 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/sensory.png';
 import Spinner from '../components/Spinner'; 
+import { useNavigate } from 'react-router-dom';  // Correct import for v6
+
+
 
 const questions = [
   {
@@ -32,6 +35,7 @@ const questions = [
 
 const Question3 = () => {
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // Use the hook to get the navigate function
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -43,18 +47,25 @@ const Question3 = () => {
       }, 400); 
     }, []);
   
-  const handleAnswer = (index) => {
-    const updatedAnswers = [...answers];
-    updatedAnswers[currentQuestion] = index;
-    setAnswers(updatedAnswers);
-    handleNext();
-  };
+    const handleAnswer = (index) => {
+      const updatedAnswers = [...answers];
+      updatedAnswers[currentQuestion] = index;
+    
+      setAnswers(updatedAnswers);
+    
+      // Store the selected answer numerically in localStorage (1-based index)
+      localStorage.setItem(`Sensory_${currentQuestion}_answer`, index + 1);  // Store 1-based value
+    
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+      }
+    };
 
-  const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    }
-  };
+  // const handleNext = () => {
+  //   if (currentQuestion < questions.length - 1) {
+  //     setCurrentQuestion(currentQuestion + 1);
+  //   }
+  // };
 
   if (loading) {
     return <Spinner />;
@@ -147,9 +158,12 @@ const Question3 = () => {
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href='/emotional'
+            // href='/emotional'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
+            onClick={async () => {
+              navigate('/emotional');
+          }}
             sx={{
               width: '250px',
               backgroundColor: "#5da802",

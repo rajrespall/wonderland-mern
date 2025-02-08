@@ -4,6 +4,9 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/symptoms.png';
 import Spinner from '../components/Spinner'; 
+import useStore from '../store/assStore';  
+// import { set } from "../../../backend/app";
+
 
 const questions = [
   {
@@ -39,6 +42,7 @@ const questions = [
 
 const OtherSymptoms = () => {
   const [loading, setLoading] = useState(true);
+  const { setOthersAnswers,  submitAssessment } = useStore();  
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [other, setOther] = useState('');
@@ -57,18 +61,76 @@ const OtherSymptoms = () => {
     } else {
       setAnswers([...answers, answer]);
     }
-  };
+    setOthersAnswers(answers);  // Store updated answers in Zustand
+  };  
   
 
-  const handleSubmit = () => {
-    alert("Form submitted with answers: " + answers.join(", ") + (other ? ", Other: " + other : ""));
-  };
+  // const handleSubmit = () => {
+  //   alert("Form submitted with answers: " + answers.join(", ") + (other ? ", Other: " + other : ""));
+    
+  // };
 
-  const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+  const handleButtonClick = () => {
+    const {
+        userId,
+        setCommunicationAnswers,
+        setEmotionalAnswers,
+        setRoutineAnswers,
+        setSensoryAnswers,
+        setSocialAnswers,
+        setOthersAnswers,
+        submitAssessment
+    } = useStore.getState();
+
+    if (!userId) {
+        console.error("User ID is missing, cannot submit assessment");
+        return;
     }
-  };
+
+    // Fetch stored values from Local Storage (Ensure parsing for numbers)
+    const getAnswers = (prefix, count) => {
+        return Array.from({ length: count }, (_, index) => {
+            const value = localStorage.getItem(`${prefix}_${index}_answer`);
+            return value !== null ? Number(value) : null;
+        }).filter(answer => answer !== null);
+    };
+
+    // Fetch all category answers
+    const communicationAnswers = getAnswers("Communication", 4);
+    const emotionalAnswers = getAnswers("Emotional", 3);
+    const routineAnswers = getAnswers("Rotutines", 3);
+    const sensoryAnswers = getAnswers("Sensory", 3);
+    const socialAnswers = getAnswers("Social", 4);
+
+    // Collect 'others' answers (checkboxes & text input)
+    const othersAnswers = [...answers];
+    if (other.trim() !== "") {
+        othersAnswers.push(other);
+    }
+
+    // Update Zustand store with latest data
+    setCommunicationAnswers(communicationAnswers);
+    setEmotionalAnswers(emotionalAnswers);
+    setRoutineAnswers(routineAnswers);
+    setSensoryAnswers(sensoryAnswers);
+    setSocialAnswers(socialAnswers);
+    setOthersAnswers(othersAnswers);
+
+    // Now, submit data via Zustand (this sends to backend)
+    submitAssessment();
+
+    // Clear Local Storage after submission
+    localStorage.clear();
+};
+
+
+
+  
+  // const handleNext = () => {
+  //   if (currentQuestion < questions.length - 1) {
+  //     setCurrentQuestion(currentQuestion + 1);
+  //   }
+  // };
 
   if (loading) {
     return <Spinner />;
@@ -173,6 +235,7 @@ const OtherSymptoms = () => {
             href='/whosusing'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
+            
             sx={{
               width: '250px',
               backgroundColor: "#5da802",
@@ -187,7 +250,7 @@ const OtherSymptoms = () => {
               py: 1,
               "&:hover": { backgroundColor: "#4c9000" },
             }}
-            onClick={handleSubmit}
+            onClick={handleButtonClick}  // Use the combined handler
             disabled={!allAnswered}
           >
             Submit

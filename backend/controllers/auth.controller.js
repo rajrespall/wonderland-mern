@@ -10,32 +10,34 @@ adminAuth.initializeApp({
 });
 
 const googleLogin = async (req, res) => {
-  const { idToken } = req.body;  
+  const { idToken } = req.body;  // pag kuha ng id token sa frontend 
 
   try {
     // Verify the ID token with Firebase Admin SDK
-    const decodedToken = await adminAuth.auth().verifyIdToken(idToken); 
-    const firebaseUid = decodedToken.uid;  
+    const decodedToken = await adminAuth.auth().verifyIdToken(idToken);  // Verifying the token using adminAuth
+    const firebaseUid = decodedToken.uid;  // Extract the UID from the decoded token
 
+    // Check pag may user na
     let user = await User.findOne({ firebaseUid });
     
     if (!user) {
+      //Pag wala edi create 
       user = await User.create({
-        username: decodedToken.name || 'No Name',  
-        email: decodedToken.email,  
-        password: 'firebase_managed',  
-        firebaseUid: firebaseUid  
+        username: decodedToken.name || 'No Name',  // default name pag  walang name na proprovide 
+        email: decodedToken.email,  // Store the user's email from the token
+        password: 'firebase_managed',  //Password/firebase_manage
+        firebaseUid: firebaseUid  // Firebase UID
       });
     }
 
     generateTokenandSetCookie(res, user._id);
-    
+    // User details
     res.status(200).json({
       user: {
-        id: user._id,  
+        id: user._id,  // MongoDB user ID
         username: user.username,
         email: user.email,
-        firebaseUid: firebaseUid  
+        firebaseUid: firebaseUid  // Firebase UID
       }
     });
   } catch (error) {
@@ -49,9 +51,11 @@ const registerWithEmail = async (req, res) => {
   const { username, email, password } = req.body;
   
   try {
+      // Create user in Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
 
+      // Create user in MongoDB
       const newUser = await User.create({
           username,
           email,
@@ -59,7 +63,7 @@ const registerWithEmail = async (req, res) => {
           firebaseUid: firebaseUser.uid
       });
 
-      generateTokenandSetCookie(res, user._id);
+      generateTokenandSetCookie(res, newUser._id);
 
       res.status(201).json({
           user: {
@@ -79,15 +83,17 @@ const loginWithEmail = async (req, res) => {
   const { email, password } = req.body;
   
   try {
+      // Firebase authentication
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
+      // Get user from MongoDB
       const user = await User.findOne({ email });
       if (!user) {
           throw new Error('User not found in database');
       }
 
       generateTokenandSetCookie(res, user._id);
-      
+
       res.status(200).json({
           user: {
               id: user._id,

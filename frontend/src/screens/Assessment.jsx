@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -18,6 +17,8 @@ import Logo from "../assets/logo_blue.png";
 import MediaCard from "../components/Assess";
 import Spinner from "../components/Spinner";
 
+import { useNavigate } from 'react-router-dom';
+
 import useInfoStore from '../store/infoStore';
 
 const Assessment = () => {
@@ -29,6 +30,7 @@ const Assessment = () => {
     { value: 'male', label: 'Male' },
     { value: 'female', label: 'Female' }
   ];
+
   const years = [];
   for (let year = 2000; year <= new Date().getFullYear(); year++) {
     years.push(year);
@@ -144,9 +146,9 @@ const Assessment = () => {
           <TextField
             fullWidth
             name="childName"
-            label="Child's full name"
             value={formData.childName}
             onChange={handleChange}
+            label="Child's full name"
             InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
             InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
             sx={textFieldStyles}
@@ -199,13 +201,13 @@ const Assessment = () => {
             select
             fullWidth
             name="gender"
-            label="Gender"
             value={formData.gender}
             onChange={handleChange}
+            label="Gender"
             InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
-            InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' } }}
+            InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
             sx={textFieldStyles}
-          >
+            >
             {genderChoices.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -232,7 +234,6 @@ const Assessment = () => {
           </TextField>
 
           <Button
-            href='/communication'
             variant="contained"
             fullWidth
             onClick = {handleSubmit}
@@ -252,7 +253,7 @@ const Assessment = () => {
             }}
             endIcon={<ArrowForwardRoundedIcon />}
           >
-            {loading ? 'Saving...' : 'Next page'}
+             {loading ? 'Saving...' : 'Next page'}
           </Button>
         </Paper>
       </Box>

@@ -1,27 +1,32 @@
 const jwt = require('jsonwebtoken');    
 const User = require("../models/user.model.js");
 
-const verifyToken = async (req, res, next) => {
+const verifyToken = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({success: false, message: "Unauthorized- No token provided"});
+    
     try {
-        const token = req.cookies.token;
-        if (!token) {
-            return res.status(401).json({ success: false, message: "No token found" });
-        }
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.userId);
+        if(!decoded) return res.status(401).json({success: false, message: "Unauthorized- Invalid token"});
 
-        if (!user) {
-            return res.status(401).json({ success: false, message: "User not found" });
-        }
-
-        req.user = user;
-        console.log("Authenticated User:", req.user); // Debugging
-
-        next();
+        // Find user and attach to request
+        User.findById(decoded.userId)
+            .then(user => {
+                if (!user) {
+                    return res.status(401).json({success: false, message: "User not found"});
+                }
+                req.userId = decoded.userId;
+                req.user = user; // Attach user to request object
+                next();
+            })
+            .catch(err => {
+                console.log("Error finding user: ", err);
+                return res.status(500).json({success: false, message: "Server Error"});
+            });
+        
     } catch (error) {
-        console.error("Auth error:", error);
-        res.status(401).json({ success: false, message: "Invalid token" });
+        console.log("Error verifying token: ", error);
+        return res.status(500).json({success: false, message: "Server Error"});
     }
 };
 

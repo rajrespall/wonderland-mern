@@ -12,19 +12,18 @@ const useAuthStore = create((set) => ({
   login: async (email, password) => {
     try {
       set({ loading: true, error: null });
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/login', 
-        { email, password },
-        { withCredentials: true }
-      );
-      
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email,
+        password
+      });
+      const userData = response.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
       set({
-        user: response.data.user,
+        user: userData,
         isAuthenticated: true,
         loading: false 
       });
-      
-      return response.data.user;
+      return userData;
     } catch (error) {
       set({ 
         error: error.response?.data?.error || 'Login failed',
@@ -33,19 +32,18 @@ const useAuthStore = create((set) => ({
       throw error;
     }
   },
-  
+
   register: async (username, email, password) => {
     try {
       set({ loading: true, error: null });
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/register', 
-        {username},
-        {email},
-        {password},
-        { withCredentials: true }
-      );
+      const response = await axios.post('http://localhost:5000/api/auth/register', {
+        username,
+        email,
+        password
+      });
       
       const userData = response.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
       
       set({ 
         user: userData,
@@ -66,34 +64,35 @@ const useAuthStore = create((set) => ({
   googleLogin: async (idToken) => {
     try {
       set({ loading: true, error: null });
-     
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/google-login',
-        { idToken },
-        { withCredentials: true }
-      );
+      //send sa backend yung idToken para ma verify sa firebase if legit yung token or hindi 
+      const response = await axios.post('http://localhost:5000/api/auth/google-login', { idToken });
   
-      set({ 
-        user: response.data.user, 
-        isAuthenticated: true, 
-        loading: false 
-      });
+      // Sinave ko yung user data sa  local storage and state
+      const userData = response.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
+      set({ user: userData, isAuthenticated: true, loading: false });
   
-      return response.data.user;
+      return userData;
     } catch (error) {
       set({ error: error.response?.data?.error || 'Google login failed', loading: false });
+      console.error('Google login failed:', error);
       throw error;
     }
   },
+  
 
   logout: async () => {
     try {
+      // Firebase signout
       await signOut(auth);
       
+      // Backend logout
       await axios.post('http://localhost:5000/api/auth/logout');
       
+      // Clear local storage
       localStorage.removeItem('user');
       
+      // Reset store state
       set({ 
         user: null,
         isAuthenticated: false,
@@ -104,6 +103,7 @@ const useAuthStore = create((set) => ({
       throw error;
     }
   }
+
 
 }));
 

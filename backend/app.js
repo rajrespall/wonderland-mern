@@ -2,8 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/auth.route.js");
-const generalInfoRoutes = require("./routes/geninfo.route.js");
-const cookieParser = require('cookie-parser')
 
 const app = express();
 
@@ -14,12 +12,7 @@ const corsOptions = {
 
 app.use(bodyParser.json());
 app.use(express.json());
-
-app.use(cookieParser());
 app.use(cors(corsOptions));
-
 app.use("/api/auth", authRoutes);
-app.use("/api/general-info", generalInfoRoutes);
-
 
 module.exports = app;

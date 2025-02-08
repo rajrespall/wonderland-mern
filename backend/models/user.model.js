@@ -22,10 +22,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-    },
-    generalInfo: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'GeneralInfo'
     }
 }, {
     timestamps: true

@@ -1,11 +1,9 @@
 import { create } from 'zustand';
 import axios from 'axios';
-
 const useInfoStore = create((set) => ({
   generalInfo: null,
   loading: false,
   error: null,
-
   createGeneralInfo: async (childData) => {
     try {
       set({ loading: true, error: null });
@@ -20,12 +18,10 @@ const useInfoStore = create((set) => ({
           }
         }
       );
-
       set({
         generalInfo: response.data,
         loading: false,
       });
-
       return response.data;
     } catch (error) {
       set({
@@ -35,12 +31,10 @@ const useInfoStore = create((set) => ({
       throw error;
     }
   },
-
   getGeneralInfo: async () => {
     try {
       set({ loading: true, error: null });
       const token = localStorage.getItem('token');
-
       const response = await axios.get(
         'http://localhost:5000/api/general-info',
         {
@@ -49,12 +43,10 @@ const useInfoStore = create((set) => ({
           },
         }
       );
-
       set({
         generalInfo: response.data,
         loading: false,
       });
-
       return response.data;
     } catch (error) {
       set({
@@ -64,12 +56,10 @@ const useInfoStore = create((set) => ({
       throw error;
     }
   },
-
   updateGeneralInfo: async (updates) => {
     try {
       set({ loading: true, error: null });
       const token = localStorage.getItem('token');
-
       const response = await axios.put(
         'http://localhost:5000/api/general-info',
         updates,
@@ -79,12 +69,10 @@ const useInfoStore = create((set) => ({
           },
         }
       );
-
       set({
         generalInfo: response.data,
         loading: false,
       });
-
       return response.data;
     } catch (error) {
       set({
@@ -95,5 +83,4 @@ const useInfoStore = create((set) => ({
     }
   },
 }));
-
 export default useInfoStore;

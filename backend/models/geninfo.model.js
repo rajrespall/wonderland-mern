@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const generalInfoSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -32,5 +31,4 @@ const generalInfoSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-
 module.exports = mongoose.model("GeneralInfo", generalInfoSchema);

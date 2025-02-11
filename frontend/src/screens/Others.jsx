@@ -4,6 +4,9 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/symptoms.png';
 import Spinner from '../components/Spinner'; 
+import useStore from '../store/assStore';  
+// import { set } from "../../../backend/app";
+
 
 const questions = [
   {
@@ -39,6 +42,7 @@ const questions = [
 
 const OtherSymptoms = () => {
   const [loading, setLoading] = useState(true);
+  const { setOthersAnswers,  submitAssessment } = useStore();  
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [other, setOther] = useState('');
@@ -49,26 +53,114 @@ const OtherSymptoms = () => {
     setTimeout(() => {
       setLoading(false);
     }, 400); 
-  }, []);
-  
-  const handleAnswer = (answer) => {
-    if (answers.includes(answer)) {
-      setAnswers(answers.filter(item => item !== answer));
-    } else {
-      setAnswers([...answers, answer]);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        useStore.getState().setUserId(parsedUser.id); // Update Zustand state
     }
-  };
+}, []);
+  
+const handleAnswer = (answer) => {
+  let updatedAnswers;
+  if (answers.includes(answer)) {
+      updatedAnswers = answers.filter(item => item !== answer);
+  } else {
+      updatedAnswers = [...answers, answer];
+  }
+
+  setAnswers(updatedAnswers); // Update local state
+  setOthersAnswers(updatedAnswers); // Update Zustand store
+};
+
+
   
 
-  const handleSubmit = () => {
-    alert("Form submitted with answers: " + answers.join(", ") + (other ? ", Other: " + other : ""));
-  };
+  // const handleSubmit = () => {
+  //   alert("Form submitted with answers: " + answers.join(", ") + (other ? ", Other: " + other : ""));
+    
+  // };
 
-  const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+  const handleButtonClick = async () => {
+    const {
+        userId,
+        setCommunicationAnswers,
+        setEmotionalAnswers,
+        setRoutineAnswers,
+        setSensoryAnswers,
+        setSocialAnswers,
+        setOthersAnswers,
+        submitAssessment
+    } = useStore.getState();
+
+    if (!userId) {
+        console.error("User ID is missing, cannot submit assessment");
+        return;
     }
-  };
+
+    // ✅ Retrieve answers properly from Local Storage
+    const getAnswers = (prefix, count) => {
+        let answers = [];
+        for (let i = 0; i < count; i++) {
+            const storedValue = localStorage.getItem(`${prefix}_${i}_answer`);
+            if (storedValue !== null) {
+                answers.push(JSON.parse(storedValue));  // Ensure correct data type
+            }
+        }
+        return answers;
+    };
+
+    // ✅ Fetch stored values
+    const communicationAnswers = getAnswers("Communication", 4);
+    const emotionalAnswers = getAnswers("Emotional", 3);
+    const routineAnswers = getAnswers("Routine", 3);
+    const sensoryAnswers = getAnswers("Sensory", 3);
+    const socialAnswers = getAnswers("Social", 4);
+
+    // ✅ Collect 'others' answers
+    const othersAnswers = [...answers];
+    if (other.trim() !== "") {
+        othersAnswers.push(other);
+    }
+
+    // ✅ Store values in Zustand before submission
+    setCommunicationAnswers(communicationAnswers);
+    setEmotionalAnswers(emotionalAnswers);
+    setRoutineAnswers(routineAnswers);
+    setSensoryAnswers(sensoryAnswers);
+    setSocialAnswers(socialAnswers);
+    setOthersAnswers(othersAnswers);
+
+    // ✅ Debug: Log fetched values to verify correctness
+    console.log("Submitting data:", {
+        userId,
+        communicationAnswers,
+        emotionalAnswers,
+        routineAnswers,
+        sensoryAnswers,
+        socialAnswers,
+        othersAnswers
+    });
+    submitAssessment(); // Submit only when button is clicked
+
+    for (let i = 0; i < 4; i++) {
+      localStorage.removeItem(`Communication_${i}_answer`);
+      localStorage.removeItem(`Emotional_${i}_answer`);
+      localStorage.removeItem(`Routine_${i}_answer`);
+      localStorage.removeItem(`Sensory_${i}_answer`);
+      localStorage.removeItem(`Social_${i}_answer`);
+  }
+  localStorage.removeItem("Others_answers");
+};
+
+
+
+
+  
+  // const handleNext = () => {
+  //   if (currentQuestion < questions.length - 1) {
+  //     setCurrentQuestion(currentQuestion + 1);
+  //   }
+  // };
 
   if (loading) {
     return <Spinner />;
@@ -170,9 +262,10 @@ const OtherSymptoms = () => {
 
         <Box sx={{ textAlign: "right", mt: 7 }}>
           <Button
-            href='/whosusing'
+            // href='/whosusing'
             variant="contained"
             endIcon={<ArrowForwardIcon />}
+            
             sx={{
               width: '250px',
               backgroundColor: "#5da802",
@@ -187,7 +280,7 @@ const OtherSymptoms = () => {
               py: 1,
               "&:hover": { backgroundColor: "#4c9000" },
             }}
-            onClick={handleSubmit}
+            onClick={handleButtonClick}  // Use the combined handler
             disabled={!allAnswered}
           >
             Submit

@@ -17,6 +17,7 @@
     "@mui/lab": "^6.0.0-beta.24",
     "@mui/material": "^6.4.1",
     "@mui/x-date-pickers": "^7.24.1",
+    "@react-spring/web": "^9.7.5",
     "axios": "^1.7.9",
     "date-fns": "^2.25.0",
     "firebase": "^11.2.0",

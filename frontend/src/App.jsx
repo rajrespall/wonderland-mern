@@ -13,6 +13,8 @@ import Question4 from './screens/Emotional'
 import Question5 from './screens/Routines'
 import OtherSymptoms from './screens/Others'
 import ParentPage from './screens/Parent/ParentPage'
+import Recors from './screens/Parent/Recors'
+
 
 function App() {
 
@@ -20,7 +22,16 @@ function App() {
     <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home />} />
+
+          {/* ============================================== */}
+          {/* parentside */}
           <Route path='/home' element={<ParentPage />} />
+          <Route path='/records' element={<Recors />} />
+          {/* ============================================ */}
+
+
+
+
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<Register />} />
           <Route path='/whosusing' element={<WhosUsing />} />

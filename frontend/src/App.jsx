@@ -13,8 +13,13 @@ import Question4 from './screens/Emotional'
 import Question5 from './screens/Routines'
 import OtherSymptoms from './screens/Others'
 import ParentPage from './screens/Parent/ParentPage'
+<<<<<<< HEAD
 import Recors from './screens/Parent/Recors'
 
+=======
+import AboutUs from './screens/AboutUs'
+import Admin from './screens/Admin/AdminHome'
+>>>>>>> ef8e1aebd8bdcd18d5654bad34d9fbd18c58b367
 
 function App() {
 
@@ -44,6 +49,9 @@ function App() {
           <Route path='/emotional' element={<Question4 />} />
           <Route path='/routines' element={<Question5 />} />
           <Route path='/others' element={<OtherSymptoms />} />
+          <Route path='/aboutus' element={<AboutUs />} />
+
+          <Route path='/admin' element={<Admin />} />
 
         </Routes>
     </BrowserRouter>

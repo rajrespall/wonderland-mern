@@ -12,37 +12,36 @@ import soc from '../../assets/social.jpg';
 import sen from '../../assets/sensory.jpg'; 
 import emo from '../../assets/emotional.jpg'; 
 
-// Sample images for each category
 const cardData = {
     communication: {
         title: "Improve Communication Skills",
         description: "Enhance your child's verbal and non-verbal communication.",
         image: com,
-        color: "#2196F3", // Blue
+        color: "#2196F3",
     },
     social: {
         title: "Boost Social Interaction",
         description: "Help your child build better social skills and connections.",
         image: soc,
-        color: "#9C27B0", // Purple
+        color: "#9C27B0",
     },
     sensory: {
         title: "Manage Sensory Sensitivities",
         description: "Techniques to support sensory processing challenges.",
         image: sen,
-        color: "#4CAF50", // Green
+        color: "#4CAF50",
     },
     emotional: {
         title: "Emotional Regulation Strategies",
         description: "Learn ways to manage emotions and reduce anxiety.",
         image: emo,
-        color: "#FF9800", // Orange
+        color: "#FF9800",
     },
     routine: {
         title: "Establish Healthy Routines",
         description: "Create structured and comfortable daily routines.",
         image: rou,
-        color: "#F44336", // Red
+        color: "#F44336",
     },
 };
 
@@ -91,7 +90,6 @@ const Recors = () => {
                     zIndex: 1,
                 }}
             >
-                {/* Render Cards Dynamically */}
                 {showComm && <InfoCard data={cardData.communication} />}
                 {showSocial && <InfoCard data={cardData.social} />}
                 {showSensory && <InfoCard data={cardData.sensory} />}

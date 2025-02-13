@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/auth.route.js");
 const generalInfoRoutes = require("./routes/geninfo.route.js");
 const assessRoutes = require("./routes/assess.route.js"); 
-const recRoutes = require("./routes/recors.route.js"); 
+const resourceRoutes = require("./routes/resources.route.js"); 
 
 const cookieParser = require('cookie-parser')
 
@@ -27,5 +27,5 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/general-info", generalInfoRoutes);
 app.use("/api/assessment", assessRoutes);
-app.use("/api/recors", recRoutes);
+app.use("/api/resources", resourceRoutes);
 module.exports = app;

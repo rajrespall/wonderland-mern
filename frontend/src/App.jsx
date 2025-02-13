@@ -13,13 +13,12 @@ import Question4 from './screens/Emotional'
 import Question5 from './screens/Routines'
 import OtherSymptoms from './screens/Others'
 import ParentPage from './screens/Parent/ParentPage'
-<<<<<<< HEAD
+
 import Recors from './screens/Parent/Recors'
 
-=======
 import AboutUs from './screens/AboutUs'
 import Admin from './screens/Admin/AdminHome'
->>>>>>> ef8e1aebd8bdcd18d5654bad34d9fbd18c58b367
+
 
 function App() {
 

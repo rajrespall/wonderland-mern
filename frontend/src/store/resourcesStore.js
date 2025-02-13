@@ -15,7 +15,7 @@ const useRecStore = create((set) => ({
         set({ loading: true, error: null });
 
         try {
-            const response = await axios.get(`http://localhost:5000/api/recors/assessment/${userId}`);
+            const response = await axios.get(`http://localhost:5173/api/resources/assessment/${userId}`);
             const userAssessment = response.data;
 
             // Set the user assessment and calculate visibility for each category

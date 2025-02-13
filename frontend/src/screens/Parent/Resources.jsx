@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import useRecStore from "../../store/recStore";
+import useRecStore from "../../store/resourcesStore";
 import { Box, Typography, Card, CardContent, CardMedia, IconButton } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Spinner from "../../components/Spinner";

@@ -14,7 +14,7 @@ import Question5 from './screens/Routines'
 import OtherSymptoms from './screens/Others'
 import ParentPage from './screens/Parent/ParentPage'
 
-import Recors from './screens/Parent/Recors'
+import Recors from './screens/Parent/Resources'
 
 import AboutUs from './screens/AboutUs'
 import Admin from './screens/Admin/AdminHome'

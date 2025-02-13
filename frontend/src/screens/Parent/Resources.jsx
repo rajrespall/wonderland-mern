@@ -3,6 +3,7 @@ import useRecStore from "../../store/resourcesStore";
 import { Box, Typography, Card, CardContent, CardMedia, IconButton } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Spinner from "../../components/Spinner";
+import NavigationBar from '../../components/NavigationBar';
 
 import bgImage from '../../assets/bg_main.png'; 
 
@@ -77,6 +78,8 @@ const Recors = () => {
                 overflow: 'auto',
             }}
         >
+            <NavigationBar /> {/* Added the NavigationBar here */}
+
             <Box 
                 textAlign="center" 
                 mt={4} 

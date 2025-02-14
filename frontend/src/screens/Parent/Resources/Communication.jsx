@@ -9,7 +9,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const Communication = () => {
   const { resources, loading, error, fetchResources, getResourcesByType } = useResourceStore();
-  const [expandedCards, setExpandedCards] = useState({}); // Add state for expanded cards
+  const [expandedCards, setExpandedCards] = useState({}); 
 
   useEffect(() => {
     fetchResources();
@@ -17,7 +17,6 @@ const Communication = () => {
 
   const communicationResources = getResourcesByType("Communication");
 
-  // Handle card expansion toggle
   const handleExpandClick = (resourceId) => {
     setExpandedCards(prev => ({
       ...prev,
@@ -55,7 +54,7 @@ const Communication = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  borderRadius: 4, // More rounded corners
+                  borderRadius: 4, 
                   p: 2,
                   m: 1,
                   transition: 'all 0.3s ease-in-out',
@@ -98,7 +97,7 @@ const Communication = () => {
                     p: 3,
                     pt: 0,
                     display: 'flex',
-                    justifyContent: 'space-between', // This will space out the buttons
+                    justifyContent: 'space-between', 
                     alignItems: 'center'
                   }}>
                     <Button
@@ -123,7 +122,7 @@ const Communication = () => {
                       onClick={() => handleExpandClick(resource._id)}
                       sx={{ 
                         color: 'primary.main',
-                        ml: 1 // Add some margin to separate from the Read More button
+                        ml: 1 
                       }}
                     >
                       {expandedCards[resource._id] ? (

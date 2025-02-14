@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import useAssessmentStore from '../../store/assessmentStore';
 import { Box, Typography, Card, CardContent, CardMedia, IconButton } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Spinner from "../../components/Spinner";
 import NavigationBar from '../../components/NavigationBar';
 
+// image imports
 import bgImage from '../../assets/bg_main.png'; 
-
 import rou from '../../assets/routines.jpg'; 
 import com from '../../assets/communication.jpg'; 
 import soc from '../../assets/social.jpg'; 
@@ -78,7 +79,7 @@ const Resources = () => {
                 overflow: 'auto',
             }}
         >
-            <NavigationBar /> {/* Added the NavigationBar here */}
+            <NavigationBar /> 
 
             <Box 
                 textAlign="center" 
@@ -104,8 +105,27 @@ const Resources = () => {
 };
 
 const InfoCard = ({ data }) => {
+    const navigate = useNavigate();
+    
+    const getResourceType = (title) => {
+        const typeMap = {
+            "Improve Communication Skills": "Communication",
+            "Boost Social Interaction": "Social",
+            "Manage Sensory Sensitivities": "Sensory",
+            "Emotional Regulation Strategies": "Emotional",
+            "Establish Healthy Routines": "Routines"
+        };
+        return typeMap[title];
+    };
+
+    const handleClick = () => {
+        const resourceType = getResourceType(data.title);
+        navigate(`/resources/${resourceType}`);
+    };
+
     return (
         <Card 
+            onClick={handleClick}
             sx={{ 
                 display: "flex", 
                 alignItems: "center", 

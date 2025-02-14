@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
-const useStore = create((set, get) => ({
+const useAssessmentStore = create((set, get) => ({
+    // Assessment state
     userId: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : null,
     communication: [],
     emotional: [],
@@ -9,7 +10,18 @@ const useStore = create((set, get) => ({
     sensory: [],
     social: [],
     others: [],
+    
+    // Resources state
+    userAssessment: null,
+    loading: false,
+    error: null,
+    showComm: false,
+    showSocial: false,
+    showSensory: false,
+    showEmotional: false,
+    showRoutine: false,
 
+    // Assessment actions
     setUserId: (userId) => {
         localStorage.setItem("user", JSON.stringify({ id: userId }));
         set({ userId });
@@ -31,7 +43,7 @@ const useStore = create((set, get) => ({
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/assessment/submit', {  // <-- FIXED URL
+            const response = await axios.post('http://localhost:5000/api/assessment/submit', {
                 userId,
                 communication,
                 emotional,
@@ -48,8 +60,31 @@ const useStore = create((set, get) => ({
             }
         } catch (error) {
             console.error('Error submitting assessment:', error);
+            set({ error: error.response?.data?.message || "Error submitting assessment" });
+        }
+    },
+
+    // Resources actions
+    fetchUserAssessment: async (userId) => {
+        set({ loading: true, error: null });
+
+        try {
+            const response = await axios.get(`http://localhost:5000/api/assessment/${userId}`);
+            const userAssessment = response.data;
+
+            set({
+                userAssessment,
+                showComm: JSON.stringify(userAssessment.communication) !== JSON.stringify([4, 1, 1, 1]),
+                showSocial: JSON.stringify(userAssessment.social) !== JSON.stringify([4, 4, 1, 1]),
+                showSensory: JSON.stringify(userAssessment.sensory) !== JSON.stringify([1, 1, 1]),
+                showEmotional: JSON.stringify(userAssessment.emotional) !== JSON.stringify([1, 1, 1]),
+                showRoutine: JSON.stringify(userAssessment.routine) !== JSON.stringify([1, 1, 1]),
+                loading: false
+            });
+        } catch (error) {
+            set({ error: error.response?.data?.message || "Error fetching assessment", loading: false });
         }
     }
 }));
 
-export default useStore;
+export default useAssessmentStore;

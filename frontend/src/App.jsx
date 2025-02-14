@@ -14,7 +14,12 @@ import Question5 from './screens/Routines'
 import OtherSymptoms from './screens/Others'
 import ParentPage from './screens/Parent/ParentPage'
 
-import Recors from './screens/Parent/Resources'
+import Resources from './screens/Parent/Resources'
+import Communication from './screens/Parent/Resources/Communication'
+import Emotional from './screens/Parent/Resources/Emotional'
+import Routines from './screens/Parent/Resources/Routines'
+import Sensory from './screens/Parent/Resources/Sensory'
+import Social from './screens/Parent/Resources/Social'
 
 import AboutUs from './screens/AboutUs'
 import Admin from './screens/Admin/AdminHome'
@@ -30,7 +35,12 @@ function App() {
           {/* ============================================== */}
           {/* parentside */}
           <Route path='/home' element={<ParentPage />} />
-          <Route path='/records' element={<Recors />} />
+          <Route path='/resources' element={<Resources />} />
+          <Route path='/resources/communication' element={<Communication />} />
+          <Route path='/resources/emotional' element={<Emotional />} />
+          <Route path='/resources/routines' element={<Routines />} />
+          <Route path='/resources/sensory' element={<Sensory />} />
+          <Route path='/resources/social' element={<Social />} />
           {/* ============================================ */}
 
 

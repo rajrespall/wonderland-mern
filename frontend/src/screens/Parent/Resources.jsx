@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import useRecStore from "../../store/resourcesStore";
+import useAssessmentStore from '../../store/assessmentStore';
 import { Box, Typography, Card, CardContent, CardMedia, IconButton } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Spinner from "../../components/Spinner";
@@ -46,8 +46,8 @@ const cardData = {
     },
 };
 
-const Recors = () => {
-    const { userAssessment, loading, error, fetchUserAssessment, showComm, showSocial, showSensory, showEmotional, showRoutine } = useRecStore();
+const Resources = () => {
+    const { userAssessment, loading, error, fetchUserAssessment, showComm, showSocial, showSensory, showEmotional, showRoutine } = useAssessmentStore();
     const userId = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : null;
 
     useEffect(() => {
@@ -148,4 +148,4 @@ const InfoCard = ({ data }) => {
     );
 };
 
-export default Recors;
+export default Resources;

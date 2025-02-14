@@ -4,7 +4,7 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/symptoms.png';
 import Spinner from '../components/Spinner'; 
-import useStore from '../store/assStore';  
+import useAssessmentStore from '../store/assessmentStore'; 
 // import { set } from "../../../backend/app";
 
 
@@ -42,7 +42,7 @@ const questions = [
 
 const OtherSymptoms = () => {
   const [loading, setLoading] = useState(true);
-  const { setOthersAnswers,  submitAssessment } = useStore();  
+  const { setOthersAnswers,  submitAssessment } = useAssessmentStore();  
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [other, setOther] = useState('');
@@ -56,7 +56,7 @@ const OtherSymptoms = () => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
-        useStore.getState().setUserId(parsedUser.id); // Update Zustand state
+        useAssessmentStore.getState().setUserId(parsedUser.id); // Update Zustand state
     }
 }, []);
   
@@ -90,7 +90,7 @@ const handleAnswer = (answer) => {
         setSocialAnswers,
         setOthersAnswers,
         submitAssessment
-    } = useStore.getState();
+    } = useAssessmentStore.getState();
 
     if (!userId) {
         console.error("User ID is missing, cannot submit assessment");

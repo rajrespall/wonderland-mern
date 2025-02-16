@@ -21,6 +21,8 @@ import Routines from './screens/Parent/Resources/Routines'
 import Sensory from './screens/Parent/Resources/Sensory'
 import Social from './screens/Parent/Resources/Social'
 
+import Dashboard from './screens/Children/Dashboard'
+
 import AboutUs from './screens/AboutUs'
 import Admin from './screens/Admin/AdminHome'
 
@@ -42,6 +44,12 @@ function App() {
           <Route path='/resources/sensory' element={<Sensory />} />
           <Route path='/resources/social' element={<Social />} />
           {/* ============================================ */}
+
+          {/* =================================================== */}
+          {/* Children side */}
+             <Route path='/dashboard' element={<Dashboard />} />
+          {/* =================================================== */}
+
 
 
 

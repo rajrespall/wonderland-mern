@@ -26,6 +26,7 @@ import Dashboard from './screens/Children/Dashboard'
 import AboutUs from './screens/AboutUs'
 import Admin from './screens/Admin/AdminHome'
 
+import ProtectedAssessmentRoute from './components/ProtectedRoutes/ProtectedAssessmentRoute'
 
 function App() {
 
@@ -58,14 +59,48 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/whosusing' element={<WhosUsing />} />
           
-          <Route path='/getstarted' element={<GetStarted />} />
-          <Route path='/assessment' element={<Assessment />} />
-          <Route path='/communication' element={<Question1 />} />
-          <Route path='/social-interaction' element={<Question2 />} />
-          <Route path='/sensory' element={<Question3 />} />
-          <Route path='/emotional' element={<Question4 />} />
-          <Route path='/routines' element={<Question5 />} />
-          <Route path='/others' element={<OtherSymptoms />} />
+          {/* Protected Assessment Routes */}
+          <Route path='/getstarted' element={
+            <ProtectedAssessmentRoute>
+              <GetStarted />
+            </ProtectedAssessmentRoute>
+          } />
+          <Route path='/assessment' element={
+            <ProtectedAssessmentRoute>
+              <Assessment />
+            </ProtectedAssessmentRoute>
+          } />
+          <Route path='/communication' element={
+            <ProtectedAssessmentRoute>
+              <Question1 />
+            </ProtectedAssessmentRoute>
+          } />
+          <Route path='/social-interaction' element={
+            <ProtectedAssessmentRoute>
+              <Question2 />
+            </ProtectedAssessmentRoute>
+          } />
+          <Route path='/sensory' element={
+            <ProtectedAssessmentRoute>
+              <Question3 />
+            </ProtectedAssessmentRoute>
+          } />
+          <Route path='/emotional' element={
+            <ProtectedAssessmentRoute>
+              <Question4 />
+            </ProtectedAssessmentRoute>
+          } />
+          <Route path='/routines' element={
+            <ProtectedAssessmentRoute>
+              <Question5 />
+            </ProtectedAssessmentRoute>
+          } />
+          <Route path='/others' element={
+            <ProtectedAssessmentRoute>
+              <OtherSymptoms />
+            </ProtectedAssessmentRoute>
+          } />
+        {/* =================================================== */}
           <Route path='/aboutus' element={<AboutUs />} />
 
           <Route path='/admin' element={<Admin />} />

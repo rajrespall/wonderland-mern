@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import useAssessmentStore from '../../store/assessmentStore';
-import { Box, Typography, Card, CardContent, CardMedia, IconButton } from "@mui/material";
+import { Box, Typography, Card, CardContent, CardMedia, IconButton, Grid, CssBaseline } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Spinner from "../../components/Spinner";
-import NavigationBar from '../../components/NavigationBar';
+import ParentNav from '../../components/ParentNav'; // Changed from NavigationBar to ParentNav
 
 // image imports
-import bgImage from '../../assets/bg_main.png'; 
 import rou from '../../assets/resources2.png'; 
 import com from '../../assets/resources1.png'; 
 import soc from '../../assets/resources3.png'; 
 import sen from '../../assets/resources4.png'; 
 import emo from '../../assets/emotional.jpg'; 
+
 
 const cardData = {
     communication: {
@@ -57,52 +57,55 @@ const Resources = () => {
         }
     }, [userId, fetchUserAssessment]);
 
-    if (loading) {
-        return <Spinner />;
-    }
-
+    if (loading) return <Spinner />;
     if (error) return <Typography color="error">{error}</Typography>;
 
     return (
-        <Box 
-            sx={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundImage: `url(${bgImage})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                zIndex: -1,
-                overflow: 'auto',
-            }}
-        >
-            <NavigationBar /> 
-
-            <Box 
-                textAlign="center" 
-                mt={4} 
-                sx={{ 
-                    display: "grid", 
-                    gap: 3, 
-                    justifyContent: "center", 
-                    maxWidth: 800, 
-                    margin: "auto",
-                    padding: "2rem",
-                    zIndex: 1,
+        <>
+            <CssBaseline />
+            <Box
+                sx={{
+                    backgroundColor: 'rgba(4, 87, 164, 0.1)',
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    minHeight: '100vh'
                 }}
             >
-                {showComm && <InfoCard data={cardData.communication} />}
-                {showSocial && <InfoCard data={cardData.social} />}
-                {showSensory && <InfoCard data={cardData.sensory} />}
-                {showEmotional && <InfoCard data={cardData.emotional} />}
-                {showRoutine && <InfoCard data={cardData.routine} />}
+                <ParentNav />
+                <Box sx={{ 
+                    p: 4,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: 'calc(100vh - 64px)'
+                }}>
+                    <Grid 
+                        container 
+                        spacing={4} 
+                        sx={{
+                            maxWidth: '1200px',
+                            margin: '0 auto',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Grid item xs={12} sm={6}>
+                            {showComm && <InfoCard data={cardData.communication} />}
+                            {showEmotional && <InfoCard data={cardData.emotional} />}
+                            {showSensory && <InfoCard data={cardData.sensory} />}
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            {showSocial && <InfoCard data={cardData.social} />}
+                            {showRoutine && <InfoCard data={cardData.routine} />}
+                        </Grid>
+                    </Grid>
+                </Box>
             </Box>
-        </Box>
+        </>
     );
 };
+
 
 const InfoCard = ({ data }) => {
     const navigate = useNavigate();
@@ -127,12 +130,15 @@ const InfoCard = ({ data }) => {
         <Card 
             onClick={handleClick}
             sx={{ 
+                width: 500, // Adjust the width
+                height: 200,
                 display: "flex", 
                 alignItems: "center", 
                 padding: 2, 
                 borderRadius: 3, 
                 boxShadow: 3, 
-                backgroundColor: data.color, 
+                backgroundColor: data.color,
+                marginBottom: 6, 
                 "&:hover": {
                     backgroundColor: `${data.color}cc`, 
                     transform: 'scale(1.05)', 

@@ -8,10 +8,10 @@ import NavigationBar from '../../components/NavigationBar';
 
 // image imports
 import bgImage from '../../assets/bg_main.png'; 
-import rou from '../../assets/routines.jpg'; 
-import com from '../../assets/communication.jpg'; 
-import soc from '../../assets/social.jpg'; 
-import sen from '../../assets/sensory.jpg'; 
+import rou from '../../assets/resources2.png'; 
+import com from '../../assets/resources1.png'; 
+import soc from '../../assets/resources3.png'; 
+import sen from '../../assets/resources4.png'; 
 import emo from '../../assets/emotional.jpg'; 
 
 const cardData = {

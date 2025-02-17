@@ -1,4 +1,5 @@
 const Assess = require('../models/assessment.model');
+const User = require('../models/user.model');
 
 const saveAssessment = async (req, res) => {
     try {
@@ -27,6 +28,8 @@ const saveAssessment = async (req, res) => {
         });
 
         const savedAssessment = await newAssessment.save();
+
+        await User.findByIdAndUpdate(userId, { hasCompletedAssessment: true });
         console.log("Saved to MongoDB:", savedAssessment);
 
         res.status(201).json({ message: "Assessment saved successfully", data: savedAssessment });

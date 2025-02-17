@@ -79,7 +79,6 @@ const useAuthStore = create((set) => ({
         { withCredentials: true }
       );
   
-      // Sinave ko yung user data sa  local storage and state
       const userData = response.data.user;
       localStorage.setItem('user', JSON.stringify(userData));
       set({ user: userData, isAuthenticated: true, loading: false });

@@ -55,6 +55,11 @@ const useAssessmentStore = create((set, get) => ({
 
             if (response.status === 201) {
                 console.log('Assessment saved successfully:', response.data);
+                const user = JSON.parse(localStorage.getItem('user'));
+                user.hasCompletedAssessment = true;
+                localStorage.setItem('user', JSON.stringify(user));
+                
+                return response.data;
             } else {
                 console.error("Unexpected response:", response);
             }

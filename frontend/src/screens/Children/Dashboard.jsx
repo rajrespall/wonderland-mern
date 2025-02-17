@@ -1,134 +1,203 @@
-import React from 'react';
-import { Box, Typography, Grid, Card, CardMedia } from '@mui/material';
-import forestBackground from '../../assets/bg_main.png';
-import { motion } from 'framer-motion';
-import wondercards from '../../assets/wondercards.jpg';
-import wondermatch from '../../assets/wondermatch.jpg';
-import wonderpuz from '../../assets/wonderpuz.jpg';
-import wondercolor from '../../assets/wondercolor.jpg';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import NavigationBar from '../../components/Childbar';
 
-const gameLogos = [
-  { src: wondercards, title: 'Game 1' },
-  { src: wondermatch, title: 'Game 2' },
-  { src: wonderpuz, title: 'Game 3' },
-  { src: wondercolor, title: 'Game 4' },
-];
+import bgMain from '../../assets/bg_main.png';
+import heroImage1 from '../../assets/emotional.jpg';
+import heroImage2 from '../../assets/communication.jpg';
+import heroImage3 from '../../assets/sensory.jpg';
+import heroImage4 from '../../assets/routines.jpg';
 
 const Dashboard = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      image: heroImage1,
+      title: 'WonderCards',
+      description: 'example',
+    },
+    {
+      image: heroImage2,
+      title: 'Wonderpuz',
+      description: 'Celebrating uniqueness in all its forms.',
+    },
+    {
+      image: heroImage3,
+      title: 'WonderMatch',
+      description: 'Celebrating uniqueness in all its forms.',
+    },
+    {
+      image: heroImage4,
+      title: 'WonderColor',
+      description: 'Celebrating uniqueness in all its forms.',
+    },
+  ];
+
+  const backgroundStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `url(${bgMain})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    zIndex: -1,
+    overflow: 'auto',
+  };
+
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 3000);
+
+    return () => clearInterval(slideInterval);
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleImageClick = (path) => {
+    navigate(path);
+  };
+
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundImage: `url(${forestBackground})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        zIndex: -1,
-        overflow: 'auto',
-      }}
-    >
+    <Box sx={backgroundStyle}>
+      <NavigationBar />
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          top: '15%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          height: '60vh',
+          width: '80%',
+          borderRadius: '20px',
+          boxShadow: '0px 15px 40px rgba(0,0,0,0.3)',
+          transition: 'all 0.5s ease',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundImage: `url(${slides[currentSlide].image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            height: '100%',
+            width: '100%',
+            borderRadius: '20px',
+            color: 'white',
+            padding: '20px',
+            position: 'relative',
+            transition: 'background-image 0.5s ease-in-out',
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              paddingLeft: '50px',
+              zIndex: 1,
+              opacity: 1,
+              animation: 'fadeIn 1s ease',
+            }}
+          >
+            <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
+              {slides[currentSlide].title}
+            </Typography>
+            <Typography variant="h5" sx={{ marginTop: '20px' }}>
+              {slides[currentSlide].description}
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
       <Box
         sx={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          height: '100%',
-          width: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          backdropFilter: 'blur(10px)',
-          zIndex: -1,
+          bottom: '10px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '65%',
         }}
-      />
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2, ease: 'easeInOut' }}
       >
-        <Typography
-          variant="h3"
-          align="center"
-          sx={{
-            marginBottom: '20px',
-            color: 'rgb(139, 69, 19)',
-            textShadow: '0px 0px 20px rgba(139, 69, 19, 0.8)',
-            letterSpacing: '1px',
-          }}
-        >
-          Welcome to Your Game Dashboard
-        </Typography>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2, ease: 'easeInOut', delay: 0.5 }}
-      >
-        <Typography
-          variant="h6"
-          align="center"
-          sx={{
-            marginBottom: '40px',
-            color: 'rgb(139, 69, 19)',
-            textShadow: '0px 0px 20px rgba(139, 69, 19, 0.6)',
-            letterSpacing: '0.5px',
-          }}
-        >
-          Choose a game to start playing
-        </Typography>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
-        <Grid container spacing={3} justifyContent="center">
-          {gameLogos.map((game, index) => (
-            <Grid item xs={12} sm={6} md={2.5} key={index}>
-              <motion.div
-                whileHover={{
-                  scale: 1.05,
-                  rotate: 5,
-                  boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
-                }}
-                whileTap={{
-                  scale: 0.95,
-                }}
-                transition={{ duration: 0.3 }}
-              >
-                <Card
-                  sx={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    borderRadius: '10px',
-                    boxShadow: 3,
-                    cursor: 'pointer',
-                    overflow: 'hidden',
-                    transition: 'transform 0.3s ease-in-out',
-                    width: '100%',
-                  }}
-                  onClick={() => alert(`Navigate to ${game.title} page`)}
-                >
-                  <CardMedia
-                    component="img"
-                    image={game.src}
-                    alt={game.title}
-                    sx={{
-                      height: '245px',
-                      width: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </Card>
-              </motion.div>
-            </Grid>
-          ))}
-        </Grid>
-      </motion.div>
+        <Link onClick={() => handleImageClick('/page1')} sx={{ cursor: 'pointer' }}>
+          <Box
+            sx={{
+              width: '100px',
+              height: '100px',
+              backgroundImage: `url(${heroImage1})`,
+              backgroundSize: 'cover',
+              borderRadius: '50%',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                transition: 'transform 0.3s',
+              },
+            }}
+          />
+        </Link>
+        <Link onClick={() => handleImageClick('/page2')} sx={{ cursor: 'pointer' }}>
+          <Box
+            sx={{
+              width: '100px',
+              height: '100px',
+              backgroundImage: `url(${heroImage2})`,
+              backgroundSize: 'cover',
+              borderRadius: '50%',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                transition: 'transform 0.3s',
+              },
+            }}
+          />
+        </Link>
+        <Link onClick={() => handleImageClick('/page3')} sx={{ cursor: 'pointer' }}>
+          <Box
+            sx={{
+              width: '100px',
+              height: '100px',
+              backgroundImage: `url(${heroImage3})`,
+              backgroundSize: 'cover',
+              borderRadius: '50%',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                transition: 'transform 0.3s',
+              },
+            }}
+          />
+        </Link>
+        <Link onClick={() => handleImageClick('/page4')} sx={{ cursor: 'pointer' }}>
+          <Box
+            sx={{
+              width: '100px',
+              height: '100px',
+              backgroundImage: `url(${heroImage4})`,
+              backgroundSize: 'cover',
+              borderRadius: '50%',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.4)',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                transition: 'transform 0.3s',
+              },
+            }}
+          />
+        </Link>
+      </Box>
     </Box>
   );
 };

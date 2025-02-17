@@ -27,6 +27,7 @@ import AboutUs from './screens/AboutUs'
 import Admin from './screens/Admin/AdminHome'
 
 import ProtectedAssessmentRoute from './components/ProtectedRoutes/ProtectedAssessmentRoute'
+import PublicRoute from './components/ProtectedRoutes/PublicRoute';
 
 function App() {
 
@@ -52,11 +53,19 @@ function App() {
           {/* =================================================== */}
 
 
+          {/* Public routes with authentication check */}
+          <Route path='/login' element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          } />
+          <Route path='/register' element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          } />
 
 
-
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<Register />} />
           <Route path='/whosusing' element={<WhosUsing />} />
           
           {/* Protected Assessment Routes */}
@@ -101,6 +110,7 @@ function App() {
             </ProtectedAssessmentRoute>
           } />
         {/* =================================================== */}
+
           <Route path='/aboutus' element={<AboutUs />} />
 
           <Route path='/admin' element={<Admin />} />

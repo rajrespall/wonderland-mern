@@ -2,85 +2,59 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
+import LogoutIcon from "@mui/icons-material/Logout";
 import logo from '../assets/logo_red.png';
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, IconButton } from '@mui/material';
 import useAuthStore from '../store/authStore';
+import { useNavigate } from 'react-router-dom';
 
 const ChildBar = () => {
   const { user, isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Redirect to '/whosusing' when logout is clicked
+    navigate('/whosusing');
+  };
 
   return (
     <>
       <CssBaseline />
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
-          <Toolbar sx={{ justifyContent: 'space-between' }}>
-            <img src={logo} width='180px' alt="Logo" />
-            <Box>
-              <Button href="/aboutus"
-                sx={{
-                  marginRight: '10px',
-                  width: '100px',
-                  height: '30px',
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontFamily: 'Poppins',
-                  fontSize: '14px',
-                  color: '#fcf230',
-                  '&:hover': {
-                    color: '#0457a4',
-                    backgroundColor: '#fcf230',
-                  },
-                  borderRadius: '20px'
-                }}>
-                About Us
-              </Button>
-              {isAuthenticated ? (
-                <>
-                  <Button href="/institutions"
-                    sx={{
-                      marginRight: '10px',
-                      width: '100px',
-                      height: '30px',
-                      textTransform: 'none',
-                      fontWeight: 600,
-                      fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      color: '#fcf230',
-                      '&:hover': {
-                        color: '#0457a4',
-                        backgroundColor: '#fcf230',
-                      },
-                      borderRadius: '20px'
-                    }}>
-                    Institutions
-                  </Button>
-                  {/* <Avatar alt={user?.username || "User"} src={user?.profileImage || ""} sx={{ cursor: 'pointer' }} /> */}
-                </>
-              ) : (
-                <Button href="/login"
-                  sx={{
-                    width: '100px',
-                    height: '30px',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    fontFamily: 'Poppins',
-                    fontSize: '14px',
-                    color: '#b80201',
-                    backgroundColor: '#fcf230',
-                    '&:hover': {
-                      color: '#fcf230',
-                      backgroundColor: 'transparent',
-                    },
-                    borderRadius: '20px'
-                  }}>
-                  Sign In
-                </Button>
-              )}
+        <AppBar position="relative" sx={{ 
+            backgroundColor: '#1976d2', // Blue background color
+            boxShadow: 'none', // No shadow for the navbar
+            borderRadius: '40px', // Rounded corners
+            width: '70%', // Set navbar width
+            padding: '5px 10px', // Reduced padding for smaller navbar height
+            top: '10px', // Offset the navbar from the top
+            left: '50%', // Center horizontally
+            transform: 'translateX(-50%)', // Adjust to exactly center the navbar
+            height: '60px', // Smaller height for the navbar
+          }}>
+          <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+            {/* Logo */}
+            <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
+              <img src={logo} width="150px" alt="Logo" /> {/* Smaller logo */}
             </Box>
+
+            {/* Logout icon (only visible if authenticated) */}
+            {isAuthenticated ? (
+              <IconButton 
+                color="inherit" 
+                onClick={handleLogout} 
+                sx={{
+                  '&:hover': {
+                    color: '#ffeb3b', // Yellow hover effect for logout icon
+                  },
+                  top: '-5%', // Adjust the top position of the logout icon
+                }}
+              >
+                <LogoutIcon />
+              </IconButton>
+            ) : (
+              <></>
+            )}
           </Toolbar>
         </AppBar>
       </Box>

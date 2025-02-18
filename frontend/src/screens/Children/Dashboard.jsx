@@ -78,7 +78,7 @@ const Dashboard = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          top: '1%',
+          top: '5%',
           left: '50%',
           transform: 'translateX(-50%)',
           height: '60vh',

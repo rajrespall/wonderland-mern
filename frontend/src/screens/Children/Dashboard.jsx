@@ -72,7 +72,7 @@ const Dashboard = () => {
     >
       <NavigationBar />
 
-      {/* Hero Slider */}
+      {/* Hero Slider with Solid Yellow Border */}
       <Box
         sx={{
           display: 'flex',
@@ -84,7 +84,7 @@ const Dashboard = () => {
           height: '60vh',
           width: '80%',
           borderRadius: '20px',
-          boxShadow: '0px 15px 40px rgba(0,0,0,0.3)',
+          border: '5px solid yellow', // Solid yellow border
           transition: 'all 0.5s ease',
           backgroundImage: `url(${slides[currentSlide].image})`,
           backgroundSize: 'cover',
@@ -145,7 +145,7 @@ const Dashboard = () => {
                 width: '90px', // Rectangle width
                 height: '90px', // Rectangle height
                 backgroundColor: currentSlide === index ? 'rgba(255, 255, 255, 0.4)' : 'transparent', // White translucent highlight when clicked
-              
+                boxShadow: currentSlide === index ? '0 0 20px 5px rgba(255, 255, 255, 0.8)' : 'none', // Glow effect when selected
                 borderRadius: '18px', // Slightly rounded corners
                 opacity: currentSlide === index ? 1 : 1, // Make image brighter when selected
                 transform: currentSlide === index ? 'scale(1.2)' : 'scale(1)', // Enlarge the selected image

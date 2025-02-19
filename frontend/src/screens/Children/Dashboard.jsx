@@ -1,57 +1,69 @@
 import React, { useState } from 'react';
-import { Box, Typography, Link, Button } from '@mui/material';
+import { Box, Typography, Button, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import NavigationBar from '../../components/Childbar';
+import { ArrowForward, ArrowBack, Logout } from '@mui/icons-material';
 
-import bgMain from '../../assets/bg_main.png';
-import heroImage1 from '../../assets/emotional.jpg';
-import heroImage2 from '../../assets/communication.jpg';
-import heroImage3 from '../../assets/sensory.jpg';
-import heroImage4 from '../../assets/routines.jpg';
+import bgMain from '../../assets/gamebg.png';
+import heroImage1 from '../../assets/wondercards.png';
+import heroImage2 from '../../assets/puzzleimg.png';
+import heroImage3 from '../../assets/coloringimg.png';
+import heroImage4 from '../../assets/memorypuzimg.png';
 
-import card from '../../assets/icons/cardgames.png';
-import puzzle from '../../assets/icons/puzzle.png';
-import color from '../../assets/icons/colorwheel.png';
-import match from '../../assets/icons/game.png';
+import memorygame from '../../assets/wondercard.png';
+import puzzlegame from '../../assets/wonderpuz.png';
+import matching from '../../assets/wondermatch.png';
+import color from '../../assets/wondercolor.png';
 
 const Dashboard = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentLogo, setCurrentLogo] = useState(memorygame);
   const navigate = useNavigate();
-  const icons = [card, puzzle, match, color]; // Use icons instead of hero images
 
   const slides = [
     {
       image: heroImage1,
-      title: 'WonderCards',
-      description: 'example',
+      logo: memorygame,
       route: '/wondercards',
     },
     {
       image: heroImage2,
-      title: 'Wonderpuz',
-      description: 'Celebrating uniqueness in all its forms.',
+      logo: puzzlegame,
       route: '/wonderpuz',
     },
     {
       image: heroImage3,
-      title: 'WonderMatch',
-      description: 'Celebrating uniqueness in all its forms.',
-      route: '/wondermatch',
+      logo: color,
+      route: '/wondercolor',
     },
     {
       image: heroImage4,
-      title: 'WonderColor',
-      description: 'Celebrating uniqueness in all its forms.',
-      route: '/wondercolor',
+      logo: matching,
+      route: '/wondermatch',
     },
   ];
 
-  const handleImageClick = (index) => {
-    setCurrentSlide(index);
+  const nextSlide = () => {
+    setCurrentSlide((prev) => {
+      const next = (prev + 1) % slides.length;
+      setCurrentLogo(slides[next].logo);
+      return next;
+    });
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => {
+      const next = (prev - 1 + slides.length) % slides.length;
+      setCurrentLogo(slides[next].logo);
+      return next;
+    });
   };
 
   const handlePlayClick = () => {
     navigate(slides[currentSlide].route);
+  };
+
+  const handleLogoutClick = () => {
+    navigate('/whosusing');
   };
 
   return (
@@ -67,24 +79,19 @@ const Dashboard = () => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         zIndex: -1,
-        overflow: 'auto',
+        overflow: 'hidden',
       }}
     >
-      <NavigationBar />
-
-      {/* Hero Slider with Solid Yellow Border */}
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          top: '5%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          height: '60vh',
+          left: '10%',
+          top: '2%',
+          height: '100vh',
           width: '80%',
           borderRadius: '20px',
-          border: '5px solid yellow', // Solid yellow border
           transition: 'all 0.5s ease',
           backgroundImage: `url(${slides[currentSlide].image})`,
           backgroundSize: 'cover',
@@ -92,85 +99,105 @@ const Dashboard = () => {
           color: 'white',
           padding: '20px',
           position: 'relative',
+          marginBottom: '50px',
         }}
       >
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
-            {slides[currentSlide].title}
-          </Typography>
-          <Typography variant="h5" sx={{ marginTop: '20px' }}>
-            {slides[currentSlide].description}
-          </Typography>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '-10px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            <img src={currentLogo} alt="Game Logo" style={{ width: '700px', height: 'auto' }} />
+          </Box>
         </Box>
 
-        {/* Play Button */}
         <Button
           variant="contained"
           onClick={handlePlayClick}
           sx={{
             position: 'absolute',
-            bottom: '20px',
-            right: '20px',
-            backgroundColor: '#FFD700',
-            color: 'black',
+            bottom: '60px',
+            left: '50%',
+            width: '28%',
+            transform: 'translateX(-50%)',
+            backgroundColor: '#FFB84D',
+            color: 'white',
             fontWeight: 'bold',
-            padding: '10px 20px',
-            fontSize: '16px',
+            borderRadius: '50px',
+            padding: '15px 30px',
+            fontSize: '30px',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+            border: '6px solid white',
             '&:hover': {
-              backgroundColor: '#FFC300',
+              backgroundColor: '#FF8C1A',
             },
           }}
         >
-          Play
+          Start
         </Button>
-      </Box>
 
-      {/* Rectangular Navigation */}
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          width: '50%',
-        }}
-      >
-        {slides.map((slide, index) => (
-          <Link key={index} onClick={() => handleImageClick(index)} sx={{ cursor: 'pointer' }}>
-            {/* Container Box */}
-            <Box
-              sx={{
-                width: '90px', // Rectangle width
-                height: '90px', // Rectangle height
-                backgroundColor: currentSlide === index ? 'rgba(255, 255, 255, 0.4)' : 'transparent', // White translucent highlight when clicked
-                boxShadow: currentSlide === index ? '0 0 20px 5px rgba(255, 255, 255, 0.8)' : 'none', // Glow effect when selected
-                borderRadius: '18px', // Slightly rounded corners
-                opacity: currentSlide === index ? 1 : 1, // Make image brighter when selected
-                transform: currentSlide === index ? 'scale(1.2)' : 'scale(1)', // Enlarge the selected image
-                transition: 'transform 0.3s, box-shadow 0.3s, opacity 0.3s, background-color 0.3s',
-                '&:hover': {
-                  transform: 'scale(1.2)', // Hover effect: enlarge image
-                  boxShadow: '0 0 20px 5px rgba(255, 255, 255, 0.8)', // Glow effect on hover
-                },
-              }}
-            >
-              {/* Image Box */}
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundImage: `url(${icons[index]})`, // Use icon images
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                  borderRadius: '8px', // Slightly rounded corners
-                }}
-              />
-            </Box>
-          </Link>
-        ))}
+        <IconButton
+          onClick={prevSlide}
+          sx={{
+            position: 'absolute',
+            left: '-10px',
+            top: '43%',
+            transform: 'translateY(-50%)',
+            backgroundColor: 'white',
+            color: '#FFB84D',
+            borderRadius: '10px',
+            padding: '12px',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+            '&:hover': {
+              backgroundColor: '#388E3C',
+            },
+          }}
+        >
+          <ArrowBack fontSize="inherit" sx={{ fontSize: '40px' }} />
+        </IconButton>
+
+        <IconButton
+          onClick={nextSlide}
+          sx={{
+            position: 'absolute',
+            right: '-10px',
+            top: '43%',
+            transform: 'translateY(-50%)',
+            backgroundColor: 'white',
+            color: '#FFB84D',
+            borderRadius: '10px',
+            padding: '12px',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+            '&:hover': {
+              backgroundColor: '#388E3C',
+            },
+          }}
+        >
+          <ArrowForward fontSize="inherit" sx={{ fontSize: '40px' }} />
+        </IconButton>
+
+        <IconButton
+          onClick={handleLogoutClick}
+          sx={{
+            position: 'absolute',
+            top: '10px',
+            left: '-100px',
+            backgroundColor: 'white',
+            color: '#FFB84D',
+            borderRadius: '10px',
+            padding: '12px',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+            '&:hover': {
+              backgroundColor: '#FF8C1A',
+            },
+          }}
+        >
+          <Logout fontSize="inherit" sx={{ fontSize: '40px' }} />
+        </IconButton>
       </Box>
     </Box>
   );

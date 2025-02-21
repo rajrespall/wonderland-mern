@@ -1,17 +1,19 @@
 import React from 'react';
-import { AppBar, Toolbar, Box, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Box, Button, Avatar } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from '../assets/logo_red.png';
 
 const ParentNav = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <AppBar 
       position="static" 
       sx={{ 
-        width: '95%',
-        marginTop: '20px',
+        width: '100%',
         backgroundColor: "rgba(176, 200, 227, 0.2)",
         boxShadow: "none",
         borderRadius: '40px' 
@@ -35,8 +37,8 @@ const ParentNav = () => {
               textTransform: "none",
               fontFamily: "Poppins",
               fontSize: "16px",
-              color: "#0457a4",
-              "&:hover": { color: "#fcf230" },
+              color: isActive('/resources') ? "black" : "#0457a4",
+              "&:hover": { color: "black" },
             }}
           >
             Resources
@@ -48,8 +50,8 @@ const ParentNav = () => {
               textTransform: "none",
               fontFamily: "Poppins",
               fontSize: "16px",
-              color: "#0457a4",
-              "&:hover": { color: "#fcf230" },
+              color: isActive('/institutions') ? "black" : "#0457a4",
+              "&:hover": { color: "black" },
             }}
           >
             Institutions
@@ -61,12 +63,23 @@ const ParentNav = () => {
               textTransform: "none",
               fontFamily: "Poppins",
               fontSize: "16px",
-              color: "#0457a4",
-              "&:hover": { color: "#fcf230" },
+              color: isActive('/aboutus') ? "black" : "#0457a4",
+              "&:hover": { color: "black" },
             }}
           >
             About Us
           </Button>
+          <Avatar
+            sx={{
+              bgcolor: "transparent",
+              color: isActive('/profile') ? "black" : "#0457a4",
+              cursor: 'pointer',
+              "&:hover": {
+                color: "black",
+              }
+            }}
+            onClick={() => navigate('/profile')}
+          />
         </Box>
       </Toolbar>
     </AppBar>

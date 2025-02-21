@@ -13,6 +13,7 @@ import Question4 from './screens/Emotional'
 import Question5 from './screens/Routines'
 import OtherSymptoms from './screens/Others'
 import ParentPage from './screens/Parent/ParentPage'
+import ProfilePage from './screens/Parent/Profile'
 
 import Resources from './screens/Parent/Resources'
 import Communication from './screens/Parent/Resources/Communication'
@@ -22,9 +23,7 @@ import Sensory from './screens/Parent/Resources/Sensory'
 import Social from './screens/Parent/Resources/Social'
 
 import Dashboard from './screens/Children/Dashboard'
-
 import AboutUs from './screens/AboutUs'
-import Admin from './screens/Admin/AdminHome'
 
 import ProtectedAssessmentRoute from './components/ProtectedRoutes/ProtectedAssessmentRoute'
 import PublicRoute from './components/ProtectedRoutes/PublicRoute';
@@ -39,6 +38,7 @@ function App() {
           {/* ============================================== */}
           {/* parentside */}
           <Route path='/home' element={<ParentPage />} />
+          <Route path='/profile' element={<ProfilePage />} />
           <Route path='/resources' element={<Resources />} />
           <Route path='/resources/communication' element={<Communication />} />
           <Route path='/resources/emotional' element={<Emotional />} />

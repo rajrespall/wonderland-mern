@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, CssBaseline } from "@mui/material";
 import Spinner from "../components/Spinner";
 import Feedback from "../components/Feedback";
-import ParentNav from "../components/ParentNav"; // Add this import
+import ParentNav from "../components/ParentNav";
 
 const AboutUs = () => {
   const [loading, setLoading] = useState(true);
@@ -27,6 +27,7 @@ const AboutUs = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
+          p: 2
         }}
       >
         <ParentNav />

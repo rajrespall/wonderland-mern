@@ -10,7 +10,7 @@ const buttonStyles = (active) => ({
   border: '2px solid yellow',
   fontFamily: 'Poppins', 
   fontWeight: '400',
-  justifyContent: 'center',
+  justifyContent: 'left',
   backgroundColor: active ? 'yellow' : 'transparent',
   borderColor: active ? '#b80201' : '#0457a4',
   color: active ? '#b80201' : '#0457a4',

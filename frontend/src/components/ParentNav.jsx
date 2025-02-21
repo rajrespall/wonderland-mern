@@ -37,7 +37,7 @@ const ParentNav = () => {
               textTransform: "none",
               fontFamily: "Poppins",
               fontSize: "16px",
-              color: isActive('/resources') ? "black" : "#0457a4",
+              color: isActive('/resources') ? "#243558" : "#0457a4",
               "&:hover": { color: "black" },
             }}
           >
@@ -50,7 +50,7 @@ const ParentNav = () => {
               textTransform: "none",
               fontFamily: "Poppins",
               fontSize: "16px",
-              color: isActive('/institutions') ? "black" : "#0457a4",
+              color: isActive('/institutions') ? "#243558" : "#0457a4",
               "&:hover": { color: "black" },
             }}
           >
@@ -63,7 +63,7 @@ const ParentNav = () => {
               textTransform: "none",
               fontFamily: "Poppins",
               fontSize: "16px",
-              color: isActive('/aboutus') ? "black" : "#0457a4",
+              color: isActive('/aboutus') ? "#243558" : "#0457a4",
               "&:hover": { color: "black" },
             }}
           >
@@ -72,7 +72,7 @@ const ParentNav = () => {
           <Avatar
             sx={{
               bgcolor: "transparent",
-              color: isActive('/profile') ? "black" : "#0457a4",
+              color: isActive('/profile') ? "#243558" : "#0457a4",
               cursor: 'pointer',
               "&:hover": {
                 color: "black",

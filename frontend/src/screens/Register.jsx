@@ -47,7 +47,7 @@ const Register = () => {
     e.preventDefault();
     try {
       await register(formData.username, formData.email, formData.password);
-      navigate('/whosusing');
+      navigate('/getstarted');
     } catch (err) {
       console.error('Registration error:', err);
     }

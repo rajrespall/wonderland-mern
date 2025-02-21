@@ -40,7 +40,7 @@ const NavigationBar = () => {
               </Button>
               {isAuthenticated ? (
                 <>
-                  <Button href="/institutions"
+                  <Button href="/resources"
                     sx={{
                       marginRight: '10px',
                       width: '100px',
@@ -56,7 +56,7 @@ const NavigationBar = () => {
                       },
                       borderRadius: '20px'
                     }}>
-                    Institutions
+                    Resources
                   </Button>
                   {/* <Avatar alt={user?.username || "User"} src={user?.profileImage || ""} sx={{ cursor: 'pointer' }} /> */}
                 </>

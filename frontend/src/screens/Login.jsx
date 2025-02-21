@@ -48,33 +48,37 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(formData.email, formData.password);
-      navigate('/whosusing');
+        const user = await login(formData.email, formData.password);
+        if (user.isFirstLogin) {
+            navigate('/getstarted');
+        } else {
+            navigate('/whosusing');
+        }
     } catch (err) {
-      console.error('Login error:', err);
+        console.error('Login error:', err);
     }
   };
 
   const handleGoogleLogin = async (event) => {
     event.preventDefault();
-  
     try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-  
-      const idToken = await user.getIdToken();
-      console.log("Google ID Token:", idToken); 
-  
-      await googleLogin(idToken); // ibabalik sa zustand action
-  
-      navigate('/whosusing');
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const idToken = await user.getIdToken();
+        const response = await googleLogin(idToken);
+        
+        if (response.isFirstLogin) {
+            navigate('/getstarted');
+        } else {
+            navigate('/whosusing');
+        }
     } catch (err) {
-      if (err.code === 'auth/popup-blocked') {
-        console.error('Popup was blocked by the browser!');
-      } else {
-        console.error('Google login error:', err);
-      }
+        if (err.code === 'auth/popup-blocked') {
+            console.error('Popup was blocked by the browser!');
+        } else {
+            console.error('Google login error:', err);
+        }
     }
   };
   

@@ -10,23 +10,21 @@ adminAuth.initializeApp({
 });
 
 const googleLogin = async (req, res) => {
-  const { idToken } = req.body;  // pag kuha ng id token sa frontend 
+  const { idToken } = req.body;  
 
   try {
-    // Verify the ID token with Firebase Admin SDK
-    const decodedToken = await adminAuth.auth().verifyIdToken(idToken);  // Verifying the token using adminAuth
-    const firebaseUid = decodedToken.uid;  // Extract the UID from the decoded token
+    const decodedToken = await adminAuth.auth().verifyIdToken(idToken); 
+    const firebaseUid = decodedToken.uid;  
 
-    // Check pag may user na
     let user = await User.findOne({ firebaseUid });
     
     if (!user) {
-      //Pag wala edi create 
       user = await User.create({
-        username: decodedToken.name || 'No Name',  // default name pag  walang name na proprovide 
-        email: decodedToken.email,  // Store the user's email from the token
-        password: 'firebase_managed',  //Password/firebase_manage
-        firebaseUid: firebaseUid  // Firebase UID
+        username: decodedToken.name || 'No Name',  
+        email: decodedToken.email,  
+        password: 'firebase_managed',  
+        firebaseUid: firebaseUid,
+        hasCompletedAssessment: false  
       });
     }
 
@@ -37,7 +35,8 @@ const googleLogin = async (req, res) => {
         id: user._id,  // MongoDB user ID
         username: user.username,
         email: user.email,
-        firebaseUid: firebaseUid  // Firebase UID
+        firebaseUid: firebaseUid, 
+        isFirstLogin: !user.hasCompletedAssessment
       }
     });
   } catch (error) {
@@ -99,7 +98,8 @@ const loginWithEmail = async (req, res) => {
               id: user._id,
               username: user.username,
               email: user.email,
-              firebaseUid: userCredential.user.uid
+              firebaseUid: userCredential.user.uid,
+              isFirstLogin: !user.hasCompletedAssessment
           }
       });
   } catch (error) {

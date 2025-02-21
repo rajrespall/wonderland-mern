@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
     generalInfo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'GeneralInfo'
+    },
+    hasCompletedAssessment: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

@@ -4,9 +4,8 @@ import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceR
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from '../assets/symptoms.png';
 import Spinner from '../components/Spinner'; 
-import useStore from '../store/assStore';  
-// import { set } from "../../../backend/app";
-
+import useAssessmentStore from '../store/assessmentStore'; 
+import { useNavigate } from 'react-router-dom';
 
 const questions = [
   {
@@ -41,13 +40,15 @@ const questions = [
 ];
 
 const OtherSymptoms = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { setOthersAnswers,  submitAssessment } = useStore();  
+  const { setOthersAnswers,  submitAssessment } = useAssessmentStore();  
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [other, setOther] = useState('');
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const allAnswered = answers.length > 0;
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -56,111 +57,93 @@ const OtherSymptoms = () => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
-        useStore.getState().setUserId(parsedUser.id); // Update Zustand state
+        useAssessmentStore.getState().setUserId(parsedUser.id); // Update Zustand state
     }
-}, []);
+  }, []);
   
-const handleAnswer = (answer) => {
-  let updatedAnswers;
-  if (answers.includes(answer)) {
-      updatedAnswers = answers.filter(item => item !== answer);
-  } else {
-      updatedAnswers = [...answers, answer];
-  }
+  const handleAnswer = (answer) => {
+    let updatedAnswers;
+    if (answers.includes(answer)) {
+        updatedAnswers = answers.filter(item => item !== answer);
+    } else {
+        updatedAnswers = [...answers, answer];
+    }
 
-  setAnswers(updatedAnswers); // Update local state
-  setOthersAnswers(updatedAnswers); // Update Zustand store
-};
-
-
-  
-
-  // const handleSubmit = () => {
-  //   alert("Form submitted with answers: " + answers.join(", ") + (other ? ", Other: " + other : ""));
-    
-  // };
+    setAnswers(updatedAnswers); // Update local state
+    setOthersAnswers(updatedAnswers); // Update Zustand store
+  };
 
   const handleButtonClick = async () => {
-    const {
-        userId,
-        setCommunicationAnswers,
-        setEmotionalAnswers,
-        setRoutineAnswers,
-        setSensoryAnswers,
-        setSocialAnswers,
-        setOthersAnswers,
-        submitAssessment
-    } = useStore.getState();
+    try {
+      setSubmitting(true);
+      const {
+          userId,
+          setCommunicationAnswers,
+          setEmotionalAnswers,
+          setRoutineAnswers,
+          setSensoryAnswers,
+          setSocialAnswers,
+          setOthersAnswers,
+          submitAssessment
+      } = useAssessmentStore.getState();
 
-    if (!userId) {
-        console.error("User ID is missing, cannot submit assessment");
-        return;
-    }
+      if (!userId) {
+          console.error("User ID is missing, cannot submit assessment");
+          return;
+      }
 
-    // ✅ Retrieve answers properly from Local Storage
-    const getAnswers = (prefix, count) => {
-        let answers = [];
-        for (let i = 0; i < count; i++) {
-            const storedValue = localStorage.getItem(`${prefix}_${i}_answer`);
-            if (storedValue !== null) {
-                answers.push(JSON.parse(storedValue));  // Ensure correct data type
-            }
-        }
-        return answers;
-    };
+      // ✅ Retrieve answers properly from Local Storage
+      const getAnswers = (prefix, count) => {
+          let answers = [];
+          for (let i = 0; i < count; i++) {
+              const storedValue = localStorage.getItem(`${prefix}_${i}_answer`);
+              if (storedValue !== null) {
+                  answers.push(JSON.parse(storedValue));  // Ensure correct data type
+              }
+          }
+          return answers;
+      };
 
-    // ✅ Fetch stored values
-    const communicationAnswers = getAnswers("Communication", 4);
-    const emotionalAnswers = getAnswers("Emotional", 3);
-    const routineAnswers = getAnswers("Routine", 3);
-    const sensoryAnswers = getAnswers("Sensory", 3);
-    const socialAnswers = getAnswers("Social", 4);
+      // ✅ Fetch stored values
+      const communicationAnswers = getAnswers("Communication", 4);
+      const emotionalAnswers = getAnswers("Emotional", 3);
+      const routineAnswers = getAnswers("Routine", 3);
+      const sensoryAnswers = getAnswers("Sensory", 3);
+      const socialAnswers = getAnswers("Social", 4);
 
-    // ✅ Collect 'others' answers
-    const othersAnswers = [...answers];
-    if (other.trim() !== "") {
-        othersAnswers.push(other);
-    }
+      // ✅ Collect 'others' answers
+      const othersAnswers = [...answers];
+      if (other.trim() !== "") {
+          othersAnswers.push(other);
+      }
 
-    // ✅ Store values in Zustand before submission
-    setCommunicationAnswers(communicationAnswers);
-    setEmotionalAnswers(emotionalAnswers);
-    setRoutineAnswers(routineAnswers);
-    setSensoryAnswers(sensoryAnswers);
-    setSocialAnswers(socialAnswers);
-    setOthersAnswers(othersAnswers);
+      // ✅ Store values in Zustand before submission
+      setCommunicationAnswers(communicationAnswers);
+      setEmotionalAnswers(emotionalAnswers);
+      setRoutineAnswers(routineAnswers);
+      setSensoryAnswers(sensoryAnswers);
+      setSocialAnswers(socialAnswers);
+      setOthersAnswers(othersAnswers);
 
-    // ✅ Debug: Log fetched values to verify correctness
-    console.log("Submitting data:", {
-        userId,
-        communicationAnswers,
-        emotionalAnswers,
-        routineAnswers,
-        sensoryAnswers,
-        socialAnswers,
-        othersAnswers
-    });
-    submitAssessment(); // Submit only when button is clicked
-
-    for (let i = 0; i < 4; i++) {
-      localStorage.removeItem(`Communication_${i}_answer`);
-      localStorage.removeItem(`Emotional_${i}_answer`);
-      localStorage.removeItem(`Routine_${i}_answer`);
-      localStorage.removeItem(`Sensory_${i}_answer`);
-      localStorage.removeItem(`Social_${i}_answer`);
+      const response = await submitAssessment();
+        
+      if (response) {
+          for (let i = 0; i < 4; i++) {
+              localStorage.removeItem(`Communication_${i}_answer`);
+              localStorage.removeItem(`Emotional_${i}_answer`);
+              localStorage.removeItem(`Routine_${i}_answer`);
+              localStorage.removeItem(`Sensory_${i}_answer`);
+              localStorage.removeItem(`Social_${i}_answer`);
+          }
+          localStorage.removeItem("Others_answers");
+          navigate('/resources');
+      }
+  } catch (error) {
+    console.error('Error submitting assessment:', error);
+  } finally {
+    setSubmitting(false);
   }
-  localStorage.removeItem("Others_answers");
 };
-
-
-
-
-  
-  // const handleNext = () => {
-  //   if (currentQuestion < questions.length - 1) {
-  //     setCurrentQuestion(currentQuestion + 1);
-  //   }
-  // };
 
   if (loading) {
     return <Spinner />;
@@ -281,9 +264,9 @@ const handleAnswer = (answer) => {
               "&:hover": { backgroundColor: "#4c9000" },
             }}
             onClick={handleButtonClick}  // Use the combined handler
-            disabled={!allAnswered}
+            disabled={!allAnswered || submitting}
           >
-            Submit
+            {submitting ? 'Submitting...' : 'Submit'}
           </Button>
         </Box>
       </Box>

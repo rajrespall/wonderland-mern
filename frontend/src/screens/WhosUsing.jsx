@@ -112,7 +112,7 @@ const UserSelection = () => {
                   },
                 }}
               >
-                <Box component="a" href="#">
+                <Box component="a" href="/dashboard">
                   <img src={ChildIcon} alt="Child Icon"/>
                 </Box>
                 <Typography
@@ -145,7 +145,7 @@ const UserSelection = () => {
                   },
                 }}
               >
-                <Box component="a" href="#">
+                <Box component="a" href="/resources">
                   <img src={ParentIcon} alt="Parent Icon" />
                 </Box>
                 <Typography

@@ -42,7 +42,7 @@ const useAuthStore = create((set) => ({
       
       const response = await axios.post(
         'http://localhost:5000/api/auth/register', 
-        { username, email, password }, // Fix: Send data as a single object
+        { username, email, password }, 
         { 
           withCredentials: true,
           headers: {
@@ -68,19 +68,17 @@ const useAuthStore = create((set) => ({
       });
       throw error;
     }
-},
+  },
 
   googleLogin: async (idToken) => {
     try {
       set({ loading: true, error: null });
-      //send sa backend yung idToken para ma verify sa firebase if legit yung token or hindi 
       const response = await axios.post(
         'http://localhost:5000/api/auth/google-login',
         { idToken },
         { withCredentials: true }
       );
   
-      // Sinave ko yung user data sa  local storage and state
       const userData = response.data.user;
       localStorage.setItem('user', JSON.stringify(userData));
       set({ user: userData, isAuthenticated: true, loading: false });
@@ -93,22 +91,16 @@ const useAuthStore = create((set) => ({
     }
   },
   
-
   logout: async () => {
     try {
-      // Firebase signout
       await signOut(auth);
-      
-      // Backend logout
+
       await axios.post('http://localhost:5000/api/auth/logout', {}, {
         withCredentials: true
       });
       
-      // Clear local storage
-      
       localStorage.removeItem('user');
       
-      // Reset store state
       set({ 
         user: null,
         isAuthenticated: false,
@@ -119,8 +111,6 @@ const useAuthStore = create((set) => ({
       throw error;
     }
   }
-
-
 }));
 
 export default useAuthStore;

@@ -4,6 +4,7 @@ const useInfoStore = create((set) => ({
   generalInfo: null,
   loading: false,
   error: null,
+
   createGeneralInfo: async (childData) => {
     try {
       set({ loading: true, error: null });
@@ -31,6 +32,7 @@ const useInfoStore = create((set) => ({
       throw error;
     }
   },
+
   getGeneralInfo: async () => {
     try {
       set({ loading: true, error: null });
@@ -56,6 +58,7 @@ const useInfoStore = create((set) => ({
       throw error;
     }
   },
+
   updateGeneralInfo: async (updates) => {
     try {
       set({ loading: true, error: null });
@@ -82,5 +85,6 @@ const useInfoStore = create((set) => ({
       throw error;
     }
   },
+  
 }));
 export default useInfoStore;

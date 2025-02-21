@@ -29,12 +29,12 @@ export default function ProfilePage() {
         display: "flex", 
         height: "100%", 
         bgcolor: "#fff", 
-        borderRadius: 3, 
+        borderRadius: '30px', 
         p: 2 }}>
 
         <Paper elevation={3} sx={{ width: "250px", p: 2, borderRadius: 3, bgcolor: 'transparent', boxShadow: 'none'}}>
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <Avatar sx={{ width: 80, height: 80 }} />
+            <Avatar sx={{ width: 150, height: 150 }} />
             <Typography
             sx={{
               fontWeight:"bold",

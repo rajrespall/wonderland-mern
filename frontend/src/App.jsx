@@ -36,9 +36,6 @@ function App() {
           <Route path='/routines' element={<Question5 />} />
           <Route path='/others' element={<OtherSymptoms />} />
           <Route path='/aboutus' element={<AboutUs />} />
-
-          <Route path='/admin' element={<Admin />} />
-
         </Routes>
     </BrowserRouter>
   )

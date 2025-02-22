@@ -66,7 +66,7 @@ export default function Donations() {
 
   return (
     <Box
-      sx={{
+      sx={{ 
         p: 3,
         bgcolor: "#f9f9f9",
         borderRadius: 3,
@@ -112,6 +112,8 @@ export default function Donations() {
                   sx={{
                     p: 2,
                     textAlign: "center",
+                    boxShadow: 'none',
+                    backgroundColor: 'rgb(4, 87, 164, 0.05)',
                   }}
                 >
                   <Avatar

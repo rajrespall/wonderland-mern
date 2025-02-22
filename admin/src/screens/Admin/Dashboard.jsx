@@ -5,7 +5,8 @@ import { styled, alpha } from '@mui/material/styles';
 import Sidebar from '../../components/Admin/SideBar';
 import DashboardCharts from '../../components/Admin/Dashboard';
 import AdminReviews from '../../components/Admin/Reviews';
-import Donations from '../../components/Donations';
+import Donations from '../../components/Admin/Donations';
+import Charts from '../../components/Admin/Charts';
 
 const drawerWidth = 260;
 
@@ -38,8 +39,8 @@ const AdminHome = () => {
         return <AdminReviews />;
       case 'Donations':
         return <Donations />;
-      case 'Reports':
-        return <div>Reports/Analytics Content</div>;
+      case 'Charts':
+        return <Charts />;
         default:  
           return <DashboardCharts />;
     }

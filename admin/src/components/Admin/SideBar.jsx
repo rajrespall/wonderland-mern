@@ -59,13 +59,15 @@ const Sidebar = ({ currentView, onButtonClick }) => {
         <StyledButton onClick={() => onButtonClick('Dashboard')} active={currentView === 'Dashboard'}>Dashboard</StyledButton>
         <StyledButton onClick={() => onButtonClick('Reviews')} active={currentView === 'Reviews'}>Reviews</StyledButton>
         <StyledButton onClick={() => onButtonClick('Donations')} active={currentView === 'Donations'}>Donations</StyledButton>
-        <StyledButton onClick={() => onButtonClick('Reports')} active={currentView === 'Reports'}>Reports/ Analytics</StyledButton>
+        <StyledButton onClick={() => onButtonClick('Charts')} active={currentView === 'Charts'}>Charts</StyledButton>
+        <StyledButton onClick={() => onButtonClick('Reports')} active={currentView === 'Reports'}>Reports</StyledButton>
+
       </List>
       <Box>
         <StyledButton
           sx={{
             fontSize: '14px',
-            mt: "290px",
+            mt: "240px",
             width: '221px'
           }}
         >

@@ -1,7 +1,11 @@
 import React from "react";
-import { Grid, Card, Typography, Box } from "@mui/material";
+import { Grid, Card, Typography, Box, IconButton } from "@mui/material";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, LineChart, Line, Tooltip, ResponsiveContainer } from "recharts";
 import GroupsIcon from "@mui/icons-material/Groups";
+import ReviewsIcon from "@mui/icons-material/RateReview";
+import DonationsIcon from "@mui/icons-material/VolunteerActivism";
+import AdminsIcon from "@mui/icons-material/SupervisorAccount";
+import '@fontsource/poppins'
 
 const dataPie = [
   { name: "A", value: 400 },
@@ -30,11 +34,12 @@ const DashboardCharts = () => {
       container 
       spacing={2} 
       sx={{ 
-        backgroundColor: "#e6f0fa", 
         minHeight: "85vh", 
         display: "flex", 
         alignItems: "center", 
-        justifyContent: "center" 
+        justifyContent: "left", 
+        width: "120%",
+        pl: 20,
       }}
     >
       <Grid 
@@ -56,54 +61,72 @@ const DashboardCharts = () => {
             sx={{ 
               p: 2, 
               textAlign: "center", 
-              fontFamily: 'Poppins', 
-              boxShadow: 'none', 
               borderRadius: '25px', 
               height: '150px', 
+              boxShadow: 'none', 
               display: "flex", 
-              flexDirection: "column", 
               alignItems: "center", 
-              justifyContent: "center" 
+              justifyContent: "space-between",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f0f0f0"
+              }
             }}
           >
-            <Typography variant="subtitle1">Reviews</Typography>
-            <Typography variant="h4" color="green">34</Typography>
+            <Box>
+              <Typography variant="subtitle1" sx={{fontFamily: 'Poppins'}}>Reviews</Typography>
+              <Typography variant="h4" color="green" sx={{fontFamily: 'Poppins'}}>34</Typography>
+            </Box>
+            <ReviewsIcon sx={{ fontSize: 70, color: "green" }} />
           </Card>
           <Card 
             sx={{ 
               p: 2, 
               mt: 2, 
+              fontFamily: 'Poppins',
               textAlign: "center", 
-              fontFamily: 'Poppins', 
-              boxShadow: 'none', 
               borderRadius: '25px', 
               height: '150px', 
+              boxShadow: 'none', 
               display: "flex", 
-              flexDirection: "column", 
               alignItems: "center", 
-              justifyContent: "center" 
+              justifyContent: "space-between",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f0f0f0"
+                
+              }
             }}
           >
-            <Typography variant="subtitle1">Donations</Typography>
-            <Typography variant="h4" color="orange">5,000</Typography>
+            <Box>
+              <Typography variant="subtitle1" sx={{fontFamily: 'Poppins'}}>Donations</Typography>
+              <Typography variant="h4" color="orange" sx={{fontFamily: 'Poppins'}}>5,000</Typography>
+            </Box>
+            <DonationsIcon sx={{ fontSize: 70, color: "orange" }} />
           </Card>
           <Card 
             sx={{ 
               p: 2, 
               mt: 2, 
+              fontFamily: 'Poppins',
               textAlign: "center", 
-              fontFamily: 'Poppins', 
-              boxShadow: 'none', 
               borderRadius: '25px', 
               height: '150px', 
+              boxShadow: 'none', 
               display: "flex", 
-              flexDirection: "column", 
               alignItems: "center", 
-              justifyContent: "center" 
+              justifyContent: "space-between",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f0f0f0"
+              }
             }}
           >
-            <Typography variant="subtitle1">Admins</Typography>
-            <Typography variant="h4" color="green">3</Typography>
+            <Box>
+              <Typography variant="subtitle1" sx={{fontFamily: 'Poppins'}}>Admins</Typography>
+              <Typography variant="h4" color="green" sx={{fontFamily: 'Poppins'}}>3</Typography>
+            </Box>
+            <AdminsIcon sx={{ fontSize: 70, color: "green" }} />
           </Card>
         </Grid>
 
@@ -122,12 +145,16 @@ const DashboardCharts = () => {
               boxShadow: 'none', 
               display: "flex", 
               alignItems: "center", 
-              justifyContent: "space-between" 
+              justifyContent: "space-between",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#f0f0f0"
+              }
             }}
           >
             <Box>
-              <Typography variant="subtitle1">Users</Typography>
-              <Typography variant="h4" color="orange">1,234</Typography>
+              <Typography variant="subtitle1" sx={{fontFamily: 'Poppins'}}>Users</Typography>
+              <Typography variant="h4" color="orange" sx={{fontFamily: 'Poppins'}}>1,234</Typography>
             </Box>
             <GroupsIcon sx={{ fontSize: 70, color: "green" }} />
           </Card>
@@ -135,8 +162,10 @@ const DashboardCharts = () => {
             sx={{ 
               p: 2, 
               mt: 2, 
+              fontFamily: 'Poppins',
               borderRadius: "25px", 
               height: "320px", 
+              width: "100%", 
               boxShadow: 'none', 
               display: "flex", 
               alignItems: "center", 
@@ -170,7 +199,8 @@ const DashboardCharts = () => {
               display: "flex", 
               boxShadow: 'none', 
               alignItems: "center", 
-              justifyContent: "center" 
+              justifyContent: "center", 
+              width: '400px'
             }}
           >
             <ResponsiveContainer width="100%" height="100%">
@@ -191,7 +221,8 @@ const DashboardCharts = () => {
               display: "flex", 
               boxShadow: 'none', 
               alignItems: "center", 
-              justifyContent: "center" 
+              justifyContent: "center" ,
+              width: '400px'
             }}
           >
             <ResponsiveContainer width="100%" height="100%">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, List, ListItemButton, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import logo from '../../assets/logo_red.png'
+import logo from '../../assets/logo_red.png';
 
 const SidebarContainer = styled(Box)({
   width: 260,
@@ -33,34 +33,44 @@ const StyledButton = styled(ListItemButton)(({ active }) => ({
   },
 }));
 
-const Sidebar = () => {
+const Sidebar = ({ currentView, onButtonClick }) => {
   return (
     <SidebarContainer>
-        <img src={logo} width="80%" alt="Logo" />
+      <img src={logo} width="80%" alt="Logo" />
       <Typography variant="h6"
-      sx={{ 
-        fontFamily: 'Poppins', 
-        fontWeight: '500',
-        fontSize: '18px',
-        mb: 2,
-        mt: 3 }}>
+        sx={{ 
+          fontFamily: 'Poppins', 
+          fontWeight: 'bold',
+          fontSize: '15px',
+          mb: 2,
+          mt: 3 
+        }}
+      >
         Admin
       </Typography>
-      <List sx={{ fontSize: '14px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <StyledButton active>Dashboard</StyledButton>
-        <StyledButton>Reviews</StyledButton>
-        <StyledButton>Donations</StyledButton>
-        <StyledButton>Reports/ Analytics</StyledButton>
+      <List 
+      sx={{ 
+        fontSize: '14px', 
+        width: '100%', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center'
+        }}>
+        <StyledButton onClick={() => onButtonClick('Dashboard')} active={currentView === 'Dashboard'}>Dashboard</StyledButton>
+        <StyledButton onClick={() => onButtonClick('Reviews')} active={currentView === 'Reviews'}>Reviews</StyledButton>
+        <StyledButton onClick={() => onButtonClick('Donations')} active={currentView === 'Donations'}>Donations</StyledButton>
+        <StyledButton onClick={() => onButtonClick('Reports')} active={currentView === 'Reports'}>Reports/ Analytics</StyledButton>
       </List>
       <Box>
-
-      <StyledButton
-      sx={{
-        fontSize: '14px',
-        mt: "290px",
-        width: '221px'
-      }}>
-        Logout</StyledButton>
+        <StyledButton
+          sx={{
+            fontSize: '14px',
+            mt: "290px",
+            width: '221px'
+          }}
+        >
+          Logout
+        </StyledButton>
       </Box>
     </SidebarContainer>
   );

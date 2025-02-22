@@ -31,7 +31,6 @@ const DashboardCharts = () => {
       spacing={2} 
       sx={{ 
         backgroundColor: "#e6f0fa", 
-        padding: 3, 
         minHeight: "85vh", 
         display: "flex", 
         alignItems: "center", 
@@ -130,7 +129,7 @@ const DashboardCharts = () => {
               <Typography variant="subtitle1">Users</Typography>
               <Typography variant="h4" color="orange">1,234</Typography>
             </Box>
-            <GroupsIcon sx={{ fontSize: 40, color: "green" }} />
+            <GroupsIcon sx={{ fontSize: 70, color: "green" }} />
           </Card>
           <Card 
             sx={{ 

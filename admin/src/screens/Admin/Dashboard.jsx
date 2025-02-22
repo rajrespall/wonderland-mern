@@ -1,9 +1,11 @@
-import React from 'react';
-import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, InputBase } from '@mui/material';
-import { Search, AccountCircle } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { CssBaseline, Box, AppBar, Toolbar, Typography, IconButton, InputBase } from '@mui/material';
+import { Search, AccountCircle, Reviews } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import Sidebar from '../../components/Admin/SideBar';
 import DashboardCharts from '../../components/Admin/Dashboard';
+import AdminReviews from '../../components/Admin/Reviews';
+import Donations from '../../components/Donations';
 
 const drawerWidth = 260;
 
@@ -26,6 +28,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const AdminHome = () => {
+  const [currentView, setCurrentView] = useState('Dashboard');
+
+  const renderContent = () => {
+    switch (currentView) {
+      case 'Dashboard':
+        return <DashboardCharts />;
+      case 'Reviews':
+        return <AdminReviews />;
+      case 'Donations':
+        return <Donations />;
+      case 'Reports':
+        return <div>Reports/Analytics Content</div>;
+        default:  
+          return <DashboardCharts />;
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -64,7 +83,7 @@ const AdminHome = () => {
         </Toolbar>
       </AppBar>
 
-      <Sidebar />
+      <Sidebar currentView={currentView} onButtonClick={setCurrentView} />
 
       <Box 
         component="main" 
@@ -72,10 +91,11 @@ const AdminHome = () => {
           flexGrow: 1, 
           bgcolor: '#DCEAF7', 
           p: 3 
+          
         }}
       >
         <Toolbar />
-        <DashboardCharts />
+        {renderContent()}
       </Box>
     </Box>
   );

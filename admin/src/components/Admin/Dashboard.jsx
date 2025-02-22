@@ -38,31 +38,112 @@ const DashboardCharts = () => {
         justifyContent: "center" 
       }}
     >
-      <Grid item container spacing={2} xs={12} md={9} justifyContent="center" alignItems="center">
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ p: 2, textAlign: "center", fontFamily: 'Poppins', borderRadius: '25px', height: '150px', display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <Grid 
+        item 
+        container 
+        spacing={2} 
+        xs={12} 
+        md={9} 
+        justifyContent="center" 
+        alignItems="center"
+      >
+        <Grid 
+          item 
+          xs={12} 
+          sm={6} 
+          md={3}
+        >
+          <Card 
+            sx={{ 
+              p: 2, 
+              textAlign: "center", 
+              fontFamily: 'Poppins', 
+              boxShadow: 'none', 
+              borderRadius: '25px', 
+              height: '150px', 
+              display: "flex", 
+              flexDirection: "column", 
+              alignItems: "center", 
+              justifyContent: "center" 
+            }}
+          >
             <Typography variant="subtitle1">Reviews</Typography>
             <Typography variant="h4" color="green">34</Typography>
           </Card>
-          <Card sx={{ p: 2, mt: 2, textAlign: "center", fontFamily: 'Poppins', borderRadius: '25px', height: '150px', display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <Card 
+            sx={{ 
+              p: 2, 
+              mt: 2, 
+              textAlign: "center", 
+              fontFamily: 'Poppins', 
+              boxShadow: 'none', 
+              borderRadius: '25px', 
+              height: '150px', 
+              display: "flex", 
+              flexDirection: "column", 
+              alignItems: "center", 
+              justifyContent: "center" 
+            }}
+          >
             <Typography variant="subtitle1">Donations</Typography>
             <Typography variant="h4" color="orange">5,000</Typography>
           </Card>
-          <Card sx={{ p: 2, mt: 2, textAlign: "center", fontFamily: 'Poppins', borderRadius: '25px', height: '150px', display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <Card 
+            sx={{ 
+              p: 2, 
+              mt: 2, 
+              textAlign: "center", 
+              fontFamily: 'Poppins', 
+              boxShadow: 'none', 
+              borderRadius: '25px', 
+              height: '150px', 
+              display: "flex", 
+              flexDirection: "column", 
+              alignItems: "center", 
+              justifyContent: "center" 
+            }}
+          >
             <Typography variant="subtitle1">Admins</Typography>
             <Typography variant="h4" color="green">3</Typography>
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ p: 2, textAlign: "center", borderRadius: '25px', height: '150px', display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Grid 
+          item 
+          xs={12} 
+          sm={6} 
+          md={3}
+        >
+          <Card 
+            sx={{ 
+              p: 2, 
+              textAlign: "center", 
+              borderRadius: '25px', 
+              height: '150px', 
+              boxShadow: 'none', 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "space-between" 
+            }}
+          >
             <Box>
               <Typography variant="subtitle1">Users</Typography>
               <Typography variant="h4" color="orange">1,234</Typography>
             </Box>
             <GroupsIcon sx={{ fontSize: 40, color: "green" }} />
           </Card>
-          <Card sx={{ p: 2, mt: 2, borderRadius: "25px", height: "320px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Card 
+            sx={{ 
+              p: 2, 
+              mt: 2, 
+              borderRadius: "25px", 
+              height: "320px", 
+              boxShadow: 'none', 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "center" 
+            }}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={dataPie} dataKey="value" cx="50%" cy="50%" outerRadius={90} label>
@@ -76,8 +157,23 @@ const DashboardCharts = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={6}>
-          <Card sx={{ p: 2, borderRadius: "25px", height: "235px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Grid 
+          item 
+          xs={12} 
+          sm={6} 
+          md={6}
+        >
+          <Card 
+            sx={{ 
+              p: 2, 
+              borderRadius: "25px", 
+              height: "235px", 
+              display: "flex", 
+              boxShadow: 'none', 
+              alignItems: "center", 
+              justifyContent: "center" 
+            }}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={dataLine}>
                 <XAxis dataKey="name" />
@@ -87,7 +183,18 @@ const DashboardCharts = () => {
               </LineChart>
             </ResponsiveContainer>
           </Card>
-          <Card sx={{ p: 2, mt: 2, borderRadius: "25px", height: "235px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Card 
+            sx={{ 
+              p: 2, 
+              mt: 2, 
+              borderRadius: "25px", 
+              height: "235px", 
+              display: "flex", 
+              boxShadow: 'none', 
+              alignItems: "center", 
+              justifyContent: "center" 
+            }}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dataBar}>
                 <XAxis dataKey="name" />

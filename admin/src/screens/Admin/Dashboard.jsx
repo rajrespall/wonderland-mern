@@ -1,6 +1,6 @@
 import React from 'react';
-import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, List, ListItem, ListItemIcon, ListItemText, IconButton, Grid, Paper, Avatar } from '@mui/material';
-import { Dashboard, Reviews, People, BarChart, InsertChart, ExitToApp, Search, AccountCircle } from '@mui/icons-material';
+import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, InputBase } from '@mui/material';
+import { Search, AccountCircle } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import Sidebar from '../../components/Admin/SideBar';
 import DashboardCharts from '../../components/Admin/Dashboard';
@@ -19,18 +19,44 @@ const SearchBar = styled('div')(({ theme }) => ({
   border: '2px solid #003366',
 }));
 
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  marginLeft: theme.spacing(1),
+  flex: 1,
+}));
+
 const AdminHome = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, bgcolor: '#DCEAF7', color: 'black', boxShadow: 'none' }}>
+      <AppBar 
+        position="fixed" 
+        sx={{ 
+          width: `calc(100% - ${drawerWidth}px)`, 
+          ml: `${drawerWidth}px`, 
+          bgcolor: '#DCEAF7', 
+          color: 'black', 
+          boxShadow: 'none' 
+        }}
+      >
         <Toolbar>
-          <Typography variant="h6" noWrap sx={{ fontWeight: 'bold', color: '#0457a4' }}>
+          <Typography 
+            variant="h6" 
+            noWrap 
+            sx={{ 
+              fontWeight: 'bold', 
+              color: '#0457a4' 
+            }}
+          >
             DASHBOARD
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <SearchBar>
+          <SearchBar sx={{ borderRadius: '25px' }}>
             <Search sx={{ color: '#003366' }} />
+            <StyledInputBase
+              placeholder="Search"
+              inputProps={{ 'aria-label': 'search' }}
+            />
           </SearchBar>
           <IconButton color="inherit">
             <AccountCircle sx={{ fontSize: 32 }} />
@@ -40,7 +66,14 @@ const AdminHome = () => {
 
       <Sidebar />
 
-      <Box component="main" sx={{ flexGrow: 1, bgcolor: '#DCEAF7', p: 3 }}>
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1, 
+          bgcolor: '#DCEAF7', 
+          p: 3 
+        }}
+      >
         <Toolbar />
         <DashboardCharts />
       </Box>

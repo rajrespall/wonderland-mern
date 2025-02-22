@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Typography, Avatar, Button, Paper, Divider, Container } from "@mui/material";
 import { AccountCircle, RateReview, BarChart, SwitchAccount } from "@mui/icons-material";
+import "@fontsource/poppins";
+
 import ProgressCharts from "./ProgressCharts";
 
 const buttonStyles = (active) => ({
@@ -23,11 +25,11 @@ const buttonStyles = (active) => ({
 
 export default function ProfilePage() {
   return (
-    <Container maxWidth="xl" sx={{ py: 4, height: "635px" }}>
+    <Container maxWidth="xl" sx={{ py: 4, minheight: "635px" }}>
       <Box 
       sx={{ 
         display: "flex", 
-        height: "100%", 
+        minheight: "100%", 
         bgcolor: "#fff", 
         borderRadius: '30px', 
         p: 2 }}>

@@ -36,7 +36,8 @@ const Emotional = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
-          minHeight: '100vh'
+          minHeight: '100vh',
+          p: 2
         }}
       >
         <ParentNav />

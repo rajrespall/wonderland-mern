@@ -23,12 +23,12 @@ const Dashboard = () => {
     {
       image: heroImage1,
       logo: memorygame,
-      route: '/wondercards',
+      route: 'http://localhost:5177',
     },
     {
       image: heroImage2,
       logo: puzzlegame,
-      route: '/wonderpuz',
+      route: 'http://localhost:5176',
     },
     {
       image: heroImage3,
@@ -38,7 +38,7 @@ const Dashboard = () => {
     {
       image: heroImage4,
       logo: matching,
-      route: '/wondermatch',
+      route: 'http://localhost:5175',
     },
   ];
 

@@ -25,7 +25,7 @@ const ParentNav = () => {
           px: 3,
         }}
       >
-        <Box onClick={() => navigate('/parent')} sx={{ cursor: 'pointer' }}>
+        <Box onClick={() => navigate('/whosusing')} sx={{ cursor: 'pointer' }}>
           <img src={Logo} alt="Wonderland Logo" style={{ height: "35px" }} />
         </Box>
 

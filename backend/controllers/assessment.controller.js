@@ -1,40 +1,40 @@
 const Assess = require('../models/assessment.model');
 const User = require('../models/user.model');
+const { analyzeAssessment } = require('../services/assessmentAnalysis.service');
 
 const saveAssessment = async (req, res) => {
     try {
-        console.log("Received request at /api/submit");
-        console.log("Request body:", req.body);
-
         const userId = req.user ? req.user._id : req.body.userId;
-        const { communication, emotional, routine, sensory, social, others } = req.body;
+        const assessmentData = {
+            communication: req.body.communication,
+            emotional: req.body.emotional,
+            routine: req.body.routine,
+            sensory: req.body.sensory,
+            social: req.body.social,
+            others: req.body.others
+        };
 
-        if (!userId) {
-            return res.status(400).json({ message: "User ID is missing" });
-        }
-
-        if (!communication || !emotional || !routine || !sensory || !social || !others) {
-            return res.status(400).json({ message: "Incomplete data received", receivedData: req.body });
-        }
+        const analysisResults = analyzeAssessment(assessmentData);
 
         const newAssessment = new Assess({
             userId,
-            communication,
-            emotional,
-            routine,
-            sensory,
-            social,
-            others
+            ...assessmentData,
+            analysis: analysisResults
         });
 
         const savedAssessment = await newAssessment.save();
+        await User.findByIdAndUpdate(userId, { 
+            hasCompletedAssessment: true,
+            assessmentResults: analysisResults
+        });
 
-        await User.findByIdAndUpdate(userId, { hasCompletedAssessment: true });
-        console.log("Saved to MongoDB:", savedAssessment);
-
-        res.status(201).json({ message: "Assessment saved successfully", data: savedAssessment });
+        res.status(201).json({ 
+            message: "Assessment saved successfully", 
+            data: savedAssessment,
+            analysis: analysisResults 
+        });
     } catch (error) {
-        console.error("MongoDB Save Error:", error);
+        console.error("Error:", error);
         res.status(500).json({ message: "Error saving assessment data", error });
     }
 };

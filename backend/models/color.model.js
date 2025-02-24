@@ -20,4 +20,4 @@ const colorSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Color', colorSchema);
+module.exports = mongoose.model('Color', colorSchema, 'wondercolor');

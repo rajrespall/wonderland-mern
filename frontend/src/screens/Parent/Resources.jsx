@@ -4,7 +4,8 @@ import useAssessmentStore from '../../store/assessmentStore';
 import { Box, Typography, Card, CardContent, CardMedia, IconButton, Grid, CssBaseline } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Spinner from "../../components/Spinner";
-import ParentNav from '../../components/ParentNav'; // Changed from NavigationBar to ParentNav
+import ParentNav from '../../components/ParentNav'; 
+import AssessmentAnalysis from "../../components/AssessmentAnalysis";
 
 // image imports
 import rou from '../../assets/resources2.png'; 
@@ -50,7 +51,7 @@ const cardData = {
 const Resources = () => {
     const { userAssessment, loading, error, fetchUserAssessment, showComm, showSocial, showSensory, showEmotional, showRoutine } = useAssessmentStore();
     const userId = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : null;
-
+    
     useEffect(() => {
         if (userId) {
             fetchUserAssessment(userId);
@@ -75,31 +76,37 @@ const Resources = () => {
                 }}
             >
                 <ParentNav />
-                <Box sx={{ 
-                    p: 4,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minHeight: 'calc(100vh - 64px)'
-                }}>
-                    <Grid 
-                        container 
-                        spacing={4} 
-                        sx={{
-                            maxWidth: '1200px',
-                            margin: '0 auto',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        <Grid item xs={12} sm={6}>
-                            {showComm && <InfoCard data={cardData.communication} />}
-                            {showEmotional && <InfoCard data={cardData.emotional} />}
-                            {showSensory && <InfoCard data={cardData.sensory} />}
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            {showSocial && <InfoCard data={cardData.social} />}
-                            {showRoutine && <InfoCard data={cardData.routine} />}
-                        </Grid>
+                <Box sx={{ width: '100%', maxWidth: '1200px', p: 4 }}>
+                {userAssessment?.analysis && (
+                    <AssessmentAnalysis analysis={userAssessment.analysis} />
+                )}
+                    
+                    <Grid container spacing={4} sx={{
+                        maxWidth: '1200px',
+                        margin: '0 auto',
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}>
+                        {[
+                            showComm && { ...cardData.communication, type: 'communication' },
+                            showEmotional && { ...cardData.emotional, type: 'emotional' },
+                            showSensory && { ...cardData.sensory, type: 'sensory' },
+                            showSocial && { ...cardData.social, type: 'social' },
+                            showRoutine && { ...cardData.routine, type: 'routine' }
+                        ].filter(Boolean).map((card, index) => (
+                            <Grid 
+                                item 
+                                xs={12} 
+                                sm={6} 
+                                key={card.type}
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: index % 2 === 0 ? 'flex-end' : 'flex-start'
+                                }}
+                            >
+                                <InfoCard data={card} />
+                            </Grid>
+                        ))}
                     </Grid>
                 </Box>
             </Box>
@@ -131,7 +138,7 @@ const InfoCard = ({ data }) => {
         <Card 
             onClick={handleClick}
             sx={{ 
-                width: 500, // Adjust the width
+                width: 500, 
                 height: 200,
                 display: "flex", 
                 alignItems: "center", 
@@ -139,7 +146,8 @@ const InfoCard = ({ data }) => {
                 borderRadius: 3, 
                 boxShadow: 3, 
                 backgroundColor: data.color,
-                marginBottom: 6, 
+                marginBottom: 2,
+                marginRight: 2, 
                 "&:hover": {
                     backgroundColor: `${data.color}cc`, 
                     transform: 'scale(1.05)', 

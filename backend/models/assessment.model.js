@@ -9,28 +9,36 @@ const assessSchema = new mongoose.Schema({
         unique: true
     },
     communication: {
-        type: [Number],  // Update to an array of numbers
+        type: [Number],
         required: true
     },
     emotional: {
-        type: [Number],  // Update to an array of numbers
+        type: [Number],
         required: true
     },
     routine: {
-        type: [Number],  // Update to an array of numbers
+        type: [Number],
         required: true
     },
     sensory: {
-        type: [Number],  // Update to an array of numbers
+        type: [Number],
         required: true
     },
     social: {
-        type: [Number],  // Update to an array of numbers
+        type: [Number],
         required: true
     },
     others: {
-        type: [String],  // Update to an array of strings
+        type: [String],
         required: true
+    },
+    analysis: {
+        priorityAreas: [String],
+        recommendedResources: [String],
+        showResources: {
+            type: Map,
+            of: Boolean
+        }
     }
 }, {
     timestamps: true

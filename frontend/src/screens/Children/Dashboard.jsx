@@ -33,7 +33,7 @@ const Dashboard = () => {
     {
       image: heroImage3,
       logo: color,
-      route: '/wondercolor',
+      route: 'http://localhost:5174',
     },
     {
       image: heroImage4,
@@ -59,7 +59,14 @@ const Dashboard = () => {
   };
 
   const handlePlayClick = () => {
-    navigate(slides[currentSlide].route);
+    const currentRoute = slides[currentSlide].route;
+    
+    // Check if the route is an external URL
+    if (currentRoute.startsWith('http')) {
+      window.open(currentRoute, '_blank'); // Opens in new tab
+    } else {
+      navigate(currentRoute); // Internal navigation
+    }
   };
 
   const handleLogoutClick = () => {

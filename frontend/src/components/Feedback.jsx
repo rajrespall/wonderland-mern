@@ -17,8 +17,8 @@ const Feedback = () => {
         "http://localhost:5000/api/reviews/submit",
         { rating, comment },
         {
-          withCredentials: true, // 🔹 Ensures cookies are sent
-          headers: { "Content-Type": "application/json" }, // 🔹 Ensures correct format
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
         }
       );
   
@@ -32,8 +32,6 @@ const Feedback = () => {
     }
   };
   
-  
-
   return (
     <Grid container spacing={4} justifyContent="center" alignItems="center" position="relative" sx={{ px: 2, height: '92vh' }}>
       <Grid item xs={12} sm={10} md={6} lg={4} sx={{ marginRight: "300px" }}>

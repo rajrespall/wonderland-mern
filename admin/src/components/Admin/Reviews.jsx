@@ -8,27 +8,24 @@ export default function AdminReviews() {
   const [open, setOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
 
-  // ✅ Fetch reviews from MongoDB when the component mounts
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/reviews/all");
-        setReviews(response.data); // Set fetched reviews in state
+        setReviews(response.data);
       } catch (error) {
-        console.error("❌ Error fetching reviews:", error);
+        console.error("Error fetching reviews:", error);
       }
     };
 
     fetchReviews();
   }, []);
 
-  // Function to handle opening review details
   const handleViewDetails = (review) => {
     setSelectedReview(review);
     setOpen(true);
   };
 
-  // Function to close the details dialog
   const handleClose = () => {
     setOpen(false);
     setSelectedReview(null);
@@ -56,7 +53,6 @@ export default function AdminReviews() {
       </Typography>
       <Divider sx={{ mb: 2 }} />
 
-      {/* ✅ Check if reviews exist before displaying */}
       {reviews.length > 0 ? (
         <List>
           {reviews.map((review) => (
@@ -91,7 +87,6 @@ export default function AdminReviews() {
         <Typography sx={{ textAlign: "center", mt: 2 }}>No reviews available.</Typography>
       )}
 
-      {/* Dialog for review details */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Review Details</DialogTitle>
         <DialogContent>

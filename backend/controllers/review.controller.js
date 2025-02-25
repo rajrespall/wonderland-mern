@@ -5,7 +5,6 @@ exports.createReview = async (req, res) => {
     try {
       console.log("🔍 Incoming request:", req.body);
   
-      // Get token from cookies
       const token = req.cookies.token;
       if (!token) {
         console.error("⛔ No token found in cookies.");
@@ -14,7 +13,6 @@ exports.createReview = async (req, res) => {
   
       console.log("🔍 Token received:", token);
   
-      // Verify token
       let decoded;
       try {
         decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -24,22 +22,20 @@ exports.createReview = async (req, res) => {
         return res.status(401).json({ message: "Unauthorized: Invalid token" });
       }
   
-      if (!decoded || !decoded.userId) { // ✅ Fix: Check "userId" instead of "id"
+      if (!decoded || !decoded.userId) {
         console.error("⛔ Missing user ID in token.");
         return res.status(401).json({ message: "Unauthorized: Invalid token data" });
       }
   
-      const userId = decoded.userId; // ✅ Fix: Extract userId correctly
+      const userId = decoded.userId;
       console.log("✅ User ID extracted:", userId);
   
-      // Validate input
       const { rating, comment } = req.body;
       if (!rating || rating < 1 || rating > 5) {
         console.error("⚠️ Invalid rating:", rating);
         return res.status(400).json({ message: "Invalid rating value" });
       }
   
-      // Save review to database
       const review = new Review({ userId, rating, comment });
       await review.save();
   
@@ -52,16 +48,14 @@ exports.createReview = async (req, res) => {
     }
 };
 
-// ✅ Fix: Define and export getReviews
 exports.getReviews = async (req, res) => {
     try {
       console.log("📢 Fetching all reviews...");
-      const reviews = await Review.find().populate("userId", "username"); // ✅ Populate user info
+      const reviews = await Review.find().populate("userId", "username");
   
       res.status(200).json(reviews);
     } catch (error) {
       console.error("🔥 Error fetching reviews:", error);
       res.status(500).json({ message: "Error fetching reviews", error });
     }
-    
 };

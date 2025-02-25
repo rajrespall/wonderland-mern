@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
     hasCompletedAssessment: {
         type: Boolean,
         default: false
+    },
+    isTestData: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

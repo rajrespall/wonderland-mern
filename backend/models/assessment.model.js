@@ -39,6 +39,10 @@ const assessSchema = new mongoose.Schema({
             type: Map,
             of: Boolean
         }
+    },
+    isTestData: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

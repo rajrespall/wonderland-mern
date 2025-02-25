@@ -27,6 +27,10 @@ const generalInfoSchema = new mongoose.Schema({
     diagnosisAge: {
         type: Number,
         required: true
+    },
+    isTestData: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

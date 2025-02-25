@@ -2,16 +2,16 @@ const Save = require('../models/card.model.js');
 
 const saveGameData = async (req, res) => {
     const { gameDate, failed, difficulty, completed, timeTaken } = req.body;
-    const userID = req.user._id;
+    const userId = req.user._id;
 
     try {
        
-        if (!userID || !gameDate || difficulty === undefined || completed === undefined || timeTaken === undefined) {
+        if (!userId || !gameDate || difficulty === undefined || completed === undefined || timeTaken === undefined) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
         const newSave = new Save({
-            userID,
+            userId,
             gameDate,
             failed,
             difficulty,
@@ -29,8 +29,8 @@ const saveGameData = async (req, res) => {
 
 const getUserGameData = async (req, res) => {
     try {
-        const userID = req.user._id;
-        const gameData = await Save.find({ userID })
+        const userId = req.user._id;
+        const gameData = await Save.find({ userId })
             .sort({ gameDate: -1 }) // Sort by date, newest first
             .select('-__v'); // Exclude version key
 
@@ -47,10 +47,10 @@ const getUserGameData = async (req, res) => {
 
 const getUserStats = async (req, res) => {
     try {
-        const userID = req.user._id;
+        const userId = req.user._id;
         
         const stats = await Save.aggregate([
-            { $match: { userID: userID } },
+            { $match: { userId: userId } },
             { $group: {
                 _id: '$difficulty',
                 gamesPlayed: { $sum: 1 },

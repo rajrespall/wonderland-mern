@@ -55,7 +55,7 @@ const generateGameData = async (users) => {
     const numCards = randomInt(5, 10);
     for (let i = 0; i < numCards; i++) {
       gameData.cards.push({
-        userID: user._id,
+        userId: user._id,
         gameDate: new Date(Date.now() - randomInt(0, 30) * 24 * 60 * 60 * 1000),
         failed: randomInt(0, 5),
         difficulty: randomElement(difficulties.card),

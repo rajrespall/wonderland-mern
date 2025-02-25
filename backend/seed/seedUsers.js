@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const { createUserWithEmailAndPassword } = require('firebase/auth');
+const { auth } = require('../config/firebase');
 const User = require('../models/user.model');
 const Assess = require('../models/assessment.model');
 const GeneralInfo = require('../models/geninfo.model');
@@ -9,42 +11,37 @@ dotenv.config();
 
 const testUsers = [
   {
-    username: "parent1",
-    email: "parent1@test.com",
-    password: "firebase_managed",
-    firebaseUid: "test_uid_1",
+    username: "testparent1",
+    email: "testparent1@wonderland.com",
+    password: "Test@123", // Real password that can be used to login
     hasCompletedAssessment: true,
     isTestData: true
   },
   {
-    username: "parent2",
-    email: "parent2@test.com",
-    password: "firebase_managed",
-    firebaseUid: "test_uid_2",
+    username: "testparent2",
+    email: "testparent2@wonderland.com",
+    password: "Test@123",
     hasCompletedAssessment: true,
     isTestData: true
   },
   {
-    username: "parent3",
-    email: "parent3@test.com",
-    password: "firebase_managed",
-    firebaseUid: "test_uid_3",
+    username: "testparent3",
+    email: "testparent3@wonderland.com",
+    password: "Test@123",
     hasCompletedAssessment: true,
     isTestData: true
   },
   {
-    username: "parent4", 
-    email: "parent4@test.com",
-    password: "firebase_managed",
-    firebaseUid: "test_uid_4",
+    username: "testparent4",
+    email: "testparent4@wonderland.com",
+    password: "Test@123",
     hasCompletedAssessment: true,
     isTestData: true
   },
   {
-    username: "parent5",
-    email: "parent5@test.com", 
-    password: "firebase_managed",
-    firebaseUid: "test_uid_5",
+    username: "testparent5",
+    email: "testparent5@wonderland.com",
+    password: "Test@123",
     hasCompletedAssessment: true,
     isTestData: true
   }
@@ -127,37 +124,48 @@ const assessments = [
 ];
 
 const seedUsersAndData = async () => {
-    try {
-      await mongoose.connect(process.env.MONGO_URI);
-      console.log('Connected to MongoDB');
-  
-      // Only clear test data
-      await User.deleteMany({ isTestData: true });
-      await Assess.deleteMany({ userId: { $in: (await User.find({ isTestData: true })).map(u => u._id) } });
-      await GeneralInfo.deleteMany({ userId: { $in: (await User.find({ isTestData: true })).map(u => u._id) } });
-      console.log('Cleared existing test data');
-  
-      // Create users and their data
-      for (let i = 0; i < testUsers.length; i++) {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('Connected to MongoDB');
+
+    // Clear existing test data
+    await User.deleteMany({ isTestData: true });
+    await Assess.deleteMany({ userId: { $in: (await User.find({ isTestData: true })).map(u => u._id) } });
+    await GeneralInfo.deleteMany({ userId: { $in: (await User.find({ isTestData: true })).map(u => u._id) } });
+    console.log('Cleared existing test data');
+
+    // Create users
+    for (let i = 0; i < testUsers.length; i++) {
+      try {
+        // Create Firebase user
+        const userCredential = await createUserWithEmailAndPassword(
+          auth, 
+          testUsers[i].email, 
+          testUsers[i].password
+        );
+        const firebaseUid = userCredential.user.uid;
+
+        // Create MongoDB user
         const user = await User.create({
           ...testUsers[i],
-          isTestData: true
+          firebaseUid,
+          password: "firebase_managed" // Store this in MongoDB instead of actual password
         });
-        console.log(`Created test user: ${user.username}`);
-  
-        // Create general info with test flag
+        console.log(`Created user: ${user.username}`);
+
+        // Create general info
         const birthYear = new Date(generalInfos[i].dateOfBirth).getFullYear();
         const diagnosisAge = generalInfos[i].diagnosisYear - birthYear;
-  
+
         const generalInfo = await GeneralInfo.create({
           userId: user._id,
           ...generalInfos[i],
           diagnosisAge,
           isTestData: true
         });
-        console.log(`Created test general info for: ${generalInfo.childName}`);
-  
-        // Create assessment with test flag
+        console.log(`Created general info for: ${generalInfo.childName}`);
+
+        // Create assessment
         const analysisResults = analyzeAssessment(assessments[i]);
         const assessment = await Assess.create({
           userId: user._id,
@@ -165,15 +173,20 @@ const seedUsersAndData = async () => {
           analysis: analysisResults,
           isTestData: true
         });
-        console.log(`Created test assessment for: ${user.username}`);
+        console.log(`Created assessment for: ${user.username}`);
+      } catch (error) {
+        console.error(`Error creating user ${testUsers[i].email}:`, error);
+        continue; // Continue with next user if one fails
       }
-  
-      console.log('Test data seeding completed successfully');
-      process.exit();
-    } catch (error) {
-      console.error('Error seeding test data:', error);
-      process.exit(1);
     }
-  };
-  
+
+    console.log('Test data seeding completed successfully');
+    console.log('Test users can login with their email and password: Test@123');
+    process.exit();
+  } catch (error) {
+    console.error('Error seeding test data:', error);
+    process.exit(1);
+  }
+};
+
 seedUsersAndData();

@@ -1,9 +1,15 @@
 const express = require('express');
-const { saveGameData } = require('../controllers/card.controller.js');
+const {
+    createMatch,
+    getUserGames,
+    getUserStats
+} = require('../controllers/match.controller');
 const verifyToken = require('../middleware/auth.middleware.js');
 
 const router = express.Router();
 
-router.post('/save', verifyToken, saveGameData);
+router.post('/', verifyToken, createMatch);
+router.get('/user-games', verifyToken, getUserGames);
+router.get('/user-stats', verifyToken, getUserStats);
 
 module.exports = router;

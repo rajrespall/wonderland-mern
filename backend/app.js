@@ -12,14 +12,15 @@ const resourceRoutes = require("./routes/resources.route.js");
 const colorRoutes = require("./routes/color.route.js");
 const matchRoutes = require("./routes/match.route.js"); 
 const cardRoutes = require("./routes/card.route.js");
-
+const reviewRoutes = require("./routes/review.route.js");
 // Allow multiple frontend ports
 const ALLOWED_ORIGINS = [
     'http://localhost:5173', //main  
     'http://localhost:5174', //wondercolor
     'http://localhost:5175', //wondermatch
     'http://localhost:5176', //wonderpuz
-    'http://localhost:5177' //wondercards
+    'http://localhost:5177', //wondercards
+    'http://localhost:5178' //admin
 ];
 
 const app = express();
@@ -53,5 +54,6 @@ app.use("/api/resources", resourceRoutes);
 app.use("/api/color", colorRoutes);
 app.use('/api/match', matchRoutes);
 app.use('/api/card', cardRoutes); 
+app.use("/api/reviews", reviewRoutes);  
 
 module.exports = app;

@@ -1,51 +1,34 @@
-import React, { useState } from "react";
-import { Box, Typography, Paper, Divider, Avatar, Rating, List, ListItem, ListItemAvatar, ListItemText, Checkbox, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText } from "@mui/material";
-import { Delete, CheckCircle, Visibility } from "@mui/icons-material";
-
-const reviews = [
-  {
-    id: 1,
-    name: "Jane Doe",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    rating: 4,
-    comment: "Great platform! Very easy to use and navigate.",
-    date: "2025-02-20T14:30:00",
-  },
-  {
-    id: 2,
-    name: "John Smith",
-    avatar: "https://i.pravatar.cc/150?img=2",
-    rating: 5,
-    comment: "Excellent experience. Highly recommend!",
-    date: "2025-02-21T10:15:00",
-  },
-  {
-    id: 3,
-    name: "Emily Johnson",
-    avatar: "https://i.pravatar.cc/150?img=3",
-    rating: 3,
-    comment: "Good, but there's room for improvement.",
-    date: "2025-02-22T09:45:00",
-  },
-  {
-    id: 4,
-    name: "Emily Johnson",
-    avatar: "https://i.pravatar.cc/150?img=3",
-    rating: 3,
-    comment: "Good, but there's room for improvement.",
-    date: "2025-02-23T08:30:00",
-  },
-];
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Paper, Divider, Avatar, Rating, List, ListItem, ListItemAvatar, ListItemText, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText } from "@mui/material";
+import { Visibility } from "@mui/icons-material";
+import axios from "axios";
 
 export default function AdminReviews() {
+  const [reviews, setReviews] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
 
+  // ✅ Fetch reviews from MongoDB when the component mounts
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/reviews/all");
+        setReviews(response.data); // Set fetched reviews in state
+      } catch (error) {
+        console.error("❌ Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
+  // Function to handle opening review details
   const handleViewDetails = (review) => {
     setSelectedReview(review);
     setOpen(true);
   };
 
+  // Function to close the details dialog
   const handleClose = () => {
     setOpen(false);
     setSelectedReview(null);
@@ -58,7 +41,7 @@ export default function AdminReviews() {
         p: 3,
         borderRadius: 3,
         bgcolor: "#f9f9f9",
-        boxShadow: 'none'
+        boxShadow: "none",
       }}
     >
       <Typography
@@ -71,112 +54,58 @@ export default function AdminReviews() {
       >
         User Reviews
       </Typography>
-      <Divider
-        sx={{
-          mb: 2,
-        }}
-      />
-      <List>
-        {reviews.map((review) => (
-          <ListItem
-            key={review.id}
-            alignItems="flex-start"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Checkbox />
-            <ListItemAvatar>
-              <Avatar src={review.avatar} alt={review.name} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    color: "#0457a4",
-                  }}
-                >
-                  {review.name}
-                </Typography>
-              }
-              secondary={
-                <Box>
-                  <Rating value={review.rating} readOnly />
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontFamily: "Poppins",
-                      color: "#333",
-                    }}
-                  >
-                    {review.comment}
+      <Divider sx={{ mb: 2 }} />
+
+      {/* ✅ Check if reviews exist before displaying */}
+      {reviews.length > 0 ? (
+        <List>
+          {reviews.map((review) => (
+            <ListItem key={review._id} alignItems="flex-start" sx={{ display: "flex", alignItems: "center" }}>
+              <ListItemAvatar>
+                <Avatar src={`https://i.pravatar.cc/150?u=${review.userId}`} alt={review.userId} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontWeight: "bold", color: "#0457a4" }}>
+                    {review.userId.username || "Anonymous User"}
                   </Typography>
-                </Box>
-              }
-            />
-            <Tooltip title="View Details">
-              <IconButton onClick={() => handleViewDetails(review)}>
-                <Visibility
-                  sx={{
-                    color: "#0457a4",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Approve">
-              <IconButton>
-                <CheckCircle
-                  sx={{
-                    color: "green",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Delete">
-              <IconButton>
-                <Delete
-                  sx={{
-                    color: "#b80201",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-          </ListItem>
-        ))}
-      </List>
+                }
+                secondary={
+                  <Box>
+                    <Rating value={review.rating} readOnly />
+                    <Typography variant="body2" sx={{ fontFamily: "Poppins", color: "#333" }}>
+                      {review.comment}
+                    </Typography>
+                  </Box>
+                }
+              />
+              <Tooltip title="View Details">
+                <IconButton onClick={() => handleViewDetails(review)}>
+                  <Visibility sx={{ color: "#0457a4" }} />
+                </IconButton>
+              </Tooltip>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Typography sx={{ textAlign: "center", mt: 2 }}>No reviews available.</Typography>
+      )}
+
+      {/* Dialog for review details */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Review Details</DialogTitle>
         <DialogContent>
           {selectedReview && (
             <DialogContentText>
-              <Typography
-                sx={{
-                  fontWeight: "bold",
-                  color: "#0457a4",
-                  mb: 1,
-                }}
-              >
-                {selectedReview.name}
+              <Typography sx={{ fontWeight: "bold", color: "#0457a4", mb: 1 }}>
+                {selectedReview.userId?.username || "Anonymous User"}
               </Typography>
               <Rating value={selectedReview.rating} readOnly />
-              <Typography
-                variant="body2"
-                sx={{
-                  mt: 2,
-                }}
-              >
+              <Typography variant="body2" sx={{ mt: 2 }}>
                 {selectedReview.comment}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  mt: 2,
-                  color: "#666",
-                }}
-              >
-                {new Date(selectedReview.date).toLocaleString()}
+              <Typography variant="body2" sx={{ mt: 2, color: "#666" }}>
+                {new Date(selectedReview.createdAt).toLocaleString()}
               </Typography>
             </DialogContentText>
           )}

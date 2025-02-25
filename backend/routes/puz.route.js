@@ -3,7 +3,7 @@ const {
     saveGameData,
     getUserGameData,
     getUserStats
-} = require('../controllers/card.controller');
+} = require('../controllers/puz.controller');
 const verifyToken = require('../middleware/auth.middleware.js');
 
 const router = express.Router();

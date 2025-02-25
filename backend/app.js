@@ -11,6 +11,7 @@ const assessmentRoutes = require("./routes/assessment.route.js");
 const resourceRoutes = require("./routes/resources.route.js");
 const colorRoutes = require("./routes/color.route.js");
 const matchRoutes = require("./routes/match.route.js"); 
+const cardRoutes = require("./routes/card.route.js");
 
 // Allow multiple frontend ports
 const ALLOWED_ORIGINS = [
@@ -50,6 +51,7 @@ app.use("/api/general-info", generalInfoRoutes);
 app.use("/api/assessment", assessmentRoutes);
 app.use("/api/resources", resourceRoutes);
 app.use("/api/color", colorRoutes);
-app.use('/api/match', matchRoutes); 
+app.use('/api/match', matchRoutes);
+app.use('/api/card', cardRoutes); 
 
 module.exports = app;

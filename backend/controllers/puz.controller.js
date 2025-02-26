@@ -38,7 +38,7 @@ const getUserGameData = async (req, res) => {
     try {
         const userId = req.user._id;
         const gameData = await Puz.find({ userId })
-            .sort({ gameDate: -1 }) // Sort by date, newest first
+            .sort({ playedAt: -1 }) // Sort by date, newest first
             .select('-__v'); // Exclude version key
 
         if (!gameData.length) {

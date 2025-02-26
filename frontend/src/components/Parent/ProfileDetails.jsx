@@ -68,19 +68,19 @@ export default function UserProfileCard() {
         <CustomTabPanel value={value} index={0}>
           <Typography variant="h6" fontWeight="bold" sx={{
               fontFamily: 'Poppins',
-            }}>Timeline Content</Typography>
+            }}>Profile Details</Typography>
           <Typography variant="body2"
           sx={{
             fontFamily: 'Poppins',
-          }}>This is where the timeline content goes.</Typography>
+          }}>This is where the profile details goes.</Typography>
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
           <Typography variant="h6" fontWeight="bold">Contact Information</Typography>
-          <Typography variant="body2">Phone: <Link href="tel:+1234567890">+1 234 567 890</Link></Typography>
+          <Typography variant="body2">Phone: <Link href="tel:+1234567890">+0 223432 34234</Link></Typography>
           <Typography variant="body2">Address: 5341 E 65th Street, New York, NY 10681</Typography>
-          <Typography variant="body2">E-mail: <Link href="mailto:hello@rsmarquetech.com">hello@rsmarquetech.com</Link></Typography>
-          <Typography variant="body2">Site: <Link href="https://www.rsmarquetech.com" target="_blank">www.rsmarquetech.com</Link></Typography>
+          <Typography variant="body2">E-mail: <Link href="#">hello@wonderland.com</Link></Typography>
+          <Typography variant="body2">Site: <Link href="#" target="_blank">www.wonderland.com</Link></Typography>
 
         </CustomTabPanel>
       </Box>

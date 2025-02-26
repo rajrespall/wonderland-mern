@@ -5,8 +5,8 @@ import { AccountCircle, RateReview, BarChart, SwitchAccount, CheckCircleOutline 
 import "@fontsource/poppins";
 
 import ProgressCharts from "./ProgressCharts";
-import ProfileDetails from "./ProfileDetails";
 import PageReviews from "./PageReviews";
+import UserProfileCard from "./ProfileDetails";
 
 const buttonStyles = (active) => ({
   width: '100%',
@@ -34,13 +34,13 @@ export default function ProfilePage() {
   const renderActiveSection = () => {
     switch (activeSection) {
       case "Profile":
-        return <ProfileDetails />;
+        return <UserProfileCard />;
       case "PageReviews":
         return <PageReviews />;
       case "Progress":
         return <ProgressCharts />;
       default:
-        return <ProfileDetails />;
+        return <UserProfileCard />;
     }
   };
 

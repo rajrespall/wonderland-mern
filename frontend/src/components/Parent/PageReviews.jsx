@@ -57,7 +57,7 @@ export default function PageReviews() {
           </Box>
 
           <Typography variant="body1">
-            My first and only mala ordered on Etsy, and I'm beyond delighted! I requested a custom mala based on two stories I was called to invite together in this kind of creation.
+            This is wonderful! My child learned a lot from this.
           </Typography>
 
           <Box mt={2} display="flex" justifyContent="flex-start">

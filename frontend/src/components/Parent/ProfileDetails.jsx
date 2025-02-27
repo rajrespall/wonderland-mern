@@ -18,7 +18,7 @@ export default function UserProfileCard() {
   };
 
   return (
-      <Box sx={{ p: 3, borderRadius: 3, bgcolor: "white", boxShadow: "none" }}>
+      <Box sx={{ borderRadius: 3, bgcolor: "white", boxShadow: "none" }}>
         <Box display="flex" alignItems="center" gap={2}>
           <Avatar sx={{ width: 60, height: 60 }} />
           <Box >
@@ -39,22 +39,6 @@ export default function UserProfileCard() {
           </Box>
         </Box>
 
-        <Box display="flex" gap={1} mt={2}>
-          <Button variant="contained" startIcon={<Message />}
-           sx={{
-            bgcolor: "#0457a4",
-            borderRadius: '25px',
-            fontFamily: 'Poppins',
-          }}>Edit Profile</Button>
-          <Button variant="outlined" startIcon={<Group />}
-           sx={{
-            bgcolor: "white",
-            borderRadius: '25px',
-            fontFamily: 'Poppins',
-          }}>View Child Details</Button>
-          {/* <Button variant="text" color="error" startIcon={<Report />}>Report User</Button> */}
-        </Box>
-
         <Divider sx={{ my: 2 }} />
 
        <Tabs value={value} onChange={handleChange} aria-label="profile tabs">
@@ -73,14 +57,33 @@ export default function UserProfileCard() {
           sx={{
             fontFamily: 'Poppins',
           }}>This is where the profile details goes.</Typography>
+
+        <Button variant="contained" startIcon={<Message />}
+           sx={{
+            bgcolor: "#0457a4",
+            borderRadius: '25px',
+            fontFamily: 'Poppins',
+            mt: 2
+          }}>Edit Profile</Button>
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
-          <Typography variant="h6" fontWeight="bold">Contact Information</Typography>
-          <Typography variant="body2">Phone: <Link href="tel:+1234567890">+0 223432 34234</Link></Typography>
-          <Typography variant="body2">Address: 5341 E 65th Street, New York, NY 10681</Typography>
-          <Typography variant="body2">E-mail: <Link href="#">hello@wonderland.com</Link></Typography>
-          <Typography variant="body2">Site: <Link href="#" target="_blank">www.wonderland.com</Link></Typography>
+        <Typography variant="h6" fontWeight="bold" sx={{
+              fontFamily: 'Poppins',
+            }}>Child Details</Typography>
+          <Typography variant="body2"
+          sx={{
+            fontFamily: 'Poppins',
+          }}>This is where the child details goes.</Typography>
+
+          <Button variant="contained" startIcon={<Message />}
+           sx={{
+            bgcolor: "#0457a4",
+            borderRadius: '25px',
+            fontFamily: 'Poppins',
+            mt: 2
+          }}>Edit Child Details</Button>
+          
 
         </CustomTabPanel>
       </Box>

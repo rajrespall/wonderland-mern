@@ -14,6 +14,7 @@ const matchRoutes = require("./routes/match.route.js");
 const cardRoutes = require("./routes/card.route.js");
 const reviewRoutes = require("./routes/review.route.js");
 const puzRoutes = require('./routes/puz.route');
+const profileRoutes = require('./routes/profile.route.js'); 
 
 // Allow multiple frontend ports
 const ALLOWED_ORIGINS = [
@@ -58,5 +59,6 @@ app.use('/api/match', matchRoutes);
 app.use('/api/card', cardRoutes); 
 app.use("/api/reviews", reviewRoutes);  
 app.use('/api/puz', puzRoutes);
+app.use('/api/profile', profileRoutes);
 
 module.exports = app;

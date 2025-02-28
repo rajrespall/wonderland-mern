@@ -1,4 +1,4 @@
-const cloudinary = require('../config/cloudinary.js');
+const { cloudinary } = require('../config/cloudinary.js');
 const Color = require('../models/color.model.js');
 
 const uploadImage = async (req, res) => {
@@ -31,7 +31,8 @@ const uploadImage = async (req, res) => {
             console.error('Cloudinary Upload Error:', cloudinaryError);
             return res.status(500).json({
                 success: false,
-                message: "Failed to upload image to cloud storage"
+                message: "Failed to upload image to cloud storage",
+                error: cloudinaryError.message
             });
         }
 

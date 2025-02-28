@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import useAssessmentStore from '../../store/assessmentStore';
 import { Box, Typography, Card, CardContent, CardMedia, IconButton, Grid, CssBaseline } from "@mui/material";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import EastRoundedIcon from '@mui/icons-material/EastRounded';
 import Spinner from "../../components/Spinner";
 import ParentNav from '../../components/ParentNav'; 
 import AssessmentAnalysis from "../../components/AssessmentAnalysis";
@@ -20,31 +20,31 @@ const cardData = {
         title: "Improve Communication Skills",
         description: "Enhance your child's verbal and non-verbal communication.",
         image: com,
-        color: "#2196F3",
+        color: "#0457a4",
     },
     social: {
         title: "Boost Social Interaction",
         description: "Help your child build better social skills and connections.",
         image: soc,
-        color: "#9C27B0",
+        color: "#5da802",
     },
     sensory: {
         title: "Manage Sensory Sensitivities",
         description: "Techniques to support sensory processing challenges.",
         image: sen,
-        color: "#4CAF50",
+        color: "#b80201",
     },
     emotional: {
         title: "Emotional Regulation Strategies",
         description: "Learn ways to manage emotions and reduce anxiety.",
         image: emo,
-        color: "#FF9800",
+        color: "#f4900c",
     },
     routine: {
         title: "Establish Healthy Routines",
         description: "Create structured and comfortable daily routines.",
         image: rou,
-        color: "#F44336",
+        color: "#5829c0",
     },
 };
 
@@ -80,7 +80,25 @@ const Resources = () => {
                 {userAssessment?.analysis && (
                     <AssessmentAnalysis analysis={userAssessment.analysis} />
                 )}
-                    
+                    <Typography
+                    sx={{
+                        fontFamily: 'Poppins',
+                        fontSize: '30px',
+                        fontWeight: 'bold',
+                        color: '#0457a4',
+                        textAlign: 'center',
+                    }}>
+                        Resources 
+                    </Typography>
+                    <Typography
+                    sx={{
+                        fontFamily: 'Poppins',
+                        color: '#0457a4',
+                        textAlign: 'center',
+                    }}>
+                        Learn how improve the commuincation skills and more!
+                    </Typography>
+
                     <Grid container spacing={4} sx={{
                         maxWidth: '1200px',
                         margin: '0 auto',
@@ -142,7 +160,7 @@ const InfoCard = ({ data }) => {
                 height: 200,
                 display: "flex", 
                 alignItems: "center", 
-                padding: 2, 
+                padding: 3, 
                 borderRadius: 3, 
                 boxShadow: 3, 
                 backgroundColor: data.color,
@@ -159,8 +177,8 @@ const InfoCard = ({ data }) => {
             <CardMedia
                 component="img"
                 sx={{ 
-                    width: 120, 
-                    height: 120, 
+                    width: 100, 
+                    height: 100, 
                     borderRadius: 2, 
                     marginRight: 2,
                     transition: "transform 0.3s ease-in-out", 
@@ -169,15 +187,29 @@ const InfoCard = ({ data }) => {
                 alt={data.title}
             />
             <CardContent sx={{ flex: 1 }}>
-                <Typography variant="h6" fontWeight="bold" color="white">
+                <Typography variant="h6" fontWeight="bold" color="#fcf230"
+                sx={{
+                    fontFamily: 'Poppins',
+                    fontSize: '18px',
+                    mb: 2
+                }}>
                     {data.title}
                 </Typography>
-                <Typography variant="body2" color="white">
+                <Typography variant="body2" color="white"
+                sx={{
+                    fontFamily: 'Poppins',
+                    fontSize: '14px'
+                }}>
                     {data.description}
                 </Typography>
             </CardContent>
-            <IconButton sx={{ color: "white" }}>
-                <ArrowForwardIcon />
+            <IconButton 
+            sx={{ 
+                color: "#fcf230", }}>
+                <EastRoundedIcon 
+                sx={{
+                    fontSize: '40px'
+                }}/>
             </IconButton>
         </Card>
     );

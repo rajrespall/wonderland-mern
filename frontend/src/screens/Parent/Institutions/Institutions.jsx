@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box, CssBaseline } from "@mui/material";
-import ParentNav from "../../components/ParentNav";
-import ProfilePage from "../../components/Parent/Profile";
-import Spinner from "../../components/Spinner";
-import InstitutionsPage from "../../components/Parent/InstitutionsPage";
+import ParentNav from "../../../components/ParentNav";
+import Spinner from "../../../components/Spinner";
+import InstitutionsPage from "../../../components/Parent/Institutions/InstitutionsPage";
 
 export default function Institutions() {
     const [loading, setLoading] = useState(true);

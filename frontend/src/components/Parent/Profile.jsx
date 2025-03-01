@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Typography, Avatar, Button, Paper, Divider, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, } from "@mui/material";
+import { Box, Typography, Avatar, Button, Paper, Divider, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from "@mui/material";
 import { AccountCircle, RateReview, BarChart, SwitchAccount, CheckCircleOutline } from "@mui/icons-material";
 import "@fontsource/poppins";
+import useProfileStore from "../../store/profileStore";
 
 import ProgressCharts from "./ProgressCharts";
 import PageReviews from "./PageReviews";
@@ -30,6 +31,14 @@ export default function ProfilePage() {
   const [activeSection, setActiveSection] = useState("Profile"); 
   const [openDialog, setOpenDialog] = useState(false); 
   const navigate = useNavigate(); 
+  const { profile, loading, error, getProfile } = useProfileStore();
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const userName = profile ? `${profile.firstName} ${profile.lastName}` : "Loading...";
+  const profilePicture = profile?.profilePicture || "";
 
   const renderActiveSection = () => {
     switch (activeSection) {
@@ -71,9 +80,17 @@ export default function ProfilePage() {
       >
         <Paper elevation={3} sx={{ width: "250px", p: 2, borderRadius: 3, bgcolor: 'transparent', boxShadow: 'none' }}>
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <Avatar sx={{ width: 150, height: 150 }} />
+            {loading ? (
+              <CircularProgress size={150} thickness={2} />
+            ) : (
+              <Avatar 
+                src={profilePicture} 
+                alt={userName}
+                sx={{ width: 150, height: 150 }}
+              />
+            )}
             <Typography sx={{ fontWeight: "bold", color: "#0457a4", fontFamily: "Poppins", fontSize: '15px' }}>
-              Diana Carreon
+              {loading ? "Loading..." : userName}
             </Typography>
             <Typography variant="body2" color="textSecondary" sx={{ color: "rgb(4, 87, 164, .6)", fontFamily: "Poppins" }}>
               Parent

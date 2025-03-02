@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Box, Grid, Card, CardContent, Typography, TextField, Button } from "@mui/material";
 import StyledRating from "../components/Rating"; 
 import axios from "axios";
+
+import sqheart from "../assets/sq_hearts.png"
 import pagkaki from "../assets/aboutus.png";
 
 const Feedback = () => {
@@ -42,10 +44,10 @@ const Feedback = () => {
             backgroundColor: "white",
             color: "black",
             textAlign: "center",
-            boxShadow: 3,
-            p: 3,
+            boxShadow: 'none',
+            p: 2,
           }}
-        >
+        >  
           <CardContent>
             <Typography variant="h6" fontWeight="bold" color="green" mb={2}>
               GIVE US YOUR FEEDBACK!

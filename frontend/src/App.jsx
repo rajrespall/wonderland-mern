@@ -27,7 +27,8 @@ import AboutUs from './screens/AboutUs'
 
 import ProtectedAssessmentRoute from './components/ProtectedRoutes/ProtectedAssessmentRoute'
 import PublicRoute from './components/ProtectedRoutes/PublicRoute';
-import Institutions from './screens/Parent/Institutions'
+import Institutions from './screens/Parent/Institutions/Institutions'
+import InstitutionsDetails from './screens/Parent/Institutions/InstitutionDetails'
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
           <Route path='/home' element={<ParentPage />} />
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/institutions' element={<Institutions />} />
+          <Route path="/institutions/:id" element={<InstitutionsDetails />} />
           <Route path='/resources' element={<Resources />} />
           <Route path='/resources/communication' element={<Communication />} />
           <Route path='/resources/emotional' element={<Emotional />} />

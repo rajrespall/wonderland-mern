@@ -1,8 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Container, Typography } from "@mui/material";
+import { Container, Box, CssBaseline, CardMedia } from "@mui/material";
 import ParentNav from "../../../components/ParentNav";
 import InstitutionCard from "../../../components/Parent/Institutions/InsDetails";
+import institutionimage from "../../../assets/institutions1.jpg";
 
 const institutions = [
   { 
@@ -35,31 +36,25 @@ export default function InstitutionsDetails() {
 
   return (
     <>
-      <ParentNav />
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <InstitutionCard
-          title={institution.name}
-          description="Now that your eyes are open, make the sun jealous with your burning passion to start the day. Make the sun jealous or stay in bed."
-          address={institution.address}
-        />
-        {institution.mapEmbed && (
-          <Container sx={{ mt: 4, textAlign: "center" }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Location of {institution.name}
-            </Typography>
-            <iframe
-              src={institution.mapEmbed}
-              width="100%"
-              height="400"
-              style={{ border: 0, borderRadius: "10px" }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-
-          </Container>
-        )}
-      </Container>
+      <CssBaseline />
+      <Box sx={{backgroundColor: 'rgb(4, 87, 164, .1)', minHeight: '100vh', p: 2}}>
+        <ParentNav/>
+        <CardMedia sx={{mt: 4}}>
+          <img
+            src={institutionimage}
+            alt="institution"
+            style={{ width: "100%", height: "400px", objectFit: "cover", }}
+          />
+        </CardMedia>
+        <Container maxWidth="100%" sx={{ mt: 4 }}>
+          <InstitutionCard
+            title={institution.name}
+            description="Now that your eyes are open, make the sun jealous with your burning passion to start the day. Make the sun jealous or stay in bed."
+            address={institution.address}
+            mapEmbed={institution.mapEmbed} 
+            />
+        </Container>
+      </Box>
     </>
   );
 }

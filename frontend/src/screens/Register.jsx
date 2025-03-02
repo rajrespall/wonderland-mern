@@ -224,9 +224,7 @@ const Register = () => {
               <Box sx={{marginBottom: "220px"}}>
                 <img src={create} alt="Pagkaki" style={{ maxWidth: '90%',  marginLeft: "60px"}} />
               <Typography sx={{ color: 'white', mb: 3, mt: 4, fontFamily: "Poppins", fontSize: "18px"}}>
-                Inspirational Text Here Inspirational Text Here Inspirational Text Here jasdhaj gfgfj
-                Inspirational Text Here Inspirational Text Here Inspirational Text Here sdkjashdh jadkjashfjasjfgjasg
-                Inspirational Text Here Inspirational Text Here
+              "Welcome to Wonderland! We are here to help you learn, explore, and have fun in a safe and friendly environment. Our activities are designed to support creativity, problem-solving, and learning at your own pace. Join us today and start your adventure!"
               </Typography>
               </Box>
             </Box>

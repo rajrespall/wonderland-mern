@@ -260,9 +260,7 @@ const LoginPage = () => {
               <Box sx={{marginBottom: "220px"}}>
                 <img src={pagkaki} alt="Pagkaki" style={{ maxWidth: '90%',  marginLeft: "60px"}} />
               <Typography sx={{ color: 'white', mb: 3, mt: 4, fontFamily: "Poppins", fontSize: "18px"}}>
-                Inspirational Text Here Inspirational Text Here Inspirational Text Here jasdhaj gfgfj
-                Inspirational Text Here Inspirational Text Here Inspirational Text Here sdkjashdh jadkjashfjasjfgjasg
-                Inspirational Text Here Inspirational Text Here
+              "Welcome Back to Wonderland! We're happy to see you again. Log in to continue your fun learning adventure. If you need help, ask a grown-up or contact us!"
               </Typography>
               </Box>
             </Box>

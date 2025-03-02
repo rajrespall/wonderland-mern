@@ -8,6 +8,8 @@ import useProfileStore from "../../store/profileStore";
 import ProgressCharts from "./ProgressCharts";
 import PageReviews from "./PageReviews";
 import UserProfileCard from "./ProfileDetails";
+import Predictive from "./Predictive";
+
 
 const buttonStyles = (active) => ({
   width: '100%',
@@ -48,6 +50,8 @@ export default function ProfilePage() {
         return <PageReviews />;
       case "Progress":
         return <ProgressCharts />;
+      case "Predictive":
+        return <Predictive />;
       default:
         return <UserProfileCard />;
     }
@@ -93,7 +97,7 @@ export default function ProfilePage() {
               {loading ? "Loading..." : userName}
             </Typography>
             <Typography variant="body2" color="textSecondary" sx={{ color: "rgb(4, 87, 164, .6)", fontFamily: "Poppins" }}>
-              Parent
+              Parent  
             </Typography>
             <Divider sx={{ width: "100%", my: 2 }} />
             <Button variant="contained" fullWidth sx={buttonStyles(activeSection === "Profile")} startIcon={<AccountCircle />} onClick={() => setActiveSection("Profile")}>
@@ -104,6 +108,9 @@ export default function ProfilePage() {
             </Button>
             <Button variant="contained" fullWidth sx={buttonStyles(activeSection === "Progress")} startIcon={<BarChart />} onClick={() => setActiveSection("Progress")}>
               Progress
+            </Button>
+            <Button variant="contained" fullWidth sx={buttonStyles(activeSection === "Predictive")} startIcon={<BarChart />} onClick={() => setActiveSection("Predictive")}>
+              Predictive
             </Button>
             <Button variant="contained" fullWidth sx={buttonStyles(false)} startIcon={<SwitchAccount />} onClick={handleSwitchAccount}>
               Switch Account

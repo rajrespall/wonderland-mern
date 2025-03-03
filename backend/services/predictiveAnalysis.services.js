@@ -1,6 +1,8 @@
 const Card = require('../models/card.model');
 const Puz = require('../models/puz.model');
 const mongoose = require('mongoose');
+const Color = require('../models/color.model');
+const Match = require('../models/match.model');
 
 const calculateLogicalAbility = async (userId) => {
     try {
@@ -145,6 +147,88 @@ const calculateTrend = async (userId) => {
     }
 };
 
+const currentMotor = async (userId) => {
+    try {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        // Fetch all games played in the last 7 days
+        const wondercards = await Card.find({ userId, gameDate: { $gte: sevenDaysAgo } });
+        const wonderpuz = await Puz.find({ userId, playedAt: { $gte: sevenDaysAgo } });
+        const wondercolor = await Color.find({ userId, createdAt: { $gte: sevenDaysAgo } });
+        const wondermatch = await Match.find({ userId, playedAt: { $gte: sevenDaysAgo } });
+
+        let totalScore = 0;
+
+        // Each game played earns 5 points
+        totalScore += (wondercards.length + wonderpuz.length + wondercolor.length + wondermatch.length) * 5;
+
+        // Calculate inactivity penalties
+        const lastPlayedDates = [
+            ...wondercards.map(game => game.gameDate),
+            ...wonderpuz.map(game => game.playedAt),
+            ...wondercolor.map(game => game.createdAt),
+            ...wondermatch.map(game => game.playedAt)
+        ];
+
+        if (lastPlayedDates.length > 0) {
+            const lastPlayed = new Date(Math.max(...lastPlayedDates.map(date => new Date(date))));
+            const daysInactive = Math.floor((new Date() - lastPlayed) / (1000 * 60 * 60 * 24));
+
+            totalScore -= Math.floor(daysInactive / 3) * 3; // Deduct 3 points for every 3 days of inactivity
+        }
+
+        return Math.max(0, totalScore); // Ensure score doesn't go below 0
+    } catch (error) {
+        console.error("Error calculating motor skills score:", error);
+        throw error;
+    }
+};
+
+const predictiveMotor = async (userId) => {
+    try {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        // Fetch all game records in the last 30 days
+        const wondercards = await Card.find({ userId, gameDate: { $gte: thirtyDaysAgo } });
+        const wonderpuz = await Puz.find({ userId, playedAt: { $gte: thirtyDaysAgo } });
+        const wondercolor = await Color.find({ userId, createdAt: { $gte: thirtyDaysAgo } });
+        const wondermatch = await Match.find({ userId, playedAt: { $gte: thirtyDaysAgo } });
+
+        const dailyActivity = new Array(30).fill(0);
+        let totalScore = 0;
+        let totalDaysPlayed = 0;
+
+        // Count the number of days played and accumulate scores
+        [...wondercards, ...wonderpuz, ...wondercolor, ...wondermatch].forEach(game => {
+            const daysAgo = Math.floor((new Date() - new Date(game.gameDate || game.playedAt || game.createdAt)) / (1000 * 60 * 60 * 24));
+            if (daysAgo < 30) {
+                dailyActivity[daysAgo]++;
+                totalScore += 5; // Assuming 5 points per game played
+                totalDaysPlayed++;
+            }
+        });
+
+        // Calculate consistency ratio
+        const daysPlayed = dailyActivity.filter(count => count > 0).length;
+        const consistencyRatio = daysPlayed / 30;
+
+        // Determine trend
+        let trend = "decreasing"; // Default to decreasing
+        if (consistencyRatio > 0.8) trend = "improving";
+        else if (consistencyRatio > 0.5) trend = "stable";
+
+        // Calculate the average percentage of the score
+        const avgScore = totalDaysPlayed > 0 ? (totalScore / totalDaysPlayed).toFixed(1) : 0;
+
+        return { trend, avgScore };
+    } catch (error) {
+        console.error("Error calculating predictive motor trend:", error);
+        return { trend: "stable", avgScore: 0 };
+    }
+};
 
 
-module.exports = { calculateLogicalAbility, calculateTrend };
+module.exports = { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor };
+

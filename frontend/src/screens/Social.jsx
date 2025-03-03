@@ -10,28 +10,42 @@ import { useNavigate } from 'react-router-dom';  // Correct import for v6
 const questions = [
   {
     question: "Does your child make eye contact when interacting with others?",
-    answers: ["Never", "Rarely", "Sometimes", "Frequently"]
+    answers: [
+      "Never makes eye contact", // 5
+      "Rarely makes eye contact", // 4
+      "Sometimes makes eye contact", // 3
+      "Often makes eye contact but not consistently", // 2
+      "Consistently makes appropriate eye contact" // 1
+    ]
   },
   {
     question: "Does your child engage in pretend play or play alongside other children?",
-    answers: ["Never", "Rarely", "Sometimes", "Frequently"]
+    answers: [
+      "Never engages in any form of play with others", // 5
+      "Rarely shows interest in others' play activities", // 4
+      "Sometimes observes others but seldom joins in", // 3
+      "Occasionally participates in parallel play", // 2
+      "Regularly engages in age-appropriate interactive and pretend play" // 1
+    ]
   },
   {
     question: "How does your child respond to social cues (e.g., facial expressions, tone of voice)?",
     answers: [
-      "Appropriately most of the time.",
-      "Inconsistently.",
-      "Struggles to interpret cues.",
-      "Does not respond to social cues."
+      "Does not respond to any social cues", // 5
+      "Rarely notices or responds to obvious social cues", // 4
+      "Inconsistently responds to strong social cues", // 3
+      "Notices and responds to clear social cues but may miss subtle ones", // 2
+      "Appropriately interprets and responds to social cues" // 1
     ]
   },
   {
     question: "Does your child seem uninterested in interacting with peers or family members?",
     answers: [
-      "No, they are very social.",
-      "Sometimes, depending on the situation.",
-      "Often, they prefer being alone.",
-      "Always, they avoid social interactions."
+      "Actively avoids all social interactions", // 5
+      "Shows strong preference for isolation over social interaction", // 4
+      "Often appears indifferent to social opportunities", // 3
+      "Sometimes shows interest in social interaction", // 2
+      "Consistently seeks and enjoys social interaction" // 1
     ]
   }
 ];
@@ -53,12 +67,13 @@ const navigate = useNavigate(); // Use the hook to get the navigate function
     const handleAnswer = (index) => {
       const updatedAnswers = [...answers];
       updatedAnswers[currentQuestion] = index;
-    
+      
       setAnswers(updatedAnswers);
-    
-      // Store the selected answer numerically in localStorage (1-based index)
-      localStorage.setItem(`Social_${currentQuestion}_answer`, index + 1);  // Store 1-based value
-    
+      
+      // Store the selected answer on a scale of 5 to 1 (5 is most severe)
+      // Since our array is 0-indexed, we invert the score: 5 - index
+      localStorage.setItem(`Communication_${currentQuestion}_answer`, 5 - index);
+      
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       }

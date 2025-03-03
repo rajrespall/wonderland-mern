@@ -79,11 +79,12 @@ const useAssessmentStore = create((set, get) => ({
 
             set({
                 userAssessment,
-                showComm: JSON.stringify(userAssessment.communication) !== JSON.stringify([4, 1, 1, 1]),
-                showSocial: JSON.stringify(userAssessment.social) !== JSON.stringify([4, 4, 1, 1]),
-                showSensory: JSON.stringify(userAssessment.sensory) !== JSON.stringify([1, 1, 1]),
-                showEmotional: JSON.stringify(userAssessment.emotional) !== JSON.stringify([1, 1, 1]),
-                showRoutine: JSON.stringify(userAssessment.routine) !== JSON.stringify([1, 1, 1]),
+                // Compare with default "no issues" values (all 4s which represent ISAA score of 1)
+                showComm: JSON.stringify(userAssessment.communication) !== JSON.stringify([4, 4, 4, 4]),
+                showSocial: JSON.stringify(userAssessment.social) !== JSON.stringify([4, 4, 4, 4]),
+                showSensory: JSON.stringify(userAssessment.sensory) !== JSON.stringify([4, 4, 4]),
+                showEmotional: JSON.stringify(userAssessment.emotional) !== JSON.stringify([4, 4, 4]),
+                showRoutine: JSON.stringify(userAssessment.routine) !== JSON.stringify([4, 4, 4]),
                 loading: false
             });
         } catch (error) {

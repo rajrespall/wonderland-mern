@@ -94,15 +94,15 @@ const OtherSymptoms = () => {
 
       // ✅ Retrieve answers properly from Local Storage
       const getAnswers = (prefix, count) => {
-          let answers = [];
-          for (let i = 0; i < count; i++) {
-              const storedValue = localStorage.getItem(`${prefix}_${i}_answer`);
-              if (storedValue !== null) {
-                  answers.push(JSON.parse(storedValue));  // Ensure correct data type
-              }
-          }
-          return answers;
-      };
+        let answers = [];
+        for (let i = 0; i < count; i++) {
+            const storedValue = localStorage.getItem(`${prefix}_${i}_answer`);
+            if (storedValue !== null) {
+                answers.push(parseInt(storedValue, 10));  // Make sure it's an integer
+            }
+        }
+        return answers;
+    };
 
       // ✅ Fetch stored values
       const communicationAnswers = getAnswers("Communication", 4);

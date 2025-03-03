@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Select, MenuItem, FormControl, InputLabel, Card, CardContent, Grid } from "@mui/material";
+import React, { useEffect, useState, useRef } from "react";
+import { Box, Typography, Select, MenuItem, FormControl, InputLabel, Card, CardContent, Grid, Button } from "@mui/material";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line } from "recharts";
+import DownloadIcon from '@mui/icons-material/Download';
 import useGameDataStore from '../../store/gameStore';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 // Reusable stat card component
 const StatCard = ({ title, stats, color }) => (
@@ -44,7 +48,8 @@ const ProgressCharts = () => {
     const gameStore = useGameDataStore();
     const [selectedDataType, setSelectedDataType] = useState("puzzle");
     const COLORS = ["#d32f2f", "#f57c00", "#fbc02d"];
-    
+    const chartsRef = useRef(null);
+  
     // Map game types to their API endpoints
     const gameTypeMap = {
       puzzle: "puz",
@@ -71,7 +76,70 @@ const ProgressCharts = () => {
       
       fetchAllData();
     }, []);
-  
+    
+    const exportToPDF = async () => {
+      const input = chartsRef.current;
+      const pdf = new jsPDF('p', 'mm', 'a4', true);
+      
+      // Add title to PDF
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(18);
+      pdf.setTextColor(4, 87, 164); // #0457a4
+      pdf.text('Progress Report', 105, 15, { align: 'center' });
+      
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(12);
+      pdf.setTextColor(0, 0, 0);
+      pdf.text(`Game Type: ${selectedDataType.charAt(0).toUpperCase() + selectedDataType.slice(1)}`, 20, 25);
+      pdf.text(`Date: ${new Date().toLocaleDateString()}`, 20, 30);
+      
+      try {
+          // Generate canvas from charts
+          const canvas = await html2canvas(input, {
+              scale: 2,
+              useCORS: true,
+              logging: false
+          });
+          
+          // Convert canvas to image
+          const imgData = canvas.toDataURL('image/png');
+          
+          // Calculate aspect ratio to fit on page
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const imgWidth = pageWidth - 40; // Margins
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          
+          // Add image to PDF
+          pdf.addImage(imgData, 'PNG', 20, 40, imgWidth, imgHeight);
+          
+          // Add summary text
+          const summaryY = 40 + imgHeight + 10;
+          pdf.setFontSize(14);
+          pdf.setTextColor(4, 87, 164); // #0457a4
+          pdf.text('Summary', 20, summaryY);
+          
+          pdf.setFontSize(10);
+          pdf.setTextColor(0, 0, 0);
+          
+          const stats = gameStore[`${selectedDataType}Stats`] || {};
+          const summary = [
+              `Total Games Played: ${stats.gamesPlayed || 0}`,
+              `Average Score: ${stats.averageScore || 0}`,
+              `Best Score: ${stats.highestScore || 0}`,
+              `Average Time: ${stats.averageTimeTaken || 0} seconds`
+          ];
+          
+          summary.forEach((line, i) => {
+              pdf.text(line, 20, summaryY + 10 + (i * 5));
+          });
+          
+          // Save the PDF
+          pdf.save(`wonderland-progress-${selectedDataType}-${new Date().toLocaleDateString().replace(/\//g, '-')}.pdf`);
+      } catch (error) {
+          console.error('Error generating PDF:', error);
+      }
+  };
+
     if (gameStore.loading) return <Typography>Loading...</Typography>;
     if (gameStore.error) return <Typography color="error">{gameStore.error}</Typography>;
 
@@ -131,8 +199,23 @@ const ProgressCharts = () => {
         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#0457a4", fontFamily: "Poppins" }}>
           ACHIEVEMENTS/ PROGRESS
         </Typography>
-        
-        <FormControl sx={{ mt: 2, mb: 4, minWidth: 120 }}>
+        <Button 
+             variant="contained" 
+             startIcon={<DownloadIcon />}
+             onClick={exportToPDF}
+             sx={{
+                 left: '82%',
+                 bgcolor: "#0457a4",
+                 borderRadius: '20px',
+                 fontFamily: 'Poppins',
+                 textTransform: 'none',
+                 '&:hover': { bgcolor: "#033f7a" }
+             }}
+         >
+             Export as PDF
+         </Button>       
+
+        <FormControl sx={{ right: '15%', mt: 2, mb: 4, minWidth: 120 }}>
           <InputLabel>Game Type</InputLabel>
           <Select value={selectedDataType} onChange={handleChange}>
             <MenuItem value="puzzle">Puzzle</MenuItem>
@@ -175,7 +258,7 @@ const ProgressCharts = () => {
           Summary of player performance and progress through various game challenges.
         </Typography>
 
-        <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "left", mt: '100px' }}>
+        <Box ref={chartsRef} sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "left", mt: '100px' }}>
           {/* Pie Chart */}
           <PieChart width={250} height={250}>
             <Pie data={dataPie} cx="50%" cy="50%" outerRadius={80} label dataKey="value">

@@ -15,7 +15,7 @@ const PredictiveAnalysis = () => {
         trend,
         fetchLogicalAbilityScore,
 
-        // 🔹 Fetch Motor Skills data
+        
         motorSkillsScore,
         motorTrend,
         fetchMotorSkillsScore
@@ -28,7 +28,7 @@ const PredictiveAnalysis = () => {
         const fetchData = async () => {
             try {
                 await fetchLogicalAbilityScore();
-                await fetchMotorSkillsScore(); // 🔹 Fetch motor skills data
+                await fetchMotorSkillsScore(); 
             } catch (error) {
                 setError("Failed to load data");
             } finally {
@@ -48,7 +48,7 @@ const PredictiveAnalysis = () => {
     };
 
     const { letter: logicalLetter, gradient: logicalGradient } = getGrade(logicalAbilityScore);
-    const { letter: motorLetter, gradient: motorGradient } = getGrade(motorSkillsScore); // 🔹 Get Motor Skills Grade
+    const { letter: motorLetter, gradient: motorGradient } = getGrade(motorSkillsScore); 
 
     const getTrendIcon = (trend) => {
         switch(trend) {
@@ -69,7 +69,7 @@ const PredictiveAnalysis = () => {
 
     return (
         <Box sx={{ flexGrow: 1, px: 4, pt: 2 }}>
-            {/* 🔹 Section Title */}
+
             <Typography variant="h5" sx={{ 
                 fontWeight: "bold", 
                 color: "#0457a4", 

@@ -28,7 +28,7 @@ const usePredictiveStore = create((set) => ({
             set({ logicalAbilityScore: 0, predictedScore: 0, growthPercentage: 0, trend: "neutral" });
         }
     },
-    
+
     fetchMotorSkillsScore: async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/predictive/motor-skills", {
@@ -39,8 +39,8 @@ const usePredictiveStore = create((set) => ({
                 set({
                     motorSkillsScore: response.data.motorSkillsScore,
                     motorTrend: response.data.trend,
-                    consistencyRatio: response.data.consistencyRatio, // 🔹 Include consistency ratio
-                    avgScore: response.data.avgScore // 🔹 Include avgScore for better UI display
+                    consistencyRatio: response.data.consistencyRatio, 
+                    avgScore: response.data.avgScore 
                 });
             }
         } catch (error) {

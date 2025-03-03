@@ -30,6 +30,8 @@ import PublicRoute from './components/ProtectedRoutes/PublicRoute';
 import Institutions from './screens/Parent/Institutions/Institutions'
 import InstitutionsDetails from './screens/Parent/Institutions/InstitutionDetails'
 
+import VerifyEmail from './screens/VerifyEmail';
+
 function App() {
 
   return (
@@ -58,6 +60,7 @@ function App() {
 
 
           {/* Public routes with authentication check */}
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path='/login' element={
             <PublicRoute>
               <LoginPage />

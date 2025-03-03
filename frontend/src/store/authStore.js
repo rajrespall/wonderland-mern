@@ -17,15 +17,26 @@ const useAuthStore = create((set) => ({
         { email, password },
         { withCredentials: true }
       );
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      // Handle case where verification is required
+      if (response.data.requireVerification) {
+        set({ loading: false });
+        return { 
+          requireVerification: true,
+          email: response.data.email 
+        };
+      }
+
+      const userData = response.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
 
       set({
-        user: response.data.user,
+        user: userData,
         isAuthenticated: true,
         loading: false 
       });
 
-      return response.data.user;
+      return userData;
 
     } catch (error) {
       set({ 
@@ -52,6 +63,15 @@ const useAuthStore = create((set) => ({
       );
 
       const userData = response.data.user;
+
+      if (!userData.isVerified) {
+        set({ loading: false });
+        return { 
+          requireVerification: true,
+          email: userData.email 
+        };
+      }
+      
       localStorage.setItem('user', JSON.stringify(userData));
       
       set({ 

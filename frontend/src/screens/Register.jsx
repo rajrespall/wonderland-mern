@@ -46,7 +46,14 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(formData.username, formData.email, formData.password);
+      const response = await register(formData.username, formData.email, formData.password);
+      
+      // Check if verification is required
+      if (response.requireVerification) {
+        navigate('/verify-email', { state: { email: response.email } });
+        return;
+      }
+      
       navigate('/getstarted');
     } catch (err) {
       console.error('Registration error:', err);

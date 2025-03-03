@@ -48,14 +48,21 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const user = await login(formData.email, formData.password);
-        if (user.isFirstLogin) {
-            navigate('/getstarted');
-        } else {
-            navigate('/whosusing');
-        }
+      const response = await login(formData.email, formData.password);
+      
+      // Check if verification is required
+      if (response.requireVerification) {
+        navigate('/verify-email', { state: { email: response.email } });
+        return;
+      }
+      
+      if (response.isFirstLogin) {
+        navigate('/getstarted');
+      } else {
+        navigate('/whosusing');
+      }
     } catch (err) {
-        console.error('Login error:', err);
+      console.error('Login error:', err);
     }
   };
 

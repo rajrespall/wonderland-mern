@@ -121,7 +121,7 @@ const loginWithEmail = async (req, res) => {
           
           await sendOTPEmail(email, otp);
           
-          return res.status(403).json({ 
+          return res.status(200).json({ 
               message: "Email not verified. New verification code sent to your email.",
               requireVerification: true,
               email: user.email

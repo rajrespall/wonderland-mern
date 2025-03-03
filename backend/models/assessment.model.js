@@ -1,4 +1,3 @@
-// models/assess.model.js
 const mongoose = require("mongoose");
 
 const assessSchema = new mongoose.Schema({
@@ -33,12 +32,17 @@ const assessSchema = new mongoose.Schema({
         required: true
     },
     analysis: {
-        priorityAreas: [String],
+        priorityAreas: [{
+            domain: String,
+            label: String
+        }],
         recommendedResources: [String],
         showResources: {
             type: Map,
             of: Boolean
-        }
+        },
+        totalScore: Number,
+        isaaCategory: String
     },
     isTestData: {
         type: Boolean,

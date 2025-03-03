@@ -6,43 +6,45 @@ import Image from '../assets/communication.png';
 import Spinner from '../components/Spinner'; 
 import { useNavigate } from 'react-router-dom';  // Correct import for v6
 
-
-
 const questions = [
   {
     question: "Does your child speak? If yes, is their speech delayed or limited?",
     answers: [
-      "No, they do not speak.",
-      "Yes, their speech is delayed.",
-      "Yes, their speech is limited.",
-      "Yes, they speak fluently."
+      "No, they do not speak at all.", // 5 (most severe)
+      "Yes, with severely delayed/limited speech.", // 4
+      "Yes, with moderately delayed/limited speech.", // 3
+      "Yes, with mildly delayed/limited speech.", // 2
+      "Yes, they speak fluently and age-appropriately." // 1 (least severe)
     ]
   },
   {
     question: "Does your child exhibit repetitive speech patterns (e.g., echolalia)?",
     answers: [
-      "Never",
-      "Rarely",
-      "Sometimes",
-      "Frequently"
+      "Very frequently, dominates their communication", // 5
+      "Frequently", // 4
+      "Sometimes", // 3
+      "Rarely", // 2
+      "Never" // 1
     ]
   },
   {
     question: "Does your child have difficulty understanding or processing spoken language?",
     answers: [
-      "No difficulty.",
-      "Mild difficulty.",
-      "Moderate difficulty.",
-      "Severe difficulty."
+      "Severe difficulty with minimal comprehension", // 5
+      "Significant difficulty requiring substantial support", // 4
+      "Moderate difficulty", // 3
+      "Mild difficulty", // 2
+      "No difficulty, age-appropriate understanding" // 1
     ]
   },
   {
     question: "How does your child indicate their needs or wants?",
     answers: [
-      "Verbal communication.",
-      "Gestures (e.g., pointing, pulling).",
-      "Visual aids or assistive technology.",
-      "Non-verbal behaviors (e.g., crying, leading others)."
+      "No clear way of indicating needs", // 5
+      "Non-verbal behaviors only (e.g., crying, tantrums)", // 4
+      "Through gestures or pointing", // 3
+      "Uses simple visual aids or limited words", // 2
+      "Uses appropriate verbal communication" // 1
     ]
   }
 ];
@@ -65,12 +67,13 @@ const Question1 = () => {
   const handleAnswerSelection = (index) => {
     const updatedAnswers = [...selectedAnswers];
     updatedAnswers[currentQuestion] = index;
-  
+    
     setSelectedAnswers(updatedAnswers);
-  
-    // Store the selected answer numerically in localStorage (1-based index)
-    localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);  // Store 1-based value
-  
+    
+    // Store the selected answer on a scale of 5 to 1 (5 is most severe)
+    // Since our array is 0-indexed, we invert the score: 5 - index
+    localStorage.setItem(`Communication_${currentQuestion}_answer`, index);
+    
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }

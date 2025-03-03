@@ -6,34 +6,36 @@ import Image from '../assets/emotional.png';
 import Spinner from '../components/Spinner'; 
 import { useNavigate } from 'react-router-dom';  // Correct import for v6
 
-
-
+// frontend/src/screens/Emotional.jsx
 const questions = [
   {
     question: "Does your child have difficulty expressing emotions?",
     answers: [
-      "No, they express emotions clearly.",
-      "Mild difficulty in expressing emotions.",
-      "Moderate difficulty; they struggle in some situations.",
-      "Severe difficulty; emotions are often unclear or not expressed."
+      "Extremely limited or absent emotional expression", // 5 (most severe)
+      "Severe difficulty; emotions rarely expressed appropriately", // 4
+      "Moderate difficulty; struggles in many situations", // 3
+      "Mild difficulty in expressing emotions", // 2
+      "No difficulty; expresses emotions clearly and appropriately" // 1 (least severe)
     ]
   },
   {
     question: "How does your child cope with frustration or anxiety?",
     answers: [
-      "Self-regulates effectively.",
-      "Occasionally seeks support from others.",
-      "Often requires assistance to calm down.",
-      "Struggles significantly to cope, even with help."
-    ] 
+      "Cannot cope at all, extreme reactions that are difficult to manage", // 5
+      "Struggles significantly, requires substantial external support", // 4
+      "Often needs assistance to regulate emotions", // 3
+      "Occasionally needs support but generally manages", // 2
+      "Self-regulates effectively in most situations" // 1
+    ]
   },
   {
     question: "Does your child experience meltdowns? If yes, what typically triggers them?",
     answers: [
-      "Never.",
-      "Rarely, only in extreme situations.",
-      "Sometimes, in response to specific triggers.",
-      "Frequently, even with minor challenges."
+      "Very frequent meltdowns with multiple or unpredictable triggers", // 5
+      "Frequent meltdowns with specific triggers", // 4
+      "Occasional meltdowns in response to identified stressors", // 3
+      "Rare meltdowns only in extreme situations", // 2
+      "No meltdowns observed" // 1
     ]
   }
 ];
@@ -56,12 +58,13 @@ const Question4 = () => {
     const handleAnswer = (index) => {
       const updatedAnswers = [...answers];
       updatedAnswers[currentQuestion] = index;
-    
+      
       setAnswers(updatedAnswers);
-    
-      // Store the selected answer numerically in localStorage (1-based index)
-      localStorage.setItem(`Emotional_${currentQuestion}_answer`, index + 1);  // Store 1-based value
-    
+      
+      // Store the selected answer on a scale of 5 to 1 (5 is most severe)
+      // Since our array is 0-indexed, we invert the score: 5 - index
+      localStorage.setItem(`Communication_${currentQuestion}_answer`, 5 - index);
+      
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       }

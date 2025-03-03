@@ -11,28 +11,31 @@ const questions = [
   {
     question: "Does your child engage in repetitive movements (e.g., hand-flapping, rocking)?",
     answers: [
-      "Never",
-      "Rarely",
-      "Sometimes",
-      "Frequently"
+      "Very frequent repetitive movements that significantly interfere with daily activities", // 5
+      "Frequent repetitive movements throughout the day", // 4
+      "Regular repetitive movements in specific situations", // 3
+      "Occasional repetitive movements", // 2
+      "No repetitive movements observed" // 1
     ]
   },
   {
     question: "Does your child have strong preferences for routines or rituals?",
     answers: [
-      "No, they are flexible.",
-      "Sometimes, they show slight preferences.",
-      "Often, they have noticeable preferences.",
-      "Always, they insist on strict routines."
+      "Extreme insistence on routines, severe distress when disrupted", // 5
+      "Strong need for routines, significant distress when changed", // 4
+      "Moderate preference for routines, becomes upset when disrupted", // 3
+      "Mild preference for routines, can adapt with support", // 2
+      "No unusual insistence on routines" // 1
     ]
   },
   {
     question: "How does your child react to changes in their routine or environment?",
     answers: [
-      "Adjusts well.",
-      "Mild discomfort but adapts eventually.",
-      "Becomes upset and takes time to adjust.",
-      "Experiences significant distress or meltdowns."
+      "Extreme distress, tantrums or shutdown with any change", // 5
+      "Significant distress with most changes, difficult to redirect", // 4
+      "Moderate distress with changes, takes time to adjust", // 3
+      "Mild discomfort with changes but adapts with support", // 2
+      "Adapts well to changes with minimal distress" // 1
     ]
   }
 ];
@@ -52,18 +55,19 @@ const Question5 = () => {
     }, []);
   
     const handleAnswer = (index) => {
-      const updatedAnswers = [...answers];
-      updatedAnswers[currentQuestion] = index;
-    
-      setAnswers(updatedAnswers);
-    
-      // Store the selected answer numerically in localStorage (1-based index)
-      localStorage.setItem(`Routine_${currentQuestion}_answer`, index + 1);  // Store 1-based value
-    
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-      }
-    };
+        const updatedAnswers = [...answers];
+        updatedAnswers[currentQuestion] = index;
+        
+        setAnswers(updatedAnswers);
+        
+        // Store the selected answer on a scale of 5 to 1 (5 is most severe)
+        // Since our array is 0-indexed, we invert the score: 5 - index
+        localStorage.setItem(`Communication_${currentQuestion}_answer`, 5 - index);
+        
+        if (currentQuestion < questions.length - 1) {
+          setCurrentQuestion(currentQuestion + 1);
+        }
+      };
 
   // const handleNext = () => {
   //   if (currentQuestion < questions.length - 1) {

@@ -4,6 +4,8 @@ import axios from "axios";
 const usePredictiveStore = create((set) => ({
     logicalAbilityScore: 0,
     predictedScore: 0,
+    growthPercentage: 0,
+    trend: "neutral",
 
     fetchLogicalAbilityScore: async () => {
         try {
@@ -13,20 +15,21 @@ const usePredictiveStore = create((set) => ({
                 withCredentials: true
             });
 
-            console.log("API Response:", response.data);
+            console.log("✅ API Response:", response.data);
 
-            if (response.data && typeof response.data.logicalAbilityScore !== "undefined") {
-                set({ 
+            if (response.data) {
+                set({
                     logicalAbilityScore: response.data.logicalAbilityScore,
-                    predictedScore: response.data.predictedScore
+                    predictedScore: response.data.predictedScore,
+                    growthPercentage: response.data.growthPercentage,
+                    trend: response.data.trend
                 });
-                console.log("Updated Zustand State:", response.data.logicalAbilityScore, response.data.predictedScore);
             } else {
-                console.error("Invalid response structure:", response.data);
+                console.error("❌ Invalid response structure:", response.data);
             }
         } catch (error) {
-            console.error("Error fetching logical ability score:", error);
-            set({ logicalAbilityScore: 0, predictedScore: 0 });
+            console.error("❌ Error fetching logical ability score:", error);
+            set({ logicalAbilityScore: 0, predictedScore: 0, growthPercentage: 0, trend: "neutral" });
         }
     }
 }));

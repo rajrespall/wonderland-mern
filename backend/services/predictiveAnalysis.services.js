@@ -1,5 +1,6 @@
 const Card = require('../models/card.model');
 const Puz = require('../models/puz.model');
+const mongoose = require('mongoose');
 
 const calculateLogicalAbility = async (userId) => {
     try {
@@ -84,66 +85,66 @@ const calculateLogicalAbility = async (userId) => {
     }
 };
 
-
-const predictLogicalAbility = async (userId) => {
+const calculateTrend = async (userId) => {
     try {
-        const lastWeekScore = await calculateLogicalAbility(userId);
-        const twoWeeksAgoScore = await calculateLogicalAbility(userId);
+        if (!userId) throw new Error("User ID is required for trend calculation");
 
-        console.log(`Last Week Score: ${lastWeekScore}, Two Weeks Ago Score: ${twoWeeksAgoScore}`);
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        let trend = lastWeekScore - twoWeeksAgoScore;
-        let predictedScore = lastWeekScore;  // Start with last week's score
+        // Fetch Wondercards & Puzzles for the specific user
+        const wondercards = await Card.find({ userId, gameDate: { $gte: sevenDaysAgo } }).sort({ gameDate: 1 });
+        const jigsawPuzzles = await Puz.find({ userId, playedAt: { $gte: sevenDaysAgo } }).sort({ playedAt: 1 });
 
-        // 🔹 Adjust prediction based on trend
-        if (trend > 0) {
-            predictedScore += Math.min(2, trend); // Limit to +2
-        } else if (trend < 0) {
-            predictedScore -= Math.min(2, Math.abs(trend)); // Limit to -2
+        if (!wondercards.length && !jigsawPuzzles.length) {
+            return { growthPercentage: 0, trend: "neutral" };
         }
 
-        // 🔹 Deduct points based on failed attempts (NO COMPLETION CHECKS)
-        const wondercards = await Card.find({ userId });
+        let failedAttempts = [];
+        let timeTaken = [];
+        let completedGames = [];
 
+        // Process Wonder Cards
         wondercards.forEach(game => {
-            if (game.difficulty === "Easy") {
-                predictedScore -= game.failed;  // Deduct 1 per failed attempt
-            } else if (game.difficulty === "Normal" || game.difficulty === "Medium") {
-                predictedScore -= Math.floor(game.failed / 3);  // Deduct 1 per 3 failed attempts
-            } else if (game.difficulty === "Hard") {
-                predictedScore -= Math.floor(game.failed / 10);  // Deduct 1 per 10 failed attempts
-            }
+            failedAttempts.push(game.failed);
+            timeTaken.push(game.timeTaken);
+            completedGames.push(game.completed);
         });
 
-        // 🔹 Scale down Puzzle Bonuses
-        let puzzleBonus = 0;
-        const jigsawPuzzles = await Puz.find({ userId });
-
+        // Process Jigsaw Puzzles (No failed attempts)
         jigsawPuzzles.forEach(puzzle => {
-            if (puzzle.difficulty === "easy" && puzzle.isCompleted && puzzle.timeSpent <= 3) {
-                puzzleBonus += 1;
-            } else if (puzzle.difficulty === "medium" && puzzle.isCompleted && puzzle.timeSpent <= 6) {
-                puzzleBonus += 1;
-            } else if (puzzle.difficulty === "hard" && puzzle.isCompleted && puzzle.timeSpent <= 10) {
-                puzzleBonus += 5;
-            }
+            timeTaken.push(puzzle.timeSpent);
+            completedGames.push(puzzle.isCompleted ? 1 : 0);
         });
 
-        // Limit Puzzle Bonus to prevent excessive score jumps
-        puzzleBonus = Math.min(5, puzzleBonus);
-        predictedScore += puzzleBonus;
+        // Compute trend over 7 days
+        const calculatePercentageChange = (arr) => {
+            if (arr.length < 2) return 0;
+            const first = arr[0];
+            const last = arr[arr.length - 1];
+            return ((last - first) / Math.abs(first || 1)) * 100;
+        };
 
-        // Ensure predicted score stays between 0 and 100
-        predictedScore = Math.max(0, Math.min(100, predictedScore));
+        const failedTrend = calculatePercentageChange(failedAttempts) * -1; // Lower failed is better
+        const timeTrend = calculatePercentageChange(timeTaken) * -1; // Lower time is better
+        const completedTrend = calculatePercentageChange(completedGames); // Higher completed is better
 
-        console.log(`Predicted Score: ${Math.round(predictedScore)}`);
-        return Math.round(predictedScore);
+        // Calculate overall growth percentage (average of all factors)
+        const totalTrend = (failedTrend + timeTrend + completedTrend) / 3;
+        const growthPercentage = Math.round(totalTrend);
+
+        // Determine trend label
+        let trend = "neutral";
+        if (growthPercentage > 0) trend = "improving";
+        else if (growthPercentage < 0) trend = "declining";
+
+        return { growthPercentage, trend };
     } catch (error) {
-        console.error("Error predicting logical ability score:", error);
-        throw error;
+        console.error("❌ Error calculating trend:", error);
+        return { growthPercentage: 0, trend: "neutral" };
     }
 };
 
 
 
-module.exports = { calculateLogicalAbility, predictLogicalAbility };
+module.exports = { calculateLogicalAbility, calculateTrend };

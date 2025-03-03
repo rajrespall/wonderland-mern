@@ -1,118 +1,98 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const User = require('../models/user.model');
-const Card = require('../models/card.model');
-const Puz = require('../models/puz.model');
+const Card = require('../models/card.model'); // Wondercards
+const Puz = require('../models/puz.model');   // Jigsaw Puzzles
+const { calculateLogicalAbility } = require('../services/predictiveAnalysis.services');
 
 dotenv.config();
 
-// Function to drop existing collections
-const dropCollections = async () => {
-    try {
-        console.log('⚡ Dropping existing collections...');
-
-        await Card.deleteMany({});
-        await Puz.deleteMany({});
-        console.log('✅ Collections cleared successfully.');
-    } catch (error) {
-        console.error('❌ Error dropping collections:', error);
-    }
-};
-
-// Function to generate Wondercards data for ~70 score
-const generateBalancedCardData = (userId) => {
-    const difficultyLevels = ['Easy', 'Normal', 'Hard'];
-    const difficulty = difficultyLevels[Math.floor(Math.random() * 3)];
-
-    let failed, timeTaken, completed;
-    
-    if (difficulty === "Easy") {
-        failed = Math.floor(Math.random() * 2); // 0-1 failed attempts
-        timeTaken = Math.floor(Math.random() * 4) + 2; // 2-6 seconds
-    } else if (difficulty === "Normal") {
-        failed = Math.floor(Math.random() * 3) + 1; // 1-3 failed attempts
-        timeTaken = Math.floor(Math.random() * 6) + 4; // 4-10 seconds
-    } else {
-        failed = Math.floor(Math.random() * 5) + 2; // 2-6 failed attempts
-        timeTaken = Math.floor(Math.random() * 10) + 5; // 5-15 seconds
-    }
-
-    completed = Math.random() > 0.2 ? 1 : 0; // 80% completion rate
-
-    return {
-        userId,
-        gameDate: new Date(),
-        failed,
-        difficulty,
-        completed,
-        timeTaken
-    };
-};
-
-// Function to generate Jigsaw Puzzles data for ~70 score
-const generateBalancedPuzzleData = (userId) => {
-    const difficultyLevels = ['easy', 'medium', 'hard'];
-    const difficulty = difficultyLevels[Math.floor(Math.random() * 3)];
-
-    let timeSpent;
-    
-    if (difficulty === "easy") {
-        timeSpent = Math.floor(Math.random() * 4) + 2; // 2-6 seconds
-    } else if (difficulty === "medium") {
-        timeSpent = Math.floor(Math.random() * 6) + 4; // 4-10 seconds
-    } else {
-        timeSpent = Math.floor(Math.random() * 10) + 6; // 6-16 seconds
-    }
-
-    return {
-        userId,
-        timeSpent,
-        difficulty,
-        isCompleted: Math.random() > 0.3, // 70% completion rate
-        playedAt: new Date()
-    };
-};
-
-// Seeder function
-const seedLogicalAbilityData = async () => {
+const seedGameData = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('✅ Connected to MongoDB');
 
-        // Fetch test user
-        const user = await User.findOne({
-            username: "testparent1",
-            email: "testparent1@wonderland.com",
-            isTestData: true
-        });
-
-        if (!user) {
-            throw new Error('❌ User testparent1 not found. Exiting...');
+        // Fetch all test users
+        const users = await User.find({ isTestData: true });
+        if (!users.length) {
+            console.log('❌ No test users found.');
+            return process.exit();
         }
-        console.log(`✅ Found user: ${user.username}, ID: ${user._id}`);
 
-        // Drop collections before inserting new data
-        await dropCollections();
+        // **Clear previous game data**
+        await Card.deleteMany({ isTestData: true });
+        await Puz.deleteMany({ isTestData: true });
+        console.log('✅ Cleared previous game data');
 
-        console.log('📊 Generating logical ability test data (~70 score) for testparent1...');
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 6); // 7 days ago
 
-        // Generate Wondercard and Puzzle data
-        const cardData = Array.from({ length: 50 }, () => generateBalancedCardData(user._id));
-        const puzzleData = Array.from({ length: 50 }, () => generateBalancedPuzzleData(user._id));
+        for (let user of users) {
+            console.log(`🟢 Seeding game data for: ${user.username}`);
 
-        // Insert Data
-        const insertedCards = await Card.insertMany(cardData);
-        const insertedPuzzles = await Puz.insertMany(puzzleData);
+            for (let day = 0; day < 7; day++) {
+                let gameDate = new Date(startDate);
+                gameDate.setDate(startDate.getDate() + day);
 
-        console.log(`✅ Inserted ${insertedCards.length} cards and ${insertedPuzzles.length} puzzles.`);
-        console.log('✅ 100 logical ability test data (50 Wondercards, 50 Puzzles) seeded successfully for testparent1');
+                for (let game = 0; game < 10; game++) {
+                    const isTestParent1 = user.username === "testparent1";
+                    
+                    let difficulty, failedAttempts, timeTaken, completed;
+                    
+                    if (isTestParent1) {
+                        // **Ensure Grade B (80-89) for testparent1**
+                        difficulty = "Medium";
+                        failedAttempts = Math.floor(Math.random() * 3); // Few failed attempts
+                        timeTaken = 8; // Consistent time
+                        completed = true;
+                    } else {
+                        // **Randomized scores for other users**
+                        difficulty = ["Easy", "Medium", "Hard"][Math.floor(Math.random() * 3)];
+                        failedAttempts = Math.floor(Math.random() * 10);
+                        timeTaken = Math.floor(Math.random() * 20);
+                        completed = Math.random() > 0.5;
+                    }
 
+                    // Insert Wondercard game
+                    await Card.create({
+                        userId: user._id,
+                        difficulty,
+                        failed: failedAttempts,
+                        timeTaken,
+                        completed,
+                        gameDate,
+                        isTestData: true
+                    });
+
+                    // Insert Jigsaw Puzzle game
+                    await Puz.create({
+                        userId: user._id,
+                        difficulty,
+                        isCompleted: completed,
+                        timeSpent: timeTaken,
+                        playedAt: gameDate,
+                        isTestData: true
+                    });
+                }
+            }
+
+            // **Verify `testparent1` logical ability**
+            if (user.username === "testparent1") {
+                let score = await calculateLogicalAbility(user._id);
+                console.log(`🎯 Final Logical Ability Score for testparent1: ${score}`);
+                if (score < 80 || score > 89) {
+                    console.warn('⚠️ testparent1 score is outside Grade B range. Consider adjusting difficulty.');
+                }
+            }
+        }
+
+        console.log('✅ Game data seeding completed');
         process.exit();
     } catch (error) {
-        console.error('❌ Error seeding logical ability test data:', error);
+        console.error('❌ Error seeding game data:', error);
         process.exit(1);
     }
 };
 
 // Run the seeder
-seedLogicalAbilityData();
+seedGameData();

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { calculateLogicalAbility, predictLogicalAbility } = require('../services/predictiveAnalysis.services');
+const { calculateLogicalAbility, calculateTrend } = require('../services/predictiveAnalysis.services');
 
 const getLogicalAbilityScore = async (req, res) => {
     try {
@@ -17,15 +17,22 @@ const getLogicalAbilityScore = async (req, res) => {
             userId = decoded._id;
         }
 
-        console.log("Fetching Logical Ability for user:", userId);
+        console.log("Fetching Logical Ability and Trend Analysis for user:", userId);
 
+        // Fetch Scores
         const score = await calculateLogicalAbility(userId);
-        const predictedScore = await predictLogicalAbility(userId);
+        const { growthPercentage, trend } = await calculateTrend(userId);
 
         console.log("Calculated Logical Ability Score:", score);
-        console.log("Predicted Logical Ability Score:", predictedScore);
+        console.log("Predicted Growth Percentage:", growthPercentage, "Trend:", trend);
 
-        res.status(200).json({ logicalAbilityScore: score, predictedScore: predictedScore });
+        // Send response
+        res.status(200).json({
+            logicalAbilityScore: score,
+            predictedScore: score + growthPercentage, // Predicts based on growth trend
+            growthPercentage,
+            trend
+        });
     } catch (error) {
         console.error('Error fetching logical ability score:', error);
         res.status(500).json({ message: 'Error fetching logical ability score', error });

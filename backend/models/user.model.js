@@ -34,6 +34,18 @@ const userSchema = new mongoose.Schema({
     isTestData: {
         type: Boolean,
         default: false
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationOTP: {
+        type: String,
+        default: null
+    },
+    otpExpires: {
+        type: Date,
+        default: null
     }
 }, {
     timestamps: true

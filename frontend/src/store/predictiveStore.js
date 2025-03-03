@@ -38,15 +38,16 @@ const usePredictiveStore = create((set) => ({
             if (response.data) {
                 set({
                     motorSkillsScore: response.data.motorSkillsScore,
-                    motorTrend: response.data.trend,
-                    consistencyRatio: response.data.consistencyRatio, 
-                    avgScore: response.data.avgScore 
+                    motorTrend: response.data.trend,  // Ensure trend is properly set
+                    avgScore: response.data.trend.avgScore,  // Ensure avgScore is properly set
                 });
             }
         } catch (error) {
-            set({ motorSkillsScore: 0, motorTrend: "neutral", consistencyRatio: 0, avgScore: 0 });
+            set({ motorSkillsScore: 0, motorTrend: { trend: "neutral", avgScore: 0 } });
         }
     }
+    
+    
     
 }));
 

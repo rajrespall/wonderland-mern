@@ -221,9 +221,9 @@ const predictiveMotor = async (userId) => {
         const consistencyRatio = daysPlayed / 30;
 
         // Determine trend
-        let trend = "decreasing"; // Default to decreasing
-        if (consistencyRatio > 0.8) trend = "improving";
-        else if (consistencyRatio > 0.5) trend = "stable";
+        let trend = "neutral"; // Default to decreasing
+        if (consistencyRatio > 0) trend = "improving";
+        else if (consistencyRatio > 0) trend = "declining";
 
         // Calculate the average percentage of the score
         const avgScore = totalDaysPlayed > 0 ? (totalScore / totalDaysPlayed).toFixed(1) : 0;
@@ -234,6 +234,8 @@ const predictiveMotor = async (userId) => {
         return { trend: "stable", avgScore: 0 };
     }
 };
+
+
 
 
 module.exports = { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor };

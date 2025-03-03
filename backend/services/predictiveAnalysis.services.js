@@ -158,10 +158,12 @@ const currentMotor = async (userId) => {
         const wondercolor = await Color.find({ userId, createdAt: { $gte: sevenDaysAgo } });
         const wondermatch = await Match.find({ userId, playedAt: { $gte: sevenDaysAgo } });
 
+        // Compute total score and count number of games
         let totalScore = 0;
+        let totalGames = wondercards.length + wonderpuz.length + wondercolor.length + wondermatch.length;
 
         // Each game played earns 5 points
-        totalScore += (wondercards.length + wonderpuz.length + wondercolor.length + wondermatch.length) * 5;
+        totalScore += totalGames * 5;
 
         // Calculate inactivity penalties
         const lastPlayedDates = [
@@ -178,12 +180,16 @@ const currentMotor = async (userId) => {
             totalScore -= Math.floor(daysInactive / 3) * 3; // Deduct 3 points for every 3 days of inactivity
         }
 
-        return Math.max(0, totalScore); // Ensure score doesn't go below 0
+        // 🔹 Compute the average score instead of percentage
+        const avgScore = totalGames > 0 ? (totalScore / totalGames).toFixed(1) : 0;
+
+        return avgScore; // Ensure a numeric value is returned
     } catch (error) {
         console.error("Error calculating motor skills score:", error);
         throw error;
     }
 };
+
 
 const predictiveMotor = async (userId) => {
     try {

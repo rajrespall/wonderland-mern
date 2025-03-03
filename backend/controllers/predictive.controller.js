@@ -58,16 +58,16 @@ const getMotorSkillsScore = async (req, res) => {
 
         console.log("Fetching Motor Skills and Predictive Analysis for user:", userId);
 
-        // Fetch Scores
-        const score = await currentMotor(userId);
+        // Fetch the average motor skill score
+        const avgScore = await currentMotor(userId);
         const trend = await predictiveMotor(userId);
 
-        console.log("Calculated Motor Skills Score:", score);
+        console.log("Calculated Motor Skills Score (Average):", avgScore);
         console.log("Predicted Trend:", trend);
 
         // Send response
         res.status(200).json({
-            motorSkillsScore: score,
+            motorSkillsScore: avgScore, // Now returns the average instead of percentage
             trend
         });
     } catch (error) {
@@ -75,6 +75,7 @@ const getMotorSkillsScore = async (req, res) => {
         res.status(500).json({ message: 'Error fetching motor skills score', error });
     }
 };
+
 
 module.exports = { getLogicalAbilityScore, getMotorSkillsScore };
 

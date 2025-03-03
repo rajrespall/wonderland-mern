@@ -18,7 +18,11 @@ const PredictiveAnalysis = () => {
         
         motorSkillsScore,
         motorTrend,
-        fetchMotorSkillsScore
+        fetchMotorSkillsScore,
+
+        socialCommunicationScore,
+        socialTrend,
+        fetchSocialCommunicationScore
     } = usePredictiveStore();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +33,7 @@ const PredictiveAnalysis = () => {
             try {
                 await fetchLogicalAbilityScore();
                 await fetchMotorSkillsScore(); 
+                await fetchSocialCommunicationScore();
             } catch (error) {
                 setError("Failed to load data");
             } finally {
@@ -36,7 +41,7 @@ const PredictiveAnalysis = () => {
             }
         };
         fetchData();
-    }, [fetchLogicalAbilityScore, fetchMotorSkillsScore]);
+    }, [fetchLogicalAbilityScore, fetchMotorSkillsScore, fetchSocialCommunicationScore]);
 
     const getGrade = (score) => {
         if (score >= 90) return { letter: "A", color: "#4CAF50", gradient: "#4CAF50" };
@@ -49,6 +54,7 @@ const PredictiveAnalysis = () => {
 
     const { letter: logicalLetter, gradient: logicalGradient } = getGrade(logicalAbilityScore);
     const { letter: motorLetter, gradient: motorGradient } = getGrade(motorSkillsScore); 
+    const { letter: socialLetter, gradient: socialGradient } = getGrade(socialCommunicationScore);
 
     const getTrendIcon = (trend) => {
         switch(trend) {
@@ -130,9 +136,9 @@ const PredictiveAnalysis = () => {
             {/* 🔹 Display Average Score Instead of Percentage */}
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: 3 }}>
                 {getTrendIcon(motorTrend?.trend)}
-                <Typography sx={{ fontWeight: 600, fontSize: "20px", ml: 1, color: "#2C3E50" }}>
-                    {motorSkillsScore ? `${motorSkillsScore}` : "0"} {/* Displays avgScore now */}
-                </Typography>
+                <Typography sx={{ fontWeight: 600, fontSize: "20px", mt: 1, color: "#2C3E50" }}>
+    {motorTrend?.consistencyRatio ? `+${motorTrend.consistencyRatio}% ` : "0%"}
+</Typography>
             </Box>
 
             {/* 🔹 Display Trend Text */}
@@ -143,9 +149,39 @@ const PredictiveAnalysis = () => {
     </Card>
 </Grid>
 
+{/* 🔹 Social Communication Card (FIXED) */}
 
-            {/* put the social container card here*/}
-      
+<Grid item xs={12} sm={6} md={3}>
+    <Card sx={{ borderRadius: 4, boxShadow: "0 10px 20px rgba(0,0,0,0.1)", overflow: "hidden" }}>
+        <Box sx={{ height: "8px", width: "100%", background: socialGradient }} /> 
+        <CardContent sx={{ textAlign: "center", p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: "#2C3E50" }}>
+                Social Communication
+            </Typography>
+            <Avatar sx={{ background: socialGradient, color: "white", width: 90, height: 90, fontSize: "40px", fontWeight: "bold", mx: "auto", mt: 2 }}>
+                {socialLetter}
+            </Avatar>
+
+            {/* 🔹 Display Score & Trend */}
+          
+
+            {/* 🔹 Display Percentage Change Below Letter */}
+          
+            <Typography sx={{ fontWeight: 600, fontSize: "20px", mt: 1, color: "#2C3E50" }}>
+            {getTrendIcon(socialTrend?.trend)}
+                {socialTrend?.percentageChange ? `+${socialTrend.percentageChange}%` : "0%"}
+            </Typography>
+
+            {/* 🔹 Display Trend Text Below Percentage Change */}
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                {getTrendText(socialTrend?.trend)}
+            </Typography>
+        </CardContent>
+    </Card>
+</Grid>
+
+
+
 
 
             </Grid>

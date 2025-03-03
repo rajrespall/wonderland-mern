@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Color = require('../models/color.model');
 const Match = require('../models/match.model');
 
+
 const calculateLogicalAbility = async (userId) => {
     try {
         // Fetch all Wondercards & Jigsaw Puzzles for the user
@@ -216,27 +217,120 @@ const predictiveMotor = async (userId) => {
             }
         });
 
-        // Calculate consistency ratio
+        // Calculate consistency ratio (percentage)
         const daysPlayed = dailyActivity.filter(count => count > 0).length;
-        const consistencyRatio = daysPlayed / 30;
+        const consistencyRatio = ((daysPlayed / 30) * 100).toFixed(2); // Convert to percentage & round to 2 decimals
 
         // Determine trend
-        let trend = "neutral"; // Default to decreasing
-        if (consistencyRatio > 0) trend = "improving";
-        else if (consistencyRatio > 0) trend = "declining";
+        let trend = "neutral"; 
+        if (consistencyRatio > 30) trend = "improving";
+        else if (consistencyRatio < 20) trend = "declining";
 
         // Calculate the average percentage of the score
         const avgScore = totalDaysPlayed > 0 ? (totalScore / totalDaysPlayed).toFixed(1) : 0;
 
-        return { trend, avgScore };
+        console.log("📊 Predictive Motor Analysis:", { trend, consistencyRatio, avgScore });
+
+        return { 
+            trend, 
+            avgScore, 
+            consistencyRatio 
+        };
     } catch (error) {
-        console.error("Error calculating predictive motor trend:", error);
-        return { trend: "stable", avgScore: 0 };
+        console.error("❌ Error calculating predictive motor trend:", error);
+        return { 
+            trend: "neutral", 
+            avgScore: 0, 
+            consistencyRatio: 0 
+        };
     }
 };
 
 
+const currentSocial = async (userId) => {
+    try {
+        // Fetch all match data for the user
+        const matches = await Match.find({ userId });
+
+        // Initialize total raw score
+        let totalRawScore = 0;
+        let totalDeduction = 0;
+
+        matches.forEach(match => {
+            let score = match.score; // Original match score
+            let timeSpent = match.timeSpent;
+
+            // Add raw score before deductions
+            totalRawScore += score;
+
+            // Deduct points based on difficulty level and time spent
+            if (match.difficulty === "easy") {
+                if (timeSpent >= 40) {
+                    totalDeduction += Math.floor((timeSpent - 20) / 20) * 5;
+                }
+            } else if (match.difficulty === "medium") {
+                if (timeSpent >= 50) {
+                    totalDeduction += Math.floor((timeSpent - 25) / 25) * 3;
+                }
+            } else if (match.difficulty === "hard") {
+                if (timeSpent >= 60) {
+                    totalDeduction += Math.floor((timeSpent - 30) / 30) * 1;
+                }
+            }
+        });
+
+        // Calculate final score (raw score minus total deductions)
+        let finalScore = totalRawScore - totalDeduction;
+
+        // Ensure final score is not negative
+        return Math.max(0, finalScore);
+    } catch (error) {
+        console.error("Error calculating social communication score:", error);
+        return 0;
+    }
+};
 
 
-module.exports = { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor };
+const predictiveSocial = async (userId) => {
+    try {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const matches = await Match.find({ userId, playedAt: { $gte: sevenDaysAgo } }).sort({ playedAt: 1 });
+
+        if (!matches.length) return { trend: "neutral", scoreChange: 0, percentageChange: 0 };
+
+        // Extract scores and timeSpent values
+        let totalScores = matches.map(m => m.score);
+        let totalTimes = matches.map(m => m.timeSpent);
+
+        // Calculate change in score and timeSpent
+        const initialScore = totalScores[0];
+        const latestScore = totalScores[totalScores.length - 1];
+        const initialTime = totalTimes[0];
+        const latestTime = totalTimes[totalTimes.length - 1];
+
+        const scoreChange = latestScore - initialScore;
+        const timeChange = latestTime - initialTime;
+
+        // Calculate percentage change (avoid division by zero)
+        let percentageChange = initialScore !== 0 ? ((scoreChange / initialScore) * 100).toFixed(2) : scoreChange * 100;
+
+        // Determine trend
+        let trend = "neutral";
+        if (scoreChange > 0 && timeChange < 0) trend = "improving";
+        else if (scoreChange < 0 && timeChange > 0) trend = "declining";
+
+        console.log("📈 Predicted Social Trend:", { trend, scoreChange, percentageChange });
+
+        return { trend, scoreChange, percentageChange };
+    } catch (error) {
+        console.error("Error calculating predictive social trend:", error);
+        return { trend: "neutral", scoreChange: 0, percentageChange: 0 };
+    }
+
+};
+
+
+module.exports = { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor, currentSocial, predictiveSocial  };
 

@@ -29,24 +29,44 @@ const usePredictiveStore = create((set) => ({
         }
     },
 
-    fetchMotorSkillsScore: async () => {
-        try {
-            const response = await axios.get("http://localhost:5000/api/predictive/motor-skills", {
-                withCredentials: true
+fetchMotorSkillsScore: async () => {
+    try {
+        const response = await axios.get("http://localhost:5000/api/predictive/motor-skills", {
+            withCredentials: true
+        });
+
+        if (response.data) {
+            set({
+                motorSkillsScore: response.data.motorSkillsScore,
+                motorTrend: response.data.trend,  // Ensure trend is properly set
+                avgScore: response.data.trend.avgScore,  // Ensure avgScore is properly set
             });
-    
-            if (response.data) {
-                set({
-                    motorSkillsScore: response.data.motorSkillsScore,
-                    motorTrend: response.data.trend,  // Ensure trend is properly set
-                    avgScore: response.data.trend.avgScore,  // Ensure avgScore is properly set
-                });
-            }
-        } catch (error) {
-            set({ motorSkillsScore: 0, motorTrend: { trend: "neutral", avgScore: 0 } });
         }
+    } catch (error) {
+        set({ motorSkillsScore: 0, motorTrend: { trend: "neutral", avgScore: 0 } });
     }
-    
+},
+
+fetchSocialCommunicationScore: async () => {
+    try {
+        const response = await axios.get("http://localhost:5000/api/predictive/social-communication", {
+            withCredentials: true
+        });
+
+        console.log("📊 Fetching Social Communication Data:", response.data); // Debugging
+
+        if (response.data) {
+            set({
+                socialCommunicationScore: response.data.socialCommunicationScore,
+                socialTrend: response.data.trend // Ensure this is correctly set
+            });
+        }
+    } catch (error) {
+        console.error("❌ Error fetching social communication data:", error);
+        set({ socialCommunicationScore: 0, socialTrend: "neutral" });
+    }
+}
+
     
     
 }));

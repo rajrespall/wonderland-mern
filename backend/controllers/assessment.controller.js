@@ -16,13 +16,31 @@ const saveAssessment = async (req, res) => {
 
         const analysisResults = analyzeAssessment(assessmentData);
 
+        // Find previous assessments and get the latest version number
+        const previousAssessments = await Assess.find({ userId }).sort({ version: -1 }).limit(1);
+        const newVersion = previousAssessments.length > 0 ? previousAssessments[0].version + 1 : 1;
+        
+        // Mark previous assessments as not latest
+        if (previousAssessments.length > 0) {
+            await Assess.updateMany(
+                { userId },
+                { isLatest: false }
+            );
+        }
+
+        // Create new assessment
         const newAssessment = new Assess({
             userId,
+            version: newVersion,
+            isLatest: true,
+            assessmentDate: new Date(),
             ...assessmentData,
             analysis: analysisResults
         });
 
         const savedAssessment = await newAssessment.save();
+        
+        // Update user's reference to latest assessment
         await User.findByIdAndUpdate(userId, { 
             hasCompletedAssessment: true,
             assessmentResults: analysisResults
@@ -42,12 +60,21 @@ const saveAssessment = async (req, res) => {
 const getUserAssessment = async (req, res) => {
     try {
         const { userId } = req.params;
+        const { version } = req.query;
 
         if (!userId) {
             return res.status(400).json({ message: "User ID is required" });
         }
 
-        const assessment = await Assess.findOne({ userId });
+        let assessment;
+        
+        if (version) {
+            // Get specific version if requested
+            assessment = await Assess.findOne({ userId, version: parseInt(version) });
+        } else {
+            // Get latest assessment by default
+            assessment = await Assess.findOne({ userId, isLatest: true });
+        }
 
         if (!assessment) {
             return res.status(404).json({ message: "Assessment not found" });
@@ -60,4 +87,24 @@ const getUserAssessment = async (req, res) => {
     }
 };
 
-module.exports = { saveAssessment, getUserAssessment };
+// Add new function to get assessment history
+const getUserAssessmentHistory = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const assessments = await Assess.find({ userId })
+            .sort({ version: -1 })
+            .select('version assessmentDate analysis.totalScore analysis.isaaCategory');
+
+        res.status(200).json(assessments);
+    } catch (error) {
+        console.error("Error fetching assessment history:", error);
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
+module.exports = { saveAssessment, getUserAssessment, getUserAssessmentHistory };

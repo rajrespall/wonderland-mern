@@ -39,7 +39,7 @@ const analyzeDomain = (answers, totalQuestions, label) => {
 const categorizeIsaaScore = (score) => {
   const totalMaxScore = 17 * 5; // 85
   
-  if (score < totalMaxScore * 0.3) return "No Autism";       // < 26
+  if (score < totalMaxScore * 0.3) return "Normal";       // < 26
   if (score <= totalMaxScore * 0.5) return "Mild Autism";     // <= 43
   if (score <= totalMaxScore * 0.7) return "Moderate Autism"; // <= 60
   return "Severe Autism";                                    // > 60

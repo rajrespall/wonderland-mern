@@ -6,6 +6,7 @@ import {
 import { LocationOn, Star, Message, Group, Report, Close, AddAPhoto } from "@mui/icons-material";
 import useAuthStore from "../../store/authStore";
 import useProfileStore from "../../store/profileStore";
+import AssessmentHistory from "./AssessmentHistory";  // Add this import
 
 function CustomTabPanel({ children, value, index }) {
   return (
@@ -147,7 +148,7 @@ export default function UserProfileCard() {
           <Typography variant="body2"
           sx={{
             fontFamily: 'Poppins',
-          }}>{profile?.bio || "No profile details available."}</Typography>
+          }}>{profile?.lastName || "No profile details available."}</Typography>
 
           <Button 
             variant="contained" 
@@ -166,20 +167,50 @@ export default function UserProfileCard() {
 
         <CustomTabPanel value={value} index={1}>
           <Typography variant="h6" fontWeight="bold" sx={{
+            fontFamily: 'Poppins',
+            mb: 2
+          }}>Child Details</Typography>
+          
+          {/* General info section - you can expand this later */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="body2" sx={{ fontFamily: 'Poppins' }}>
+              View your child's assessment history below. You can see previous assessments and track progress over time.
+            </Typography>
+          </Box>
+          
+          {/* Add the AssessmentHistory component */}
+          {user && user.id && (
+            <AssessmentHistory userId={user.id} />
+          )}
+          
+          <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+            <Button 
+              variant="contained" 
+              startIcon={<Message />}
+              sx={{
+                bgcolor: "#0457a4",
+                borderRadius: '25px',
                 fontFamily: 'Poppins',
-              }}>Child Details</Typography>
-            <Typography variant="body2"
-            sx={{
-              fontFamily: 'Poppins',
-            }}>This is where the child details goes.</Typography>
-
-            <Button variant="contained" startIcon={<Message />}
-             sx={{
-              bgcolor: "#0457a4",
-              borderRadius: '25px',
-              fontFamily: 'Poppins',
-              mt: 2
-            }}>Edit Child Details</Button>
+              }}
+            >
+              Edit Child Details
+            </Button>
+            
+            {/* Add Reassessment Button */}
+            <Button 
+              variant="contained" 
+              sx={{
+                backgroundColor: '#5da802',
+                '&:hover': { backgroundColor: '#4c8a00' },
+                borderRadius: '25px',
+                fontFamily: 'Poppins',
+                padding: '6px 16px',
+              }}
+              onClick={() => window.location.href = '/assessment'}  // Simple navigation
+            >
+              Start Reassessment
+            </Button>
+          </Box>
         </CustomTabPanel>
         
         {/* Edit Profile Modal */}

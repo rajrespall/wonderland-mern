@@ -31,6 +31,7 @@ import Institutions from './screens/Parent/Institutions/Institutions'
 import InstitutionsDetails from './screens/Parent/Institutions/InstitutionDetails'
 
 import VerifyEmail from './screens/VerifyEmail';
+import ForgotPassword from './screens/ForgotPassword';
 
 function App() {
 
@@ -61,6 +62,7 @@ function App() {
 
           {/* Public routes with authentication check */}
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path='/login' element={
             <PublicRoute>
               <LoginPage />

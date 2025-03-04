@@ -1,18 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Container, Grid, Card, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import "@fontsource/poppins";
 import ins1 from "../../../assets/institutions1.jpg";
-
-const institutions = [
-  { id: 1, name: "TUP - TAGUIG", color: "#0057b8", address: "Taguig, Metro Manila, Philippines" },
-  { id: 2, name: "INSTITUTION 2", color: "#6cbf2e", address: "Makati, Metro Manila, Philippines" },
-  { id: 3, name: "INSTITUTION 3", color: "#eb690a", address: "Quezon City, Metro Manila, Philippines" },
-  { id: 4, name: "INSTITUTION 4", color: "#ff66c4", address: "Pasig, Metro Manila, Philippines" },
-  { id: 5, name: "INSTITUTION 5", color: "#5a1ebf", address: "Mandaluyong, Metro Manila, Philippines" },
-  { id: 6, name: "INSTITUTION 6", color: "#d71d1d", address: "Caloocan, Metro Manila, Philippines" },
-];
 
 const InstitutionCard = styled(Card)(({ bgcolor }) => ({
   borderRadius: "5px",
@@ -37,17 +29,42 @@ const InstitutionTitle = styled(Typography)(({ bgcolor }) => ({
 
 export default function InstitutionsPage() {
   const navigate = useNavigate();
+  const [institutions, setInstitutions] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchInstitutions = async () => {
+      try {
+        const response = await axios.get('/api/institutions');
+        setInstitutions(Array.isArray(response.data) ? response.data : []);
+      } catch (err) {
+        setError(err.response ? err.response.data.message : "Error fetching institutions");
+      }
+    };
+
+    fetchInstitutions();
+  }, []);
 
   const handleCardClick = (id) => {
-    navigate(`/institutions/${id}`); 
+    navigate(`/institutions/${id}`);
   };
+
+  if (error) {
+    return (
+      <Container sx={{ py: 4, width: "1050px" }}>
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Container>
+    );
+  }
 
   return (
     <Container sx={{ py: 4, width: "1050px" }}>
       <Grid container spacing={4}>
         {institutions.map((institution) => (
-          <Grid item xs={12} sm={6} md={4} key={institution.id}>
-            <InstitutionCard onClick={() => handleCardClick(institution.id)}>
+          <Grid item xs={12} sm={6} md={4} key={institution._id}>
+            <InstitutionCard onClick={() => handleCardClick(institution._id)}>
               <img
                 src={ins1}
                 alt={institution.name}
@@ -55,7 +72,7 @@ export default function InstitutionsPage() {
               />
               <InstitutionTitle bgcolor={institution.color}>
                 {institution.name}
-                <Typography sx={{ color: "yellow", fontSize: "12px", fontFamily: "Poppins" }}>
+                <Typography component="span" sx={{ color: "yellow", fontSize: "12px", fontFamily: "Poppins" }}>
                   {institution.address}
                 </Typography>
               </InstitutionTitle>

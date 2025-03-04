@@ -80,78 +80,109 @@ const generalInfos = [
   }
 ];
 
+// Updated assessments with varying severity (1=least severe, 5=most severe)
+// Creating more diverse assessment patterns to see different analysis results
 const assessments = [
   {
-    communication: [2, 3, 1, 1],
-    emotional: [2, 2, 1],
+    // First user - Mild to moderate difficulties
+    communication: [2, 3, 1, 2], // Lower scores indicate less severity
+    emotional: [2, 1, 2],
     routine: [3, 2, 1],
     sensory: [1, 2, 1],
     social: [2, 1, 2, 1],
-    others: ["Difficulty making friends", "Sleep disturbances"]
+    others: ["Slight difficulty making friends", "Occasional sleep disturbances"]
   },
   {
-    communication: [3, 2, 2, 1],
-    emotional: [1, 1, 2],
-    routine: [2, 1, 1],
+    // Second user - Moderate difficulties with sensory issues
+    communication: [3, 2, 3, 3],
+    emotional: [2, 3, 3],
+    routine: [2, 2, 3],
+    sensory: [4, 5, 4], // Higher sensory sensitivity
+    social: [3, 3, 2, 3],
+    others: ["Significant sensory sensitivities", "Difficulty with loud environments"]
+  },
+  {
+    // Third user - Communication challenges
+    communication: [4, 5, 4, 5], // More severe communication issues
+    emotional: [3, 2, 3],
+    routine: [2, 3, 2],
+    sensory: [2, 3, 2],
+    social: [3, 4, 3, 3],
+    others: ["Speech delays", "Language processing difficulties"]
+  },
+  {
+    // Fourth user - Social and emotional challenges
+    communication: [2, 3, 2, 3],
+    emotional: [4, 5, 4], // More emotional regulation issues
+    routine: [2, 3, 2],
     sensory: [3, 2, 2],
-    social: [1, 2, 1, 2],
-    others: ["Picky eating habits", "Difficulty with changes"]
+    social: [4, 5, 4, 5], // More social challenges
+    others: ["Anxiety in social situations", "Difficulty regulating emotions"]
   },
   {
-    communication: [1, 1, 3, 2],
-    emotional: [3, 2, 2],
-    routine: [1, 3, 2],
-    sensory: [2, 1, 3],
-    social: [3, 2, 2, 1],
-    others: ["Sensory sensitivities", "Repetitive behaviors"]
-  },
-  {
-    communication: [2, 2, 2, 1],
-    emotional: [2, 1, 3],
-    routine: [2, 2, 2],
-    sensory: [1, 3, 2],
-    social: [2, 2, 1, 2],
-    others: ["Anxiety in social situations", "Motor skill challenges"]
-  },
-  {
-    communication: [3, 3, 1, 2],
-    emotional: [1, 2, 1],
-    routine: [1, 1, 3],
-    sensory: [2, 2, 1],
-    social: [1, 3, 2, 1],
-    others: ["Language delays", "Difficulty with transitions"]
+    // Fifth user - Routine and behavioral challenges
+    communication: [2, 2, 3, 2],
+    emotional: [3, 3, 2],
+    routine: [5, 4, 5], // More significant routine challenges
+    sensory: [2, 3, 2],
+    social: [3, 2, 3, 2],
+    others: ["Rigidity in routines", "Difficulty with transitions", "Repetitive behaviors"]
   }
 ];
 
 const seedUsersAndData = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to MongoDB');
+    console.log('✅ Connected to MongoDB');
 
     // Clear existing test data
+    console.log('⚡ Clearing existing test data...');
+    
+    const existingUsers = await User.find({ isTestData: true });
+    const userIds = existingUsers.map(u => u._id);
+    
     await User.deleteMany({ isTestData: true });
-    await Assess.deleteMany({ userId: { $in: (await User.find({ isTestData: true })).map(u => u._id) } });
-    await GeneralInfo.deleteMany({ userId: { $in: (await User.find({ isTestData: true })).map(u => u._id) } });
-    console.log('Cleared existing test data');
+    await Assess.deleteMany({ userId: { $in: userIds } });
+    await GeneralInfo.deleteMany({ userId: { $in: userIds } });
+    
+    console.log('✅ Cleared existing test data');
 
     // Create users
+    console.log('⚡ Creating test users...');
     for (let i = 0; i < testUsers.length; i++) {
       try {
         // Create Firebase user
-        const userCredential = await createUserWithEmailAndPassword(
-          auth, 
-          testUsers[i].email, 
-          testUsers[i].password
-        );
-        const firebaseUid = userCredential.user.uid;
+        let firebaseUid = `seed-firebase-uid-${i}`; // Default fallback
+        
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth, 
+            testUsers[i].email, 
+            testUsers[i].password
+          );
+          firebaseUid = userCredential.user.uid;
+          console.log(`✅ Firebase user created for: ${testUsers[i].email} with UID: ${firebaseUid}`);
+        } catch (firebaseError) {
+          if (firebaseError.code === 'auth/email-already-in-use') {
+            console.log(`Firebase user already exists: ${testUsers[i].email}, using placeholder UID`);
+            // Keep the fallback UID that was already set
+          } else {
+            console.error(`❌ Firebase error for ${testUsers[i].email}:`, firebaseError);
+            throw firebaseError;
+          }
+        }
 
-        // Create MongoDB user
+        // Create MongoDB user with correct field name (firebaseUid)
         const user = await User.create({
-          ...testUsers[i],
-          firebaseUid,
-          password: "firebase_managed" // Store this in MongoDB instead of actual password
+          username: testUsers[i].username,
+          email: testUsers[i].email,
+          password: "firebase_managed",
+          firebaseUid: firebaseUid,
+          hasCompletedAssessment: true,
+          isVerified: true,  // Mark as verified
+          isTestData: true
         });
-        console.log(`Created user: ${user.username}`);
+        console.log(`✅ MongoDB user created: ${user.username}`);
 
         // Create general info
         const birthYear = new Date(generalInfos[i].dateOfBirth).getFullYear();
@@ -163,28 +194,31 @@ const seedUsersAndData = async () => {
           diagnosisAge,
           isTestData: true
         });
-        console.log(`Created general info for: ${generalInfo.childName}`);
+        console.log(`✅ Created general info for: ${generalInfo.childName}`);
 
-        // Create assessment
-        const analysisResults = analyzeAssessment(assessments[i]);
+        // Create assessment with analysis
+        console.log(`⚡ Analyzing assessment for: ${user.username}`);
+        const analysisResults = await analyzeAssessment(assessments[i]);
+        console.log(`✅ Analysis complete with category: ${analysisResults.isaaCategory}`);
+        
         const assessment = await Assess.create({
           userId: user._id,
           ...assessments[i],
           analysis: analysisResults,
           isTestData: true
         });
-        console.log(`Created assessment for: ${user.username}`);
+        console.log(`✅ Created assessment for: ${user.username}`);
       } catch (error) {
-        console.error(`Error creating user ${testUsers[i].email}:`, error);
+        console.error(`❌ Error creating user ${testUsers[i].email}:`, error);
         continue; // Continue with next user if one fails
       }
     }
 
-    console.log('Test data seeding completed successfully');
-    console.log('Test users can login with their email and password: Test@123');
-    process.exit();
+    console.log('✅ Test data seeding completed successfully');
+    console.log('🎉 Test users can login with their email and password: Test@123');
+    process.exit(0);
   } catch (error) {
-    console.error('Error seeding test data:', error);
+    console.error('❌ Error seeding test data:', error);
     process.exit(1);
   }
 };

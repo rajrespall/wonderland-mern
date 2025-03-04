@@ -1,84 +1,62 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const moment = require('moment');
-const User = require('../models/user.model');
 const Match = require('../models/match.model');
 
-dotenv.config();
-
-const userName = "testparent1"; // Test user
-
-// Define difficulty levels
-const difficulties = ["easy", "medium", "hard"];
-
-// Function to generate match data
-const generateMatchData = (userId, daysAgo) => {
-    const matches = [];
-    const now = new Date();
-
-    for (let i = 0; i < 10; i++) { // Generate 10 games per day
-        let difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
-        let score = Math.floor(Math.random() * 11); // Score between 0 and 10
-        let timeSpent;
-
-        // Assign realistic timeSpent values based on difficulty
-        if (difficulty === "easy") {
-            timeSpent = Math.floor(Math.random() * 80) + 20; // 20s to 100s
-        } else if (difficulty === "medium") {
-            timeSpent = Math.floor(Math.random() * 100) + 25; // 25s to 125s
-        } else {
-            timeSpent = Math.floor(Math.random() * 120) + 30; // 30s to 150s
-        }
-
-        // Calculate playedAt date
-        let playedAt = moment(now).subtract(daysAgo, 'days')
-            .hour(Math.floor(Math.random() * 24))
-            .minute(Math.floor(Math.random() * 60))
-            .toDate();
-
-        // Push match data
-        matches.push({
-            userId,
-            score,
-            difficulty,
-            timeSpent,
-            playedAt
-        });
-    }
-    return matches;
-};
-
-// Function to reset and seed matches
 const seedMatches = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('✅ Connected to MongoDB');
+        // Connect to MongoDB
+        await mongoose.connect('mongodb://localhost:27017/wonderland', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
 
-        // Find test user
-        const user = await User.findOne({ username: userName });
-        if (!user) throw new Error(`❌ User '${userName}' not found`);
+        // Drop the existing collection
+        await Match.collection.drop();
+        console.log('Dropped existing wondermatch collection');
 
-        // Clear old match data for this user
-        await Match.deleteMany({ userId: user._id });
-        console.log(`⚡ Old match data for '${userName}' deleted`);
+        // Generate game data to achieve a final score of 80 or 89
+        const userId = 'user123'; // Replace with actual user ID
+        const targetScore = 85; // Set target score to 80 or 89
 
-        let matchData = [];
+        const matches = [];
+        let totalRawScore = 0;
+        let totalDeduction = 0;
 
-        // Generate 10 games per day for 7 days
-        for (let day = 0; day < 7; day++) {
-            matchData.push(...generateMatchData(user._id, day));
+        // Generate game data
+        while (totalRawScore - totalDeduction < targetScore) {
+            const difficulty = ['easy', 'medium', 'hard'][Math.floor(Math.random() * 3)];
+            const score = Math.floor(Math.random() * 10) + 1; // Random score between 1 and 10
+            const timeSpent = Math.floor(Math.random() * 60) + 1; // Random time spent between 1 and 60 seconds
+
+            matches.push({
+                userId,
+                score,
+                difficulty,
+                timeSpent,
+                playedAt: new Date(),
+            });
+
+            totalRawScore += score;
+
+            // Deduct points based on difficulty level and time spent
+            if (difficulty === 'easy' && timeSpent >= 40) {
+                totalDeduction += Math.floor((timeSpent - 20) / 20) * 5;
+            } else if (difficulty === 'medium' && timeSpent >= 50) {
+                totalDeduction += Math.floor((timeSpent - 25) / 25) * 3;
+            } else if (difficulty === 'hard' && timeSpent >= 60) {
+                totalDeduction += Math.floor((timeSpent - 30) / 30) * 1;
+            }
         }
 
-        // Insert into the database
-        await Match.insertMany(matchData);
-        console.log(`✅ Seeded ${matchData.length} matches for '${userName}'`);
+        // Insert generated game data
+        await Match.insertMany(matches);
+        console.log('Inserted new game data into wondermatch collection');
 
-        process.exit();
+        // Close the connection
+        await mongoose.connection.close();
+        console.log('Database connection closed');
     } catch (error) {
-        console.error('❌ Error seeding match data:', error);
-        process.exit(1);
+        console.error('Error seeding match data:', error);
     }
 };
 
-// Run the script
 seedMatches();

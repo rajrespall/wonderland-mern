@@ -65,7 +65,29 @@ fetchSocialCommunicationScore: async () => {
         console.error("❌ Error fetching social communication data:", error);
         set({ socialCommunicationScore: 0, socialTrend: "neutral" });
     }
+},
+
+fetchCreativityScore: async () => {
+    try {
+        const response = await axios.get("http://localhost:5000/api/predictive/creativity-score", {
+            withCredentials: true
+        });
+
+        console.log("📊 Fetching Creativity Data:", response.data); // Debugging log
+
+        if (response.data) {
+            set({
+                creativityScore: response.data.creativityScore,
+                creativityTrend: response.data.trend
+            });
+        }
+    } catch (error) {
+        console.error("❌ Error fetching creativity score:", error);
+        set({ creativityScore: 0, creativityTrend: { trend: "neutral", avgGap: 0 } });
+    }
 }
+
+
 
     
     

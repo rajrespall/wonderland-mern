@@ -16,6 +16,7 @@ const reviewRoutes = require("./routes/review.route.js");
 const puzRoutes = require('./routes/puz.route');
 const profileRoutes = require('./routes/profile.route.js'); 
 const predictiveRoutes = require('./routes/predictive.route.js'); 
+const chartRoutes = require('./routes/chart.route.js');
 
 
 const ALLOWED_ORIGINS = [
@@ -63,5 +64,6 @@ app.use("/api/reviews", reviewRoutes);
 app.use('/api/puz', puzRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/predictive', predictiveRoutes);
+app.use('/api/admin', chartRoutes);
 
 module.exports = app;

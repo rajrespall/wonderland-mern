@@ -1,6 +1,9 @@
-import React from "react";
-import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import React, {useEffect, useRef} from "react";
+import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from "@mui/material";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from "recharts";
+import useChartStore from "../../../Store/chartStore"; // Import Zustand store
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const dataLine = [
   { name: "Jan", value: 400 },
@@ -33,7 +36,30 @@ const tableData = [
   { name: "Game 2", players: 200, averageScore: 90 },
 ];
 
+
 export default function Charts() {
+  const { usersPerMonth, fetchUsersPerMonth,  gamesPlayed, fetchGamesPlayed, gameAnalytics, fetchGameAnalytics  } = useChartStore();
+  const pdfRef = useRef();
+
+  useEffect(() => {
+    fetchUsersPerMonth();
+    fetchGameAnalytics();
+    fetchGamesPlayed(); 
+  }, []);
+
+  const exportToPDF = () => {
+    const input = pdfRef.current;
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 10, imgWidth, imgHeight);
+      pdf.save("game_analytics_report.pdf");
+    });
+  };
+  
+
   return (
     <Paper
       elevation={3}
@@ -44,19 +70,12 @@ export default function Charts() {
         boxShadow: "none"
       }}
     >
-      <Typography
-        sx={{
-          fontFamily: "Poppins",
-          mb: 2,
-          color: "#0457a4",
-          fontWeight: "bold",
-          fontSize: '20px'
-        }}
-      >
-        CHARTS
-      </Typography>
+      <div ref={pdfRef}>
+      <Typography sx={{ fontFamily: "Poppins", mb: 2, color: "#0457a4", fontWeight: "bold", fontSize: "22px", ml: 4 }}>
+          CHARTS
+        </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={6}>
           <Card
             sx={{
               p: 2,
@@ -78,10 +97,10 @@ export default function Charts() {
                 textAlign: "center",
               }}
             >
-              Line Chart
+              Users Created Per Month
             </Typography>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={dataLine}>
+              <LineChart data={usersPerMonth}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
@@ -91,42 +110,25 @@ export default function Charts() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              p: 2,
-              borderRadius: "25px",
-              height: "300px",
-              display: "flex",
-              boxShadow: "none",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column"
-            }}
-          >
-            <Typography
-              variant="h6"
-              sx={{
-                fontFamily: "Poppins",
-                mb: 2,
-                color: "#0457a4",
-                textAlign: "center",
-              }}
-            >
-              Bar Chart
+        <Grid item xs={12} md={6}>
+          <Card sx={{ p: 2, borderRadius: "25px", height: "300px", display: "flex", boxShadow: "none",
+            alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+            <Typography variant="h6" sx={{ fontFamily: "Poppins", mb: 2, color: "#0457a4", textAlign: "center" }}>
+              Games Played
             </Typography>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={dataBar}>
+              <BarChart data={gamesPlayed}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
+                <Legend />
                 <Bar dataKey="value" fill="#b30000" barSize={60} />
               </BarChart>
             </ResponsiveContainer>
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <Card
             sx={{
               p: 2,
@@ -171,41 +173,53 @@ export default function Charts() {
               </PieChart>
             </ResponsiveContainer>
           </Card>
-        </Grid>
+        </Grid> */}
       </Grid>
 
-      <Typography
-        sx={{
-          fontFamily: "Poppins",
-          mt: 4,
-          mb: 2,
-          color: "#0457a4",
-          fontWeight: "bold",
-          fontSize: '20px'
-        }}
+      <Typography sx={{ fontFamily: "Poppins", mt: 4, mb: 2, color: "#0457a4", fontWeight: "bold", fontSize: "22px", ml: 4 }}>
+          Game Analytics
+        </Typography>
+        <TableContainer
+  component={Paper}
+  sx={{
+    borderRadius: 2,
+    overflow: "hidden",
+    boxShadow: 3,
+    margin: "20px auto", // Adds spacing around the table
+    width: "90%", // Restricts the table width
+    maxWidth: "10000px", // Prevents it from being too wide
+  }}
+>
+  <Table>
+    <TableHead>
+      <TableRow sx={{ backgroundColor: "#0457a4" }}>
+        <TableCell sx={{ fontFamily: "Poppins", fontWeight: "bold", color: "white", textAlign: "center" }}>Game</TableCell>
+        <TableCell sx={{ fontFamily: "Poppins", fontWeight: "bold", color: "white", textAlign: "center" }}>Players</TableCell>
+        <TableCell sx={{ fontFamily: "Poppins", fontWeight: "bold", color: "white", textAlign: "center" }}>Avg Games per Player</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {gameAnalytics.map((row, index) => (
+        <TableRow key={row.name} sx={{ backgroundColor: index % 2 === 0 ? "#f4f4f4" : "white" }}>
+          <TableCell sx={{ fontFamily: "Poppins", padding: "12px", textAlign: "center", borderBottom: "1px solid #ddd" }}>{row.name}</TableCell>
+          <TableCell sx={{ fontFamily: "Poppins", padding: "12px", textAlign: "center", borderBottom: "1px solid #ddd" }}>{row.players}</TableCell>
+          <TableCell sx={{ fontFamily: "Poppins", padding: "12px", textAlign: "center", borderBottom: "1px solid #ddd" }}>{row.totalGames}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+
+
+      </div>
+      <Button
+        variant="contained"
+        sx={{ mt: 3, backgroundColor: "#0457a4", color: "#fff" }}
+        onClick={exportToPDF}
       >
-        Game Analytics
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontFamily: "Poppins", fontWeight: "bold" }}>Game</TableCell>
-              <TableCell sx={{ fontFamily: "Poppins", fontWeight: "bold" }} align="right">Players</TableCell>
-              <TableCell sx={{ fontFamily: "Poppins", fontWeight: "bold" }} align="right">Average Score</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tableData.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell sx={{ fontFamily: "Poppins" }}>{row.name}</TableCell>
-                <TableCell sx={{ fontFamily: "Poppins" }} align="right">{row.players}</TableCell>
-                <TableCell sx={{ fontFamily: "Poppins" }} align="right">{row.averageScore}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+        Export as PDF
+      </Button>
     </Paper>
   );
+  
 }

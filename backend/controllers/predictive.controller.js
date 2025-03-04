@@ -109,7 +109,7 @@ const getSocialCommunicationScore = async (req, res) => {
     }
 };
 
-// put here the controller for the creativity category
+
 
 const getCreativityScore = async (req, res) => {
     try {

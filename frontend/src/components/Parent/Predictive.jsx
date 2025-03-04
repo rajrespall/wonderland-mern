@@ -176,7 +176,7 @@ const PredictiveAnalysis = () => {
         }
     };
 
-    if (grade === "A") return null; // No recommendation for A
+    if (grade === "A") return null; 
     const categoryComments = comments[grade][category];
     return categoryComments[Math.floor(Math.random() * categoryComments.length)];
 };
@@ -257,7 +257,7 @@ if (creativityRecommendation) recommendations.push({ label: "Creativity", text: 
                 {motorLetter}
             </Avatar>
 
-            {/* 🔹 Display Average Score Instead of Percentage */}
+           
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: 3 }}>
                 {getTrendIcon(motorTrend?.trend)}
                 <Typography sx={{ fontWeight: 600, fontSize: "20px", mt: 1, color: "#2C3E50" }}>
@@ -265,7 +265,6 @@ if (creativityRecommendation) recommendations.push({ label: "Creativity", text: 
 </Typography>
             </Box>
 
-            {/* 🔹 Display Trend Text */}
             <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {getTrendText(motorTrend?.trend)}
             </Typography>
@@ -286,17 +285,14 @@ if (creativityRecommendation) recommendations.push({ label: "Creativity", text: 
                 {socialLetter}
             </Avatar>
 
-            {/* 🔹 Display Score & Trend */}
-          
 
-            {/* 🔹 Display Percentage Change Below Letter */}
           
             <Typography sx={{ fontWeight: 600, fontSize: "20px", mt: 1, color: "#2C3E50" }}>
             {getTrendIcon(socialTrend?.trend)}
                 {socialTrend?.percentageChange ? `+${socialTrend.percentageChange}%` : "0%"}
             </Typography>
 
-            {/* 🔹 Display Trend Text Below Percentage Change */}
+           
             <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {getTrendText(socialTrend?.trend)}
             </Typography>
@@ -306,7 +302,7 @@ if (creativityRecommendation) recommendations.push({ label: "Creativity", text: 
 
 
 {/* 🔹 Creativity Card */}
-{/* 🔹 Creativity Card */}
+
 <Grid item xs={12} sm={6} md={3}>
     <Card sx={{ borderRadius: 4, boxShadow: "0 10px 20px rgba(0,0,0,0.1)", overflow: "hidden" }}>
         <Box sx={{ height: "8px", width: "100%", background: creativityGradient }} /> 

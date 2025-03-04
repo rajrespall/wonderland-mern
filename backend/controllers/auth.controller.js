@@ -5,7 +5,7 @@ const  adminAuth  = require('firebase-admin');
 const jwt = require('jsonwebtoken');
 const { generateTokenandSetCookie } = require('../utils/generateTokenandSetCookie');
 const { generateOTP, createOTPExpiry } = require('../utils/otpUtils');
-const { sendOTPEmail } = require('../config/mailtrap');
+const { sendOTPEmail, sendPasswordResetEmail } = require('../config/mailtrap');
 
 adminAuth.initializeApp({
   credential: adminAuth.credential.cert(require('../config/serviceAccountKey.json')),
@@ -194,7 +194,6 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-// New function to resend OTP
 const resendOTP = async (req, res) => {
   try {
       const { email } = req.body;
@@ -245,11 +244,49 @@ const logout = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+    
+    // Check if user exists in our database
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ error: "User with this email does not exist" });
+    }
+    
+    // Use Firebase Admin SDK to send password reset email
+    await adminAuth.auth().generatePasswordResetLink(email)
+      .then(async (link) => {
+        // Send email with reset link
+        const emailSent = await sendPasswordResetEmail(email, link);
+        
+        if (!emailSent) {
+          return res.status(500).json({ error: "Failed to send password reset email" });
+        }
+        
+        return res.status(200).json({ 
+          message: "Password reset link sent successfully",
+          email: user.email
+        });
+      });
+      
+  } catch (error) {
+    console.error("Password reset error:", error);
+    res.status(500).json({ error: "Failed to process password reset request" });
+  }
+};
+
 module.exports = { 
   googleLogin, 
   registerWithEmail, 
   loginWithEmail, 
   logout, 
   verifyEmail, 
-  resendOTP 
+  resendOTP,
+  forgotPassword 
 };

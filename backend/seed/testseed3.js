@@ -37,7 +37,7 @@ const seedMatches = async () => {
 
             totalRawScore += score;
 
-            // Deduct points based on difficulty level and time spent
+            // Deduct points based on difficulty level and time spent   
             if (difficulty === 'easy' && timeSpent >= 40) {
                 totalDeduction += Math.floor((timeSpent - 20) / 20) * 5;
             } else if (difficulty === 'medium' && timeSpent >= 50) {

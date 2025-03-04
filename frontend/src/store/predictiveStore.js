@@ -38,8 +38,8 @@ fetchMotorSkillsScore: async () => {
         if (response.data) {
             set({
                 motorSkillsScore: response.data.motorSkillsScore,
-                motorTrend: response.data.trend,  // Ensure trend is properly set
-                avgScore: response.data.trend.avgScore,  // Ensure avgScore is properly set
+                motorTrend: response.data.trend,  
+                avgScore: response.data.trend.avgScore,  
             });
         }
     } catch (error) {
@@ -53,12 +53,12 @@ fetchSocialCommunicationScore: async () => {
             withCredentials: true
         });
 
-        console.log("📊 Fetching Social Communication Data:", response.data); // Debugging
+        console.log("📊 Fetching Social Communication Data:", response.data); 
 
         if (response.data) {
             set({
                 socialCommunicationScore: response.data.socialCommunicationScore,
-                socialTrend: response.data.trend // Ensure this is correctly set
+                socialTrend: response.data.trend 
             });
         }
     } catch (error) {
@@ -73,7 +73,7 @@ fetchCreativityScore: async () => {
             withCredentials: true
         });
 
-        console.log("📊 Fetching Creativity Data:", response.data); // Debugging log
+        console.log("📊 Fetching Creativity Data:", response.data); 
 
         if (response.data) {
             set({

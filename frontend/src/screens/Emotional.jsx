@@ -11,31 +11,31 @@ const questions = [
   {
     question: "Does your child have difficulty expressing emotions?",
     answers: [
-      "Extremely limited or absent emotional expression", // 5 (most severe)
-      "Severe difficulty; emotions rarely expressed appropriately", // 4
-      "Moderate difficulty; struggles in many situations", // 3
+      "No difficulty; expresses emotions clearly and appropriately", // 1 (least severe)
       "Mild difficulty in expressing emotions", // 2
-      "No difficulty; expresses emotions clearly and appropriately" // 1 (least severe)
+      "Moderate difficulty; struggles in many situations", // 3
+      "Severe difficulty; emotions rarely expressed appropriately", // 4
+      "Extremely limited or absent emotional expression" // 5 (most severe)
     ]
   },
   {
     question: "How does your child cope with frustration or anxiety?",
     answers: [
-      "Cannot cope at all, extreme reactions that are difficult to manage", // 5
-      "Struggles significantly, requires substantial external support", // 4
-      "Often needs assistance to regulate emotions", // 3
+      "Self-regulates effectively in most situations", // 1
       "Occasionally needs support but generally manages", // 2
-      "Self-regulates effectively in most situations" // 1
+      "Often needs assistance to regulate emotions", // 3
+      "Struggles significantly, requires substantial external support", // 4
+      "Cannot cope at all, extreme reactions that are difficult to manage" // 5
     ]
   },
   {
     question: "Does your child experience meltdowns? If yes, what typically triggers them?",
     answers: [
-      "Very frequent meltdowns with multiple or unpredictable triggers", // 5
-      "Frequent meltdowns with specific triggers", // 4
-      "Occasional meltdowns in response to identified stressors", // 3
+      "No meltdowns observed", // 1
       "Rare meltdowns only in extreme situations", // 2
-      "No meltdowns observed" // 1
+      "Occasional meltdowns in response to identified stressors", // 3
+      "Frequent meltdowns with specific triggers", // 4
+      "Very frequent meltdowns with multiple or unpredictable triggers" // 5
     ]
   }
 ];
@@ -61,9 +61,7 @@ const Question4 = () => {
       
       setAnswers(updatedAnswers);
       
-      // Store the selected answer on a scale of 5 to 1 (5 is most severe)
-      // Since our array is 0-indexed, we invert the score: 5 - index
-      localStorage.setItem(`Communication_${currentQuestion}_answer`, 5 - index);
+      localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);
       
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);

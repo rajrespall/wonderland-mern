@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor, currentSocial, predictiveSocial } = require('../services/predictiveAnalysis.services');
+const { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor, currentSocial, predictiveSocial, currentColor, predictiveColor } = require('../services/predictiveAnalysis.services');
 
 
 const getLogicalAbilityScore = async (req, res) => {
@@ -109,7 +109,42 @@ const getSocialCommunicationScore = async (req, res) => {
     }
 };
 
-module.exports = { getLogicalAbilityScore, getMotorSkillsScore, getSocialCommunicationScore };
+
+
+const getCreativityScore = async (req, res) => {
+    try {
+        let userId;
+        if (req.user && req.user._id) {
+            userId = req.user._id;
+        } else {
+            const token = req.cookies.token;
+            if (!token) {
+                return res.status(401).json({ message: "Unauthorized: No token found" });
+            }
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            userId = decoded._id;
+        }
+
+        console.log("📌 Fetching Creativity Scores for user:", userId); // Add log
+
+        const creativityScore = await currentColor(userId);
+        const trend = await predictiveColor(userId);
+
+        console.log("🎨 Creativity Score:", creativityScore);
+        console.log("📈 Predictive Creativity Trend:", trend);
+
+        res.status(200).json({
+            creativityScore,
+            trend
+        });
+    } catch (error) {
+        console.error("❌ Error fetching creativity score:", error);
+        res.status(500).json({ message: "Error fetching creativity score", error });
+    }
+};
+
+
+module.exports = { getLogicalAbilityScore, getMotorSkillsScore, getSocialCommunicationScore, getCreativityScore };
 
 
 

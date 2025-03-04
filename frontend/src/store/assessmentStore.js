@@ -90,6 +90,68 @@ const useAssessmentStore = create((set, get) => ({
         } catch (error) {
             set({ error: error.response?.data?.message || "Error fetching assessment", loading: false });
         }
+    },
+
+    startReassessment: () => {
+        // Clear local storage of previous answers
+        for (let i = 0; i < 4; i++) {
+            localStorage.removeItem(`Communication_${i}_answer`);
+            localStorage.removeItem(`Emotional_${i}_answer`);
+            localStorage.removeItem(`Routine_${i}_answer`);
+            localStorage.removeItem(`Sensory_${i}_answer`);
+            localStorage.removeItem(`Social_${i}_answer`);
+        }
+        localStorage.removeItem("Others_answers");
+        
+        // Reset assessment state
+        set({
+            communication: [],
+            emotional: [],
+            routine: [],
+            sensory: [],
+            social: [],
+            others: []
+        });
+        
+        return true;
+    },
+    
+    fetchAssessmentHistory: async (userId) => {
+        set({ loading: true, error: null });
+        
+        try {
+            const response = await axios.get(`http://localhost:5000/api/assessment/${userId}/history`);
+            return response.data;
+        } catch (error) {
+            set({ error: error.response?.data?.message || "Error fetching assessment history", loading: false });
+            return null;
+        } finally {
+            set({ loading: false });
+        }
+    },
+    
+    fetchSpecificAssessment: async (userId, version) => {
+        set({ loading: true, error: null });
+        
+        try {
+            const response = await axios.get(`http://localhost:5000/api/assessment/${userId}?version=${version}`);
+            const userAssessment = response.data;
+            
+            set({
+                userAssessment,
+                showComm: JSON.stringify(userAssessment.communication) !== JSON.stringify([4, 4, 4, 4]),
+                showSocial: JSON.stringify(userAssessment.social) !== JSON.stringify([4, 4, 4, 4]),
+                showSensory: JSON.stringify(userAssessment.sensory) !== JSON.stringify([4, 4, 4]),
+                showEmotional: JSON.stringify(userAssessment.emotional) !== JSON.stringify([4, 4, 4]),
+                showRoutine: JSON.stringify(userAssessment.routine) !== JSON.stringify([4, 4, 4]),
+                loading: false
+            });
+            
+            return userAssessment;
+        } catch (error) {
+            set({ error: error.response?.data?.message || "Error fetching assessment", loading: false });
+            return null;
+        }
     }
 }));
 

@@ -7,8 +7,9 @@ const getProfile = async (req, res) => {
         const userId = req.user._id;
         const profile = await Profile.findOne({ userId });
         
+        // Return null with 200 status if profile not found instead of 404 error
         if (!profile) {
-            return res.status(404).json({ message: "Profile not found" });
+            return res.status(200).json(null);
         }
 
         res.status(200).json(profile);

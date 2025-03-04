@@ -4,8 +4,19 @@ const assessSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
-        unique: true
+        required: true
+    },
+    assessmentDate: {
+        type: Date,
+        default: Date.now
+    },
+    version: {
+        type: Number,
+        required: true
+    },
+    isLatest: {
+        type: Boolean,
+        default: true
     },
     communication: {
         type: [Number],

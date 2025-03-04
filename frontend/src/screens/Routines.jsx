@@ -6,36 +6,35 @@ import Image from '../assets/repetitive.png';
 import Spinner from '../components/Spinner'; 
 import { useNavigate } from 'react-router-dom';  // Correct import for v6
 
-
 const questions = [
   {
     question: "Does your child engage in repetitive movements (e.g., hand-flapping, rocking)?",
     answers: [
-      "Very frequent repetitive movements that significantly interfere with daily activities", // 5
-      "Frequent repetitive movements throughout the day", // 4
-      "Regular repetitive movements in specific situations", // 3
+      "No repetitive movements observed", // 1 (least severe)
       "Occasional repetitive movements", // 2
-      "No repetitive movements observed" // 1
+      "Regular repetitive movements in specific situations", // 3
+      "Frequent repetitive movements throughout the day", // 4
+      "Very frequent repetitive movements that significantly interfere with daily activities" // 5 (most severe)
     ]
   },
   {
     question: "Does your child have strong preferences for routines or rituals?",
     answers: [
-      "Extreme insistence on routines, severe distress when disrupted", // 5
-      "Strong need for routines, significant distress when changed", // 4
-      "Moderate preference for routines, becomes upset when disrupted", // 3
+      "No unusual insistence on routines", // 1
       "Mild preference for routines, can adapt with support", // 2
-      "No unusual insistence on routines" // 1
+      "Moderate preference for routines, becomes upset when disrupted", // 3
+      "Strong need for routines, significant distress when changed", // 4
+      "Extreme insistence on routines, severe distress when disrupted" // 5
     ]
   },
   {
     question: "How does your child react to changes in their routine or environment?",
     answers: [
-      "Extreme distress, tantrums or shutdown with any change", // 5
-      "Significant distress with most changes, difficult to redirect", // 4
-      "Moderate distress with changes, takes time to adjust", // 3
+      "Adapts well to changes with minimal distress", // 1
       "Mild discomfort with changes but adapts with support", // 2
-      "Adapts well to changes with minimal distress" // 1
+      "Moderate distress with changes, takes time to adjust", // 3
+      "Significant distress with most changes, difficult to redirect", // 4
+      "Extreme distress, tantrums or shutdown with any change" // 5
     ]
   }
 ];
@@ -60,9 +59,7 @@ const Question5 = () => {
         
         setAnswers(updatedAnswers);
         
-        // Store the selected answer on a scale of 5 to 1 (5 is most severe)
-        // Since our array is 0-indexed, we invert the score: 5 - index
-        localStorage.setItem(`Communication_${currentQuestion}_answer`, 5 - index);
+        localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);
         
         if (currentQuestion < questions.length - 1) {
           setCurrentQuestion(currentQuestion + 1);

@@ -10,41 +10,41 @@ const questions = [
   {
     question: "Does your child speak? If yes, is their speech delayed or limited?",
     answers: [
-      "No, they do not speak at all.", // 5 (most severe)
-      "Yes, with severely delayed/limited speech.", // 4
-      "Yes, with moderately delayed/limited speech.", // 3
+      "Yes, they speak fluently and age-appropriately.", // 1 (least severe)
       "Yes, with mildly delayed/limited speech.", // 2
-      "Yes, they speak fluently and age-appropriately." // 1 (least severe)
+      "Yes, with moderately delayed/limited speech.", // 3
+      "Yes, with severely delayed/limited speech.", // 4
+      "No, they do not speak at all.", // 5 (most severe)       
     ]
   },
   {
     question: "Does your child exhibit repetitive speech patterns (e.g., echolalia)?",
     answers: [
-      "Very frequently, dominates their communication", // 5
-      "Frequently", // 4
-      "Sometimes", // 3
+      "Never", // 1
       "Rarely", // 2
-      "Never" // 1
+      "Sometimes", // 3
+      "Frequently", // 4
+      "Very frequently, dominates their communication" // 5
     ]
   },
   {
     question: "Does your child have difficulty understanding or processing spoken language?",
     answers: [
-      "Severe difficulty with minimal comprehension", // 5
-      "Significant difficulty requiring substantial support", // 4
-      "Moderate difficulty", // 3
+      "No difficulty, age-appropriate understanding", // 1
       "Mild difficulty", // 2
-      "No difficulty, age-appropriate understanding" // 1
+      "Moderate difficulty", // 3
+      "Significant difficulty requiring substantial support", // 4
+      "Severe difficulty with minimal comprehension" // 5
     ]
   },
   {
     question: "How does your child indicate their needs or wants?",
     answers: [
-      "No clear way of indicating needs", // 5
-      "Non-verbal behaviors only (e.g., crying, tantrums)", // 4
-      "Through gestures or pointing", // 3
+      "Uses appropriate verbal communication", // 1
       "Uses simple visual aids or limited words", // 2
-      "Uses appropriate verbal communication" // 1
+      "Through gestures or pointing", // 3
+      "Non-verbal behaviors only (e.g., crying, tantrums)", // 4
+      "No clear way of indicating needs" // 5
     ]
   }
 ];
@@ -70,9 +70,7 @@ const Question1 = () => {
     
     setSelectedAnswers(updatedAnswers);
     
-    // Store the selected answer on a scale of 5 to 1 (5 is most severe)
-    // Since our array is 0-indexed, we invert the score: 5 - index
-    localStorage.setItem(`Communication_${currentQuestion}_answer`, index);
+    localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);
     
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);

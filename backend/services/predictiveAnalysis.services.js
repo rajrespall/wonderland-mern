@@ -332,5 +332,68 @@ const predictiveSocial = async (userId) => {
 };
 
 
-module.exports = { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor, currentSocial, predictiveSocial  };
+const currentColor = async (userId) => {
+    try {
+        console.log("📌 Fetching Wondercolors for User:", userId);
+
+        const colors = await Color.find({ userId });
+
+        if (!colors || colors.length === 0) {
+            console.log("🚨 No Wondercolor Data Found for User:", userId);
+            return 0;
+        }
+
+        console.log("🟢 Fetched Wondercolors:", colors.length, "entries");
+        let totalScore = Math.min(colors.length, 100); // Score between 0-100
+
+        console.log("🎨 Current Creativity Score:", totalScore);
+        return totalScore;
+    } catch (error) {
+        console.error("❌ Error calculating creativity score:", error);
+        return 0;
+    }
+};
+
+
+
+
+const predictiveColor = async (userId) => {
+    try {
+        console.log("📌 Fetching Predictive Creativity Data for User:", userId);
+
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const colors = await Color.find({ userId, createdAt: { $gte: thirtyDaysAgo } }).sort({ createdAt: 1 });
+
+        if (!colors || colors.length === 0) {
+            console.log("🚨 No recent Wondercolor data found for trend analysis.");
+            return { trend: "neutral", avgGap: 0 };
+        }
+
+        console.log("🟡 Predictive Color Data Fetched:", colors.length, "entries");
+
+        let totalGap = 0;
+        for (let i = 1; i < colors.length; i++) {
+            let gap = Math.floor((new Date(colors[i].createdAt) - new Date(colors[i - 1].createdAt)) / (1000 * 60 * 60 * 24));
+            totalGap += gap;
+        }
+
+        const avgGap = colors.length > 1 ? (totalGap / (colors.length - 1)).toFixed(1) : 0;
+
+        let trend = "neutral";
+        if (avgGap <= 1) trend = "improving";
+        else if (avgGap >= 10) trend = "declining";
+
+        console.log("📊 Predictive Creativity Analysis:", { trend, avgGap });
+        return { trend, avgGap };
+    } catch (error) {
+        console.error("❌ Error calculating predictive creativity trend:", error);
+        return { trend: "neutral", avgGap: 0 };
+    }
+};
+
+
+
+module.exports = { calculateLogicalAbility, calculateTrend, currentMotor, predictiveMotor, currentSocial, predictiveSocial, currentColor, predictiveColor   };
 

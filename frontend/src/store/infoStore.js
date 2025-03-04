@@ -85,6 +85,8 @@ const useInfoStore = create((set) => ({
       throw error;
     }
   },
+
+  
   
 }));
 export default useInfoStore;

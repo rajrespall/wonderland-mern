@@ -38,8 +38,8 @@ fetchMotorSkillsScore: async () => {
         if (response.data) {
             set({
                 motorSkillsScore: response.data.motorSkillsScore,
-                motorTrend: response.data.trend,  // Ensure trend is properly set
-                avgScore: response.data.trend.avgScore,  // Ensure avgScore is properly set
+                motorTrend: response.data.trend,  
+                avgScore: response.data.trend.avgScore,  
             });
         }
     } catch (error) {
@@ -53,19 +53,41 @@ fetchSocialCommunicationScore: async () => {
             withCredentials: true
         });
 
-        console.log("📊 Fetching Social Communication Data:", response.data); // Debugging
+        console.log("📊 Fetching Social Communication Data:", response.data); 
 
         if (response.data) {
             set({
                 socialCommunicationScore: response.data.socialCommunicationScore,
-                socialTrend: response.data.trend // Ensure this is correctly set
+                socialTrend: response.data.trend 
             });
         }
     } catch (error) {
         console.error("❌ Error fetching social communication data:", error);
         set({ socialCommunicationScore: 0, socialTrend: "neutral" });
     }
+},
+
+fetchCreativityScore: async () => {
+    try {
+        const response = await axios.get("http://localhost:5000/api/predictive/creativity-score", {
+            withCredentials: true
+        });
+
+        console.log("📊 Fetching Creativity Data:", response.data); 
+
+        if (response.data) {
+            set({
+                creativityScore: response.data.creativityScore,
+                creativityTrend: response.data.trend
+            });
+        }
+    } catch (error) {
+        console.error("❌ Error fetching creativity score:", error);
+        set({ creativityScore: 0, creativityTrend: { trend: "neutral", avgGap: 0 } });
+    }
 }
+
+
 
     
     

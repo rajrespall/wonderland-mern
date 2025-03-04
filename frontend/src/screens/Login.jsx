@@ -196,6 +196,21 @@ const LoginPage = () => {
                     }}  
                   />
 
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                    <Link href="/forgot-password" variant="body2" sx={{ 
+                      color: '#0457a4',
+                      fontWeight: 'bold',
+                      textDecoration: 'none',
+                      fontFamily: 'Poppins',
+                      mb: 2,
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}>
+                      Forgot password?
+                    </Link>
+                  </Box>
+
                   {error && (
                     <Typography color="error" sx={{ mt: 2 }}>
                       {error}

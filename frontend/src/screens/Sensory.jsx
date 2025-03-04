@@ -6,30 +6,36 @@ import Image from '../assets/sensory.png';
 import Spinner from '../components/Spinner'; 
 import { useNavigate } from 'react-router-dom';  // Correct import for v6
 
-
-
 const questions = [
   {
     question: "Does your child show sensitivity to sounds, lights, textures, or smells?",
     answers: [
-      "No sensitivities observed.",
-      "Mild sensitivity to certain stimuli.",
-      "Moderate sensitivity in multiple areas.",
-      "Severe sensitivity to various stimuli."
+      "No sensitivities observed.", // 1 (least severe)
+      "Mild sensitivity to certain stimuli.", // 2
+      "Moderate sensitivity in multiple areas.", // 3 
+      "Severe sensitivity to various stimuli.", // 4
+      "Extreme sensitivity that significantly impairs daily functioning." // 5 (most severe)
     ]
   },
   {
     question: "Are there specific sensory triggers that upset your child? If yes, please describe.",
     answers: [
-      "No known triggers.",
-      "Yes, one or two specific triggers.",
-      "Yes, multiple triggers across different senses.",
-      "Yes, almost all sensory stimuli are triggering."
+      "No known triggers.", // 1
+      "Yes, one or two specific triggers.", // 2
+      "Yes, multiple triggers across different senses.", // 3
+      "Yes, almost all sensory stimuli are triggering.", // 4
+      "Yes, extreme reactions to triggers that cause significant distress." // 5
     ]
   },
   {
     question: "Does your child seek sensory input (e.g., spinning, jumping, touching objects repeatedly)?",
-    answers: ["Never", "Rarely", "Sometimes", "Frequently"]
+    answers: [
+      "Never", // 1
+      "Rarely", // 2
+      "Sometimes", // 3
+      "Frequently", // 4
+      "Very frequently, constantly seeking sensory stimulation" // 5
+    ]
   }
 ];
 
@@ -53,7 +59,6 @@ const Question3 = () => {
     
       setAnswers(updatedAnswers);
     
-      // Store the selected answer numerically in localStorage (1-based index)
       localStorage.setItem(`Sensory_${currentQuestion}_answer`, index + 1);  // Store 1-based value
     
       if (currentQuestion < questions.length - 1) {

@@ -39,7 +39,7 @@ export default function ProfilePage() {
     getProfile();
   }, []);
 
-  const userName = profile ? `${profile.firstName} ${profile.lastName}` : "Loading...";
+  const userName = profile ? `${profile.firstName} ${profile.lastName}` : "User";
   const profilePicture = profile?.profilePicture || "";
 
   const renderActiveSection = () => {

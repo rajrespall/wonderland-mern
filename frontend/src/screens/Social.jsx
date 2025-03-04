@@ -6,46 +6,45 @@ import Image from '../assets/social_int.png';
 import Spinner from '../components/Spinner'; 
 import { useNavigate } from 'react-router-dom';  // Correct import for v6
 
-
 const questions = [
   {
     question: "Does your child make eye contact when interacting with others?",
     answers: [
-      "Never makes eye contact", // 5
-      "Rarely makes eye contact", // 4
-      "Sometimes makes eye contact", // 3
+      "Consistently makes appropriate eye contact", // 1 (least severe)
       "Often makes eye contact but not consistently", // 2
-      "Consistently makes appropriate eye contact" // 1
+      "Sometimes makes eye contact", // 3
+      "Rarely makes eye contact", // 4
+      "Never makes eye contact" // 5 (most severe)
     ]
   },
   {
     question: "Does your child engage in pretend play or play alongside other children?",
     answers: [
-      "Never engages in any form of play with others", // 5
-      "Rarely shows interest in others' play activities", // 4
-      "Sometimes observes others but seldom joins in", // 3
+      "Regularly engages in age-appropriate interactive and pretend play", // 1
       "Occasionally participates in parallel play", // 2
-      "Regularly engages in age-appropriate interactive and pretend play" // 1
+      "Sometimes observes others but seldom joins in", // 3
+      "Rarely shows interest in others' play activities", // 4
+      "Never engages in any form of play with others" // 5
     ]
   },
   {
     question: "How does your child respond to social cues (e.g., facial expressions, tone of voice)?",
     answers: [
-      "Does not respond to any social cues", // 5
-      "Rarely notices or responds to obvious social cues", // 4
-      "Inconsistently responds to strong social cues", // 3
+      "Appropriately interprets and responds to social cues", // 1
       "Notices and responds to clear social cues but may miss subtle ones", // 2
-      "Appropriately interprets and responds to social cues" // 1
+      "Inconsistently responds to strong social cues", // 3
+      "Rarely notices or responds to obvious social cues", // 4
+      "Does not respond to any social cues" // 5
     ]
   },
   {
     question: "Does your child seem uninterested in interacting with peers or family members?",
     answers: [
-      "Actively avoids all social interactions", // 5
-      "Shows strong preference for isolation over social interaction", // 4
-      "Often appears indifferent to social opportunities", // 3
+      "Consistently seeks and enjoys social interaction", // 1
       "Sometimes shows interest in social interaction", // 2
-      "Consistently seeks and enjoys social interaction" // 1
+      "Often appears indifferent to social opportunities", // 3
+      "Shows strong preference for isolation over social interaction", // 4
+      "Actively avoids all social interactions" // 5
     ]
   }
 ];
@@ -70,9 +69,7 @@ const navigate = useNavigate(); // Use the hook to get the navigate function
       
       setAnswers(updatedAnswers);
       
-      // Store the selected answer on a scale of 5 to 1 (5 is most severe)
-      // Since our array is 0-indexed, we invert the score: 5 - index
-      localStorage.setItem(`Communication_${currentQuestion}_answer`, 5 - index);
+      localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);
       
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);

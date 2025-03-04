@@ -23,9 +23,8 @@ const analyzeDomain = (answers, totalQuestions, label) => {
   // In ISAA: 1 = least severe, 5 = most severe
   const maxScore = totalQuestions * 5;
   
-  // Values should be treated directly as scores (with index adjustment)
-  // If user selects the first option (index 0), that's most severe (5)
-  const actualScore = answers.reduce((sum, val) => sum + (5 - val), 0);
+  // Fix: No need to invert since the value directly maps to severity
+  const actualScore = answers.reduce((sum, val) => sum + val, 0);
   const severityScore = actualScore / maxScore;
 
   return {

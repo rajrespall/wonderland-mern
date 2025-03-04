@@ -23,6 +23,16 @@ const useProfileStore = create((set) => ({
       
       return response.data;
     } catch (error) {
+      // If profile not found (404), just set profile to null without error
+      if (error.response && error.response.status === 404) {
+        set({
+          profile: null,
+          loading: false,
+          error: null
+        });
+        return null;
+      }
+      // For other errors, maintain original error handling
       set({
         error: error.response?.data?.message || 'Failed to fetch profile',
         loading: false

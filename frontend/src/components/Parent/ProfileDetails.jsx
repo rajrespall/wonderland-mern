@@ -115,7 +115,7 @@ export default function UserProfileCard() {
               <Typography variant="h6" fontWeight="bold"
               sx={{
                 fontFamily: 'Poppins',
-              }}>{profile?.firstName + " " + profile?.lastName || user?.username || "User"}</Typography>
+              }}>{profile ? `${profile.firstName} ${profile.lastName}` : "User"}</Typography>
               <Typography variant="body2" color="primary"
               sx={{
                 fontFamily: 'Poppins',

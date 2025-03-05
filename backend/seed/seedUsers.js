@@ -205,6 +205,7 @@ const seedUsersAndData = async () => {
           userId: user._id,
           ...assessments[i],
           analysis: analysisResults,
+          version: 1,
           isTestData: true
         });
         console.log(`✅ Created assessment for: ${user.username}`);

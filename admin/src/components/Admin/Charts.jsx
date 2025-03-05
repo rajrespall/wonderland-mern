@@ -61,7 +61,11 @@ export default function Charts() {
   
 
   return (
+
+   
+  
     <Paper
+
       elevation={3}
       sx={{
         p: 2,
@@ -70,12 +74,26 @@ export default function Charts() {
         boxShadow: "none"
       }}
     >
+
+       <Typography
+    variant="h4"
+    sx={{
+      fontFamily: "Poppins",
+      fontWeight: "bold",
+      color: "#0457a4",
+      textAlign: "center",
+      mt: 3, // Adds margin above
+      mb: 4  // Adds spacing before charts
+    }}
+  >
+    WonderCharts
+  </Typography>
       <div ref={pdfRef}>
       <Typography sx={{ fontFamily: "Poppins", mb: 2, color: "#0457a4", fontWeight: "bold", fontSize: "22px", ml: 4 }}>
           CHARTS
         </Typography>
       <Grid container spacing={3}>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={24} md={12}>
           <Card
             sx={{
               p: 2,
@@ -110,7 +128,7 @@ export default function Charts() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={24} md={12}>
           <Card sx={{ p: 2, borderRadius: "25px", height: "300px", display: "flex", boxShadow: "none",
             alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
             <Typography variant="h6" sx={{ fontFamily: "Poppins", mb: 2, color: "#0457a4", textAlign: "center" }}>
@@ -127,53 +145,59 @@ export default function Charts() {
             </ResponsiveContainer>
           </Card>
         </Grid>
+        
 
-        {/* <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              p: 2,
-              borderRadius: "25px",
-              height: "300px",
-              display: "flex",
-              boxShadow: "none",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column"
-            }}
-          >
-            <Typography
-              variant="h6"
-              sx={{
-                fontFamily: "Poppins",
-                mb: 2,
-                color: "#0457a4",
-                textAlign: "center",
-              }}
-            >
-              Pie Chart
-            </Typography>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={dataPie}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label
-                >
-                  {dataPie.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Legend />
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </Card>
-        </Grid> */}
+        <Grid item xs={24} md={12}>
+  <Card
+    sx={{
+      p: 2,
+      borderRadius: "25px",
+      height: "350px",
+      display: "flex",
+      boxShadow: "none",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column"
+    }}
+  >
+    <Typography
+      variant="h6"
+      sx={{
+        fontFamily: "Poppins",
+        mb: 2,
+        color: "#0457a4",
+        textAlign: "center",
+      }}
+    >
+      Games Played (Pie Chart)
+    </Typography>
+    <ResponsiveContainer width="100%" height="100%">
+      <PieChart>
+        <Pie
+          data={gamesPlayed} // Using same data as Bar Chart
+          cx="50%"
+          cy="50%"
+          outerRadius={100}
+          dataKey="value"
+          nameKey="name"
+          label
+        >
+          {gamesPlayed.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={entry.name === "WonderPuz" ? "#FF0000" : COLORS[index % COLORS.length]} // Red for WonderPuz
+            />
+          ))}
+        </Pie>
+        <Legend />
+        <Tooltip />
+      </PieChart>
+    </ResponsiveContainer>
+  </Card>
+</Grid>
+
+
+
       </Grid>
 
       <Typography sx={{ fontFamily: "Poppins", mt: 4, mb: 2, color: "#0457a4", fontWeight: "bold", fontSize: "22px", ml: 4 }}>

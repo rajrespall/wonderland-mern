@@ -12,7 +12,7 @@ export default function AdminReviews() {
     const fetchReviews = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/reviews/all");
-        setReviews(response.data);
+        setReviews(response.data || []); // Ensure it's an array
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
@@ -58,19 +58,22 @@ export default function AdminReviews() {
           {reviews.map((review) => (
             <ListItem key={review._id} alignItems="flex-start" sx={{ display: "flex", alignItems: "center" }}>
               <ListItemAvatar>
-                <Avatar src={`https://i.pravatar.cc/150?u=${review.userId}`} alt={review.userId} />
+                <Avatar
+                  src={review.profilePicture || ""}
+                  alt={review.userId?.username || "Anonymous User"}
+                />
               </ListItemAvatar>
               <ListItemText
                 primary={
                   <Typography sx={{ fontWeight: "bold", color: "#0457a4" }}>
-                    {review.userId.username || "Anonymous User"}
+                    {review.userId?.username || "Anonymous User"}
                   </Typography>
                 }
                 secondary={
                   <Box>
-                    <Rating value={review.rating} readOnly />
+                    <Rating value={review.rating || 0} readOnly />
                     <Typography variant="body2" sx={{ fontFamily: "Poppins", color: "#333" }}>
-                      {review.comment}
+                      {review.comment || "No comment provided."}
                     </Typography>
                   </Box>
                 }
@@ -87,6 +90,7 @@ export default function AdminReviews() {
         <Typography sx={{ textAlign: "center", mt: 2 }}>No reviews available.</Typography>
       )}
 
+      {/* Review Details Dialog */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Review Details</DialogTitle>
         <DialogContent>
@@ -95,12 +99,12 @@ export default function AdminReviews() {
               <Typography sx={{ fontWeight: "bold", color: "#0457a4", mb: 1 }}>
                 {selectedReview.userId?.username || "Anonymous User"}
               </Typography>
-              <Rating value={selectedReview.rating} readOnly />
+              <Rating value={selectedReview.rating || 0} readOnly />
               <Typography variant="body2" sx={{ mt: 2 }}>
-                {selectedReview.comment}
+                {selectedReview.comment || "No additional comments."}
               </Typography>
               <Typography variant="body2" sx={{ mt: 2, color: "#666" }}>
-                {new Date(selectedReview.createdAt).toLocaleString()}
+                {selectedReview.createdAt ? new Date(selectedReview.createdAt).toLocaleString() : "No date available"}
               </Typography>
             </DialogContentText>
           )}

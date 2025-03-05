@@ -9,7 +9,7 @@ import ProgressCharts from "./ProgressCharts";
 import PageReviews from "./PageReviews";
 import UserProfileCard from "./ProfileDetails";
 import Predictive from "./Predictive";
-
+import Gallery from "./Gallery";
 
 const buttonStyles = (active) => ({
   width: '100%',
@@ -52,6 +52,8 @@ export default function ProfilePage() {
         return <ProgressCharts />;
       case "Predictive":
         return <Predictive />;
+      case "Gallery":
+        return <Gallery />;
       default:
         return <UserProfileCard />;
     }
@@ -111,6 +113,9 @@ export default function ProfilePage() {
             </Button>
             <Button variant="contained" fullWidth sx={buttonStyles(activeSection === "Predictive")} startIcon={<BarChart />} onClick={() => setActiveSection("Predictive")}>
               Predictive
+            </Button>
+            <Button variant="contained" fullWidth sx={buttonStyles(activeSection === "Gallery")} startIcon={<BarChart />} onClick={() => setActiveSection("Gallery")}>
+              Gallery
             </Button>
             <Button variant="contained" fullWidth sx={buttonStyles(false)} startIcon={<SwitchAccount />} onClick={handleSwitchAccount}>
               Switch Account

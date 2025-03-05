@@ -283,7 +283,9 @@ const ProgressCharts = () => {
           <StatBox title="Avg Accuracy" value={`${averages.accuracy}%`} color="#00C49F" />
         </Card>
       </Grid>
+      
     </Grid>
+    
   );
 };
 

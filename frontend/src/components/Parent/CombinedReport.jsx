@@ -6,6 +6,8 @@ import html2canvas from 'html2canvas';
 import ProgressCharts from "./ProgressCharts";
 import Predictive from "./Predictive";
 import usePredictiveStore from "../../store/predictiveStore";
+import tupLogo from '../../assets/tup.png';
+import wonderlandLogo from '../../assets/logo.png';
 
 const CombinedReport = () => {
     const [loading, setLoading] = useState(false);
@@ -35,11 +37,35 @@ const CombinedReport = () => {
             await new Promise(resolve => setTimeout(resolve, 3000));
             
             const pdf = new jsPDF("p", "mm", "a4");
+            const pageWidth = pdf.internal.pageSize.getWidth();
             
-            // Add title
-            pdf.setFontSize(18);
+            // **Header Section - Fixed positioning**
+            pdf.addImage(tupLogo, "PNG", 15, 10, 15, 15);
+            pdf.addImage(wonderlandLogo, "PNG", pageWidth - 30, 10, 15, 15);
+            
+            // Title and subtitle
+            pdf.setFontSize(12);
+            pdf.setFont("helvetica", "bold");
+            pdf.setTextColor(0, 0, 0);
+            pdf.text("TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES-TAGUIG", pageWidth / 2, 15, { align: "center" });
+            
+            pdf.setFontSize(10);
+            pdf.setFont("helvetica", "normal");
+            pdf.text("BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY", pageWidth / 2, 20, { align: "center" });
+            
+            pdf.setFontSize(8);
+            pdf.text("Km. 14 East Service Road, Western Bicutan, Taguig City 1630, Metro Manila, Philippines", pageWidth / 2, 25, { align: "center" });
+            
+            // Red line separator
+            pdf.setDrawColor(150, 0, 0);
+            pdf.setLineWidth(1);
+            pdf.line(15, 30, pageWidth - 15, 30);
+            
+            // Report title
+            pdf.setFontSize(16);
+            pdf.setFont("helvetica", "bold");
             pdf.setTextColor(4, 87, 164); // #0457a4
-            pdf.text("Child Development Report", 105, 20, { align: "center" });
+            pdf.text("Child Development Report", pageWidth / 2, 40, { align: "center" });
             
             // Capture ProgressCharts
             const progressElement = document.getElementById('progress-charts-container');
@@ -53,15 +79,38 @@ const CombinedReport = () => {
                 
                 const progressImgData = progressCanvas.toDataURL('image/png');
                 
-                const imgWidth = 190;
+                const imgWidth = 180;
                 const imgHeight = (progressCanvas.height * imgWidth) / progressCanvas.width;
                 
+                // Section title
                 pdf.setFontSize(14);
-                pdf.text("Game Progress Analytics", 105, 35, { align: "center" });
-                pdf.addImage(progressImgData, 'PNG', 10, 40, imgWidth, imgHeight);
+                pdf.setTextColor(0, 0, 0);
+                pdf.text("Game Progress Analytics", pageWidth / 2, 50, { align: "center" });
+                
+                // Add chart image
+                pdf.addImage(progressImgData, 'PNG', 15, 55, imgWidth, imgHeight);
                 
                 // Add a new page for predictive content
                 pdf.addPage();
+                
+                // Add header to second page too
+                pdf.addImage(tupLogo, "PNG", 15, 10, 15, 15);
+                pdf.addImage(wonderlandLogo, "PNG", pageWidth - 30, 10, 15, 15);
+                
+                pdf.setFontSize(12);
+                pdf.setFont("helvetica", "bold");
+                pdf.text("TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES-TAGUIG", pageWidth / 2, 15, { align: "center" });
+                
+                pdf.setFontSize(10);
+                pdf.setFont("helvetica", "normal");
+                pdf.text("BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY", pageWidth / 2, 20, { align: "center" });
+                
+                pdf.setFontSize(8);
+                pdf.text("Km. 14 East Service Road, Western Bicutan, Taguig City 1630, Metro Manila, Philippines", pageWidth / 2, 25, { align: "center" });
+                
+                pdf.setDrawColor(150, 0, 0);
+                pdf.setLineWidth(1);
+                pdf.line(15, 30, pageWidth - 15, 30);
             }
             
             // Capture Predictive component
@@ -76,12 +125,17 @@ const CombinedReport = () => {
                 
                 const predictiveImgData = predictiveCanvas.toDataURL('image/png');
                 
-                const imgWidth = 190;
+                const imgWidth = 180;
                 const imgHeight = (predictiveCanvas.height * imgWidth) / predictiveCanvas.width;
                 
-                pdf.setFontSize(14);
-                pdf.text("Skills Assessment", 105, 20, { align: "center" });
-                pdf.addImage(predictiveImgData, 'PNG', 10, 25, imgWidth, imgHeight);
+                // Section title for second page
+                pdf.setFontSize(16);
+                pdf.setFont("helvetica", "bold");
+                pdf.setTextColor(4, 87, 164); // #0457a4
+                pdf.text("Skills Assessment", pageWidth / 2, 40, { align: "center" });
+                
+                // Add chart image
+                pdf.addImage(predictiveImgData, 'PNG', 15, 45, imgWidth, imgHeight);
             }
             
             pdf.save("child_development_report.pdf");

@@ -1,296 +1,315 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Box, Typography, Select, MenuItem, FormControl, InputLabel, Card, CardContent, Grid, Button } from "@mui/material";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line } from "recharts";
-import DownloadIcon from '@mui/icons-material/Download';
-import useGameDataStore from '../../store/gameStore';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import React, { useState, useEffect } from 'react';
+import { Card, Grid, Typography } from '@mui/material';
+import { 
+  ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis, 
+  Tooltip, Legend, PieChart, Pie, Cell, RadarChart, PolarGrid, 
+  PolarAngleAxis, PolarRadiusAxis, Radar 
+} from 'recharts';
+import { Box } from '@mui/material';
+import axios from 'axios';
 
+// Colors for the pie chart
+const COLORS = ['#0457a4', '#ff8000', '#00C49F'];
 
-// Reusable stat card component
-const StatCard = ({ title, stats, color }) => (
-  <Card sx={{ 
-    boxShadow: 3, 
-    bgcolor: '#f8f9fa', 
-    borderLeft: `4px solid ${color}`,
-    height: '100%'
-  }}>
-    <CardContent>
-      <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1, fontFamily: 'Poppins' }}>
-        {title}
-      </Typography>
-      <Typography variant="body2" sx={{ mb: 1 }}>
-        <strong>Total Games:</strong> {stats.gamesPlayed || 0}
-      </Typography>
-      <Typography variant="body2" sx={{ mb: 1 }}>
-        <strong>Avg. Time:</strong> {Math.round(stats.averageTimeSpent || stats.averageTimeTaken || 0)} sec
-      </Typography>
-      {stats.completedGames !== undefined && (
-        <Typography variant="body2" sx={{ mb: 1 }}>
-          <strong>Completed:</strong> {stats.completedGames || 0} games
-        </Typography>
-      )}
-      {stats.bestTime !== undefined && (
-        <Typography variant="body2" sx={{ mb: 1 }}>
-          <strong>Best Time:</strong> {stats.bestTime} sec
-        </Typography>
-      )}
-      {stats.highestScore !== undefined && (
-        <Typography variant="body2" sx={{ mb: 1 }}>
-          <strong>Best Score:</strong> {stats.highestScore}
-        </Typography>
-      )}
-    </CardContent>
-  </Card>
-);
+// Helper function to calculate total games for pie chart
+const getTotalGames = (data) => {
+  if (!data.length) return [];
+  const lastMonth = data[data.length - 1];
+  return [
+    { name: 'WonderPuz', value: lastMonth.wonderPuz },
+    { name: 'WonderMatch', value: lastMonth.wonderMatch },
+    { name: 'WonderCard', value: lastMonth.wonderCard }
+  ];
+};
+
+// Helper function for radar chart data
+const getRadarData = (data) => {
+  return data.map(month => ({
+    month: month.month,
+    'Time Management': month.completion,
+    'Engagement': month.engagement,
+    'Problem Solving': month.accuracy
+  }));
+};
 
 const ProgressCharts = () => {
-    const gameStore = useGameDataStore();
-    const [selectedDataType, setSelectedDataType] = useState("puzzle");
-    const COLORS = ["#d32f2f", "#f57c00", "#fbc02d"];
-    const chartsRef = useRef(null);
-  
-    // Map game types to their API endpoints
-    const gameTypeMap = {
-      puzzle: "puz",
-      card: "card",
-      match: "match"
-    };
-  
-    useEffect(() => {
-      const fetchAllData = async () => {
-        // Fetch both game data and statistics for all game types
-        try {
-          await Promise.all([
-            gameStore.fetchPuzzleData(),
-            gameStore.fetchCardData(),
-            gameStore.fetchMatchData(),
-            gameStore.fetchPuzzleStats(),
-            gameStore.fetchCardStats(),
-            gameStore.fetchMatchStats()
-          ]);
-        } catch (error) {
-          console.error("Error fetching game data:", error);
-        }
-      };
-      
-      fetchAllData();
-    }, []);
-    
-    const exportToPDF = async () => {
-      const input = chartsRef.current;
-      const pdf = new jsPDF('p', 'mm', 'a4', true);
-      
-      // Add title to PDF
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(18);
-      pdf.setTextColor(4, 87, 164); // #0457a4
-      pdf.text('Progress Report', 105, 15, { align: 'center' });
-      
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(`Game Type: ${selectedDataType.charAt(0).toUpperCase() + selectedDataType.slice(1)}`, 20, 25);
-      pdf.text(`Date: ${new Date().toLocaleDateString()}`, 20, 30);
-      
+  const [progressData, setProgressData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProgressData = async () => {
       try {
-          // Generate canvas from charts
-          const canvas = await html2canvas(input, {
-              scale: 2,
-              useCORS: true,
-              logging: false
-          });
-          
-          // Convert canvas to image
-          const imgData = canvas.toDataURL('image/png');
-          
-          // Calculate aspect ratio to fit on page
-          const pageWidth = pdf.internal.pageSize.getWidth();
-          const imgWidth = pageWidth - 40; // Margins
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          
-          // Add image to PDF
-          pdf.addImage(imgData, 'PNG', 20, 40, imgWidth, imgHeight);
-          
-          // Add summary text
-          const summaryY = 40 + imgHeight + 10;
-          pdf.setFontSize(14);
-          pdf.setTextColor(4, 87, 164); // #0457a4
-          pdf.text('Summary', 20, summaryY);
-          
-          pdf.setFontSize(10);
-          pdf.setTextColor(0, 0, 0);
-          
-          const stats = gameStore[`${selectedDataType}Stats`] || {};
-          const summary = [
-              `Total Games Played: ${stats.gamesPlayed || 0}`,
-              `Average Score: ${stats.averageScore || 0}`,
-              `Best Score: ${stats.highestScore || 0}`,
-              `Average Time: ${stats.averageTimeTaken || 0} seconds`
-          ];
-          
-          summary.forEach((line, i) => {
-              pdf.text(line, 20, summaryY + 10 + (i * 5));
-          });
-          
-          // Save the PDF
-          pdf.save(`wonderland-progress-${selectedDataType}-${new Date().toLocaleDateString().replace(/\//g, '-')}.pdf`);
-      } catch (error) {
-          console.error('Error generating PDF:', error);
+        setLoading(true);
+        const response = await axios.get('http://localhost:5000/api/progress', {
+          withCredentials: true
+        });
+        setProgressData(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching progress data:', err);
+        setError('Failed to load progress data');
+        setLoading(false);
       }
+    };
+
+    fetchProgressData();
+  }, []);
+
+  if (loading) return <Typography>Loading charts...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
+
+  // Calculate averages for summary statistics
+  const calculateAverages = () => {
+    if (!progressData.length) return { completion: 0, engagement: 0, accuracy: 0 };
+    
+    const sum = progressData.reduce((acc, curr) => ({
+      completion: acc.completion + curr.completion,
+      engagement: acc.engagement + curr.engagement,
+      accuracy: acc.accuracy + curr.accuracy
+    }), { completion: 0, engagement: 0, accuracy: 0 });
+
+    return {
+      completion: (sum.completion / progressData.length).toFixed(1),
+      engagement: (sum.engagement / progressData.length).toFixed(1),
+      accuracy: (sum.accuracy / progressData.length).toFixed(1)
+    };
   };
 
-    if (gameStore.loading) return <Typography>Loading...</Typography>;
-    if (gameStore.error) return <Typography color="error">{gameStore.error}</Typography>;
+  const averages = calculateAverages();
 
-    const handleChange = (event) => {
-      setSelectedDataType(event.target.value);
-    };
+  return (
+    <Grid container spacing={3}>
+      {/* Line Chart for Trends */}
+      <Grid item xs={12} md={6}>
+        <Card sx={{ 
+          p: 2, 
+          borderRadius: "25px", 
+          height: "350px",
+          boxShadow: 'none',
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontFamily: "Poppins", 
+              color: "#0457a4", 
+              mb: 2,
+              textAlign: "center"
+            }}
+          >
+            Game Progress Trends
+          </Typography>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={progressData}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line 
+                type="monotone" 
+                dataKey="completion" 
+                stroke="#0457a4" 
+                strokeWidth={2}
+                name="Time Spent"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </Card>
+      </Grid>
 
-    // Get the current game data based on selection
-    const getCurrentGameData = () => {
-      const gameData = gameStore[`${selectedDataType}Data`];
-      return Array.isArray(gameData) ? gameData : [];
-    };
-    
-    // Get stats for a specific difficulty
-    const getStatsForDifficulty = (difficulty) => {
-      const apiType = gameTypeMap[selectedDataType];
-      return gameStore.getStatsForDifficulty(apiType, difficulty);
-    };
-    
-    const data = getCurrentGameData();
-    
-    // Prepare pie chart data
-    const dataPie = [
-      { name: "Easy", value: data.filter(game => game.difficulty?.toLowerCase() === 'easy').length },
-      { name: "Medium", value: data.filter(game => game.difficulty?.toLowerCase() === 'medium' || game.difficulty?.toLowerCase() === 'normal').length },
-      { name: "Hard", value: data.filter(game => game.difficulty?.toLowerCase() === 'hard').length }
-    ];
+      {/* Bar Chart with 3 bars per month */}
+      <Grid item xs={12} md={6}>
+        <Card sx={{ 
+          p: 2, 
+          borderRadius: "25px", 
+          height: "350px",
+          boxShadow: 'none',
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontFamily: "Poppins", 
+              color: "#0457a4", 
+              mb: 2,
+              textAlign: "center"
+            }}
+          >
+            Monthly Game Metrics
+          </Typography>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={progressData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar 
+                dataKey="completion" 
+                fill="#0457a4" 
+                name="WonderPuz"
+                barSize={20}
+              />
+              <Bar 
+                dataKey="engagement" 
+                fill="#ff8000" 
+                name="WonderMatch"
+                barSize={20}
+              />
+              <Bar 
+                dataKey="accuracy" 
+                fill="#00C49F" 
+                name="WonderCard"
+                barSize={20}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+      </Grid>
+      
+       {/* Replace Area Chart with Pie Chart */}
+       <Grid item xs={12} md={6}>
+        <Card sx={{ 
+          p: 2, 
+          borderRadius: "25px", 
+          height: "350px",
+          boxShadow: 'none',
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontFamily: "Poppins", 
+              color: "#0457a4", 
+              mb: 2,
+              textAlign: "center"
+            }}
+          >
+            Game Distribution
+          </Typography>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={getTotalGames(progressData)}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                outerRadius={100}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {getTotalGames(progressData).map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </Card>
+      </Grid>
 
-    // Prepare bar chart data
-    const formatDate = (dateString) => {
-      if (!dateString) return 'Unknown';
-      try {
-        return new Date(dateString).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        });
-      } catch (error) {
-        console.error('Error formatting date:', error);
-        return 'Unknown';
-      }
-    };
-    
-    const dataBar = data.slice().reverse().map(game => ({
-      name: formatDate(game.playedAt || game.gameDate),
-      score: gameStore.getGameTime(game)
-    }));
+      {/* Replace Stacked Bar Chart with Radar Chart */}
+      <Grid item xs={12} md={6}>
+        <Card sx={{ 
+          p: 2, 
+          borderRadius: "25px", 
+          height: "350px",
+          boxShadow: 'none',
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontFamily: "Poppins", 
+              color: "#0457a4", 
+              mb: 2,
+              textAlign: "center"
+            }}
+          >
+            Skill Development Radar
+          </Typography>
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart outerRadius={90} data={getRadarData(progressData)}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="month" />
+              <PolarRadiusAxis angle={30} domain={[0, 100]} />
+              <Radar
+                name="Time Management"
+                dataKey="Time Management"
+                stroke="#0457a4"
+                fill="#0457a4"
+                fillOpacity={0.6}
+              />
+              <Radar
+                name="Engagement"
+                dataKey="Engagement"
+                stroke="#ff8000"
+                fill="#ff8000"
+                fillOpacity={0.6}
+              />
+              <Radar
+                name="Problem Solving"
+                dataKey="Problem Solving"
+                stroke="#00C49F"
+                fill="#00C49F"
+                fillOpacity={0.6}
+              />
+              <Legend />
+              <Tooltip />
+            </RadarChart>
+          </ResponsiveContainer>
+        </Card>
+      </Grid>
 
-    // Prepare line chart data
-    const dataLine = data.slice().reverse().map(game => ({
-      name: formatDate(game.playedAt || game.gameDate),
-      timeSpent: gameStore.getGameTime(game)
-    }));
-
-    return (
-      <Box sx={{ flexGrow: 1, pl: 4, pt: 2 }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#0457a4", fontFamily: "Poppins" }}>
-          ACHIEVEMENTS/ PROGRESS
-        </Typography>
-        <Button 
-             variant="contained" 
-             startIcon={<DownloadIcon />}
-             onClick={exportToPDF}
-             sx={{
-                 left: '82%',
-                 bgcolor: "#0457a4",
-                 borderRadius: '20px',
-                 fontFamily: 'Poppins',
-                 textTransform: 'none',
-                 '&:hover': { bgcolor: "#033f7a" }
-             }}
-         >
-             Export as PDF
-         </Button>       
-
-        <FormControl sx={{ right: '15%', mt: 2, mb: 4, minWidth: 120 }}>
-          <InputLabel>Game Type</InputLabel>
-          <Select value={selectedDataType} onChange={handleChange}>
-            <MenuItem value="puzzle">Puzzle</MenuItem>
-            <MenuItem value="card">Card</MenuItem>
-            <MenuItem value="match">Match</MenuItem>
-          </Select>
-        </FormControl>
-        
-        {/* Game Stats Info Cards */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={4}>
-            <StatCard 
-              title={`Easy ${selectedDataType.charAt(0).toUpperCase() + selectedDataType.slice(1)} Games`}
-              stats={getStatsForDifficulty('easy')}
-              color={COLORS[0]}
-            />
-          </Grid>
-          
-          <Grid item xs={12} sm={4}>
-            <StatCard 
-              title={`Medium ${selectedDataType.charAt(0).toUpperCase() + selectedDataType.slice(1)} Games`}
-              stats={getStatsForDifficulty('medium')}
-              color={COLORS[1]}
-            />
-          </Grid>
-          
-          <Grid item xs={12} sm={4}>
-            <StatCard 
-              title={`Hard ${selectedDataType.charAt(0).toUpperCase() + selectedDataType.slice(1)} Games`}
-              stats={getStatsForDifficulty('hard')}
-              color={COLORS[2]}
-            />
-          </Grid>
-        </Grid>
-
-        <Typography 
-          variant="body2" 
-          color="textSecondary" 
-          sx={{ mb: 4, color: "rgb(4, 87, 164, .6)", fontFamily: "Poppins" }}>
-          Summary of player performance and progress through various game challenges.
-        </Typography>
-
-        <Box ref={chartsRef} sx={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "left", mt: '100px' }}>
-          {/* Pie Chart */}
-          <PieChart width={250} height={250}>
-            <Pie data={dataPie} cx="50%" cy="50%" outerRadius={80} label dataKey="value">
-              {dataPie.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-          
-          {/* Bar Chart */}
-          <BarChart width={350} height={250} data={dataBar}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="score">
-              {dataBar.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Bar>
-          </BarChart>
-          
-          {/* Line Chart */}
-          <LineChart width={700} height={250} data={dataLine}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="timeSpent" stroke="#d32f2f" strokeWidth={2} />
-          </LineChart>
-        </Box>
-      </Box>
-    );
+      {/* Summary Statistics */}
+      <Grid item xs={12}>
+        <Card sx={{ 
+          p: 2, 
+          borderRadius: "25px",
+          boxShadow: 'none',
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center"
+        }}>
+          <StatBox title="Average Completion" value={`${averages.completion}%`} color="#0457a4" />
+          <StatBox title="Avg Engagement" value={`${averages.engagement}%`} color="#ff8000" />
+          <StatBox title="Avg Accuracy" value={`${averages.accuracy}%`} color="#00C49F" />
+        </Card>
+      </Grid>
+    </Grid>
+  );
 };
+
+// Helper component for statistics
+const StatBox = ({ title, value, color }) => (
+  <Box sx={{ textAlign: 'center', p: 2 }}>
+    <Typography 
+      variant="h6" 
+      sx={{ 
+        fontFamily: "Poppins", 
+        color: color,
+        fontWeight: "bold"
+      }}
+    >
+      {value}
+    </Typography>
+    <Typography 
+      variant="body2" 
+      sx={{ 
+        fontFamily: "Poppins", 
+        color: "#666"
+      }}
+    >
+      {title}
+    </Typography>
+  </Box>
+);
 
 export default ProgressCharts;

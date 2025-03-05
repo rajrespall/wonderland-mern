@@ -125,24 +125,36 @@ const OtherSymptoms = () => {
       setSocialAnswers(socialAnswers);
       setOthersAnswers(othersAnswers);
 
-      const response = await submitAssessment();
-        
-      if (response) {
+      try {
+        const response = await submitAssessment();
+        if (response) {
+          // Clear local storage entries
           for (let i = 0; i < 4; i++) {
-              localStorage.removeItem(`Communication_${i}_answer`);
-              localStorage.removeItem(`Emotional_${i}_answer`);
-              localStorage.removeItem(`Routine_${i}_answer`);
-              localStorage.removeItem(`Sensory_${i}_answer`);
-              localStorage.removeItem(`Social_${i}_answer`);
+            localStorage.removeItem(`Communication_${i}_answer`);
+            localStorage.removeItem(`Emotional_${i}_answer`);
+            localStorage.removeItem(`Routine_${i}_answer`);
+            localStorage.removeItem(`Sensory_${i}_answer`);
+            localStorage.removeItem(`Social_${i}_answer`);
           }
           localStorage.removeItem("Others_answers");
           navigate('/resources');
+        }
+      } catch (error) {
+        if (error.response && error.response.data && error.response.data.message && 
+            error.response.data.message.includes("duplicate key error")) {
+          // Handle duplicate key error by navigating anyway - assessment was attempted
+          console.log("Duplicate assessment detected, proceeding to resources");
+          navigate('/resources');
+        } else {
+          throw error; // Rethrow if it's a different error
+        }
       }
-  } catch (error) {
-    console.error('Error submitting assessment:', error);
-  } finally {
-    setSubmitting(false);
-  }
+    } catch (error) {
+      console.error('Error submitting assessment:', error);
+      alert("There was an error submitting your assessment. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
 };
 
   if (loading) {

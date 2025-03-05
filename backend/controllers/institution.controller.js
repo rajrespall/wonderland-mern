@@ -2,12 +2,17 @@ const Institution = require('../models/institution.model');
 
 class InstitutionController {
   async createInstitution(req, res) {
+    const institution = req.body;
     try {
-      const institution = new Institution(req.body);
-      await institution.save();
-      res.status(201).json(institution);
+      const newInstitution = new Institution({
+        name: institution.name,
+        address: institution.address,
+        mapEmbed: institution.mapEmbed  
+      });
+      await newInstitution.save();
+      res.status(201).json({status:true, newInstitution});
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ message: 'Institution not created' });
     }
   }
 

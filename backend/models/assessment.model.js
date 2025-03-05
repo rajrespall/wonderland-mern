@@ -63,4 +63,6 @@ const assessSchema = new mongoose.Schema({
     timestamps: true
 });
 
+assessSchema.index({ userId: 1, version: 1 }, { unique: true });
+
 module.exports = mongoose.model("Assessment", assessSchema);

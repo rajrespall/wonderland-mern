@@ -144,12 +144,67 @@ export default function UserProfileCard() {
         <CustomTabPanel value={value} index={0}>
           <Typography variant="h6" fontWeight="bold" sx={{
               fontFamily: 'Poppins',
+              mb: 3
             }}>Profile Details</Typography>
-          <Typography variant="body2"
-          sx={{
-            fontFamily: 'Poppins',
-          }}>{profile?.lastName || "No profile details available."}</Typography>
-
+          
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: '#0457a4', width: 40, height: 40 }}>
+                <Group />
+              </Avatar>
+              <Box>
+                <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                  Full Name
+                </Typography>
+                <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500 }}>
+                  {profile ? `${profile.firstName} ${profile.lastName}` : "Not provided"}
+                </Typography>
+              </Box>
+            </Box>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: '#5da802', width: 40, height: 40 }}>
+                <Message />
+              </Avatar>
+              <Box>
+                <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                  Email Address
+                </Typography>
+                <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500 }}>
+                  {user?.email || "Not provided"}
+                </Typography>
+              </Box>
+            </Box>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: '#b80201', width: 40, height: 40 }}>
+                <Star />
+              </Avatar>
+              <Box>
+                <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                  Phone Number
+                </Typography>
+                <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500 }}>
+                  {profile?.phoneNumber || "Not provided"}
+                </Typography>
+              </Box>
+            </Box>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: '#f4900c', width: 40, height: 40 }}>
+                <LocationOn />
+              </Avatar>
+              <Box>
+                <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                  Address
+                </Typography>
+                <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500 }}>
+                  {profile?.address || "Not provided"}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          
           <Button 
             variant="contained" 
             startIcon={<Message />}
@@ -206,7 +261,7 @@ export default function UserProfileCard() {
                 fontFamily: 'Poppins',
                 padding: '6px 16px',
               }}
-              onClick={() => window.location.href = '/assessment'}  // Simple navigation
+              onClick={() => window.location.href = '/communication'}  // Simple navigation
             >
               Start Reassessment
             </Button>

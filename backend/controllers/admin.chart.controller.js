@@ -3,6 +3,7 @@ const Match = require("../models/match.model");
 const Card = require("../models/card.model");
 const Color = require("../models/color.model");
 const Puz = require("../models/puz.model");
+const Review = require("../models/review.model"); 
 
 const getUsersPerMonth = async (req, res) => {
     try {
@@ -113,5 +114,77 @@ const getGameAnalytics = async (req, res) => {
     }
 };
 
-//put here  teh game analythic
-module.exports = { getUsersPerMonth, getGamesPlayed, getGameAnalytics };
+const getGamesPlayedByDifficulty = async (req, res) => {
+    try {
+        console.log("📊 Fetching games played by difficulty...");
+
+        // Count games based on difficulty levels for each game
+        const easyGames = await Promise.all([
+            Match.countDocuments({ difficulty: "easy" }),
+            Card.countDocuments({ difficulty: "Easy" }), // Case-sensitive
+            Puz.countDocuments({ difficulty: "easy" })
+        ]).then(counts => counts.reduce((sum, count) => sum + count, 0));
+
+        const mediumGames = await Promise.all([
+            Match.countDocuments({ difficulty: "medium" }),
+            Card.countDocuments({ difficulty: "Normal" }), // Case-sensitive
+            Puz.countDocuments({ difficulty: "medium" })
+        ]).then(counts => counts.reduce((sum, count) => sum + count, 0));
+
+        const hardGames = await Promise.all([
+            Match.countDocuments({ difficulty: "hard" }),
+            Card.countDocuments({ difficulty: "Hard" }), // Case-sensitive
+            Puz.countDocuments({ difficulty: "hard" })
+        ]).then(counts => counts.reduce((sum, count) => sum + count, 0));
+
+        // Prepare pie chart data
+        const difficultyData = [
+            { name: "Easy", value: easyGames },
+            { name: "Medium", value: mediumGames },
+            { name: "Hard", value: hardGames }
+        ];
+
+        console.log("📊 Difficulty-based Games Data:", difficultyData);
+        res.json(difficultyData);
+    } catch (error) {
+        console.error("❌ Error fetching games played by difficulty:", error);
+        res.status(500).json({ message: "Internal server error", error });
+    }
+};
+
+
+
+const getReviewsPerMonth = async (req, res) => {
+    try {
+        console.log("📊 Fetching reviews per month...");
+
+        const reviewsPerMonth = await Review.aggregate([
+            {
+                $group: {
+                    _id: { $month: "$createdAt" },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { "_id": 1 } }
+        ]);
+
+        if (!reviewsPerMonth.length) {
+            console.warn("⚠ No reviews found!");
+        }
+
+        // Convert numeric month to name
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const formattedData = reviewsPerMonth.map(item => ({
+            name: monthNames[item._id - 1],
+            value: item.count
+        }));
+
+        console.log("📊 Reviews Per Month:", formattedData);
+        res.json(formattedData);
+    } catch (error) {
+        console.error("❌ Error fetching reviews per month:", error);
+        res.status(500).json({ message: "Internal server error", error });
+    }
+};  
+
+module.exports = { getUsersPerMonth, getGamesPlayed, getGameAnalytics, getGamesPlayedByDifficulty, getReviewsPerMonth };

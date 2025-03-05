@@ -1,11 +1,16 @@
 import React, {useEffect, useRef} from "react";
-import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from "@mui/material";
+import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Box, Divider } from "@mui/material";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from "recharts";
 import useChartStore from "../../../Store/chartStore"; // Import Zustand store
 import { useNavigate } from "react-router-dom";
 
-// import jsPDF from "jspdf";
-// import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
+
+import tupLogo from "../../assets/tup.png"; // Adjust the path based on where you save it
+import wonderlandLogo from "../../assets/logo.png"; // Adjust accordingly
+
 
 const dataLine = [
   { name: "Jan", value: 400 },
@@ -39,11 +44,11 @@ const tableData = [
 ];
 
 
-export default function Charts() {
+export default function PDF() {
   const { usersPerMonth, fetchUsersPerMonth,  gamesPlayed, fetchGamesPlayed, gameAnalytics, fetchGameAnalytics, fetchGamesPlayedByDifficulty, gamesPlayedByDifficulty, fetchReviewsPerMonth, reviewsPerMonth  } = useChartStore();
   const navigate = useNavigate();
 
-  // const pdfRef = useRef();
+  const pdfRef = useRef();
 
   useEffect(() => {
     fetchUsersPerMonth();
@@ -54,40 +59,64 @@ export default function Charts() {
 
   }, []);
 
-  // const exportToPDF = () => {
-  //   const input = pdfRef.current;
-  //   const pdf = new jsPDF("p", "mm", "a4");
-  
-  //   // Capture each section separately
-  //   html2canvas(input, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const imgWidth = 210; // A4 width in mm
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  
-  //     let yPosition = 10; // Start position on the first page
-  //     let pageHeight = 297; // A4 height in mm
-  
-  //     if (imgHeight < pageHeight - 20) {
-  //       // If content fits in one page
-  //       pdf.addImage(imgData, "PNG", 0, yPosition, imgWidth, imgHeight);
-  //     } else {
-  //       // Split into multiple pages
-  //       let remainingHeight = imgHeight;
-  
-  //       while (remainingHeight > 0) {
-  //         pdf.addImage(imgData, "PNG", 0, yPosition, imgWidth, pageHeight - 20);
-  //         remainingHeight -= pageHeight - 20;
-  //         if (remainingHeight > 0) {
-  //           pdf.addPage();
-  //           yPosition = 10; // Reset Y position for new page
-  //         }
-  //       }
-  //     }
-  
-  //     pdf.save("game_analytics_report.pdf");
-  //   });
-  // };
-  
+  const exportToPDF = () => {
+    const input = pdfRef.current;
+    const pdf = new jsPDF("p", "mm", "a4"); // A4 Portrait mode
+    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+    let currentPage = 1;
+
+    html2canvas(input, { scale: 3, useCORS: true }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const imgWidth = 190; // Content width to fit within margins
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let yPosition = 60; // Start content below header
+        let remainingHeight = imgHeight;
+
+        while (remainingHeight > 0) {
+            if (currentPage > 1) {
+                pdf.addPage();
+                yPosition = 20; // Reset Y position for new page
+            }
+
+            // **Header (Optimized Logo & Text Positioning)**
+            pdf.addImage(tupLogo, "PNG", 12, 10, 15, 15); // Left logo (Smaller & Top Left)
+            pdf.addImage(wonderlandLogo, "PNG", pageWidth - 27, 10, 15, 15); // Right logo (Smaller & Top Right)
+
+            pdf.setFontSize(14);
+            pdf.setFont("times", "bold");
+            pdf.text("TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES-TAGUIG", pageWidth / 2, 18, { align: "center" });
+
+            pdf.setFontSize(12);
+            pdf.text("BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY", pageWidth / 2, 24, { align: "center" });
+
+            pdf.setFontSize(10);
+            pdf.text("Km. 14 East Service Road, Western Bicutan, Taguig City 1630, Metro Manila, Philippines", pageWidth / 2, 30, { align: "center" });
+
+            // **Red Line Separator**
+            pdf.setDrawColor(150, 0, 0);
+            pdf.setLineWidth(1.5);
+            pdf.line(12, 34, pageWidth - 12, 34); // Adjusted for better spacing
+
+            // **Add Content (Avoid Squeezing)**
+            pdf.addImage(imgData, "PNG", 12, yPosition, imgWidth, pageHeight - 90);
+
+            // **Footer (Page Number & Red Line)**
+            pdf.setDrawColor(150, 0, 0);
+            pdf.setLineWidth(1.5);
+            pdf.line(12, pageHeight - 15, pageWidth - 12, pageHeight - 15); // Footer red line
+
+            pdf.setFontSize(10);
+            pdf.text(`Page ${currentPage}`, pageWidth / 2, pageHeight - 8, { align: "center" });
+
+            remainingHeight -= pageHeight - 90;
+            currentPage++;
+        }
+
+        pdf.save("game_analytics_report.pdf");
+    });
+};
+
 
   return (
 
@@ -104,8 +133,26 @@ export default function Charts() {
       }}
     >
 
-{/*       
-      <div ref={pdfRef}> */}
+
+<Box display="flex" justifyContent="space-between" alignItems="center">
+        <img src={tupLogo} alt="TUP Logo" style={{ width: "80px", height: "80px", marginLeft: "20px" }} />
+        <Box textAlign="center">
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES-TAGUIG
+          </Typography>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+            BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY
+          </Typography>
+          <Typography variant="body2">
+            Km. 14 East Service Road, Western Bicutan, Taguig City 1630, Metro Manila, Philippines
+          </Typography>
+        </Box>
+        <img src={wonderlandLogo} alt="Wonderland Logo" style={{ width: "80px", height: "80px", marginRight: "20px" }} />
+      </Box>
+      <Divider sx={{ my: 1, borderBottom: "3px solid red" }} />
+
+      
+      <div ref={pdfRef}>
 
       <Typography
     variant="h4"
@@ -305,15 +352,28 @@ export default function Charts() {
 </TableContainer>
 
 
-      {/* </div> */}
-          <Button
-      variant="contained"
-      sx={{ mt: 3, backgroundColor: "#0457a4", color: "#fff" }}
-      onClick={() => navigate("/pdf")} // Navigate to the PDF page
-    >
-      Export as PDF
-    </Button>
+      </div>
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 3 }}>
+      {/* Back Button */}
+      <Button
+        variant="contained"
+        sx={{ backgroundColor: "#d32f2f", color: "#fff" }}
+        onClick={() => navigate("/")}
+      >
+        Back
+      </Button>
+
+      {/* Export Button (Aligned Right) */}
+      <Button
+        variant="contained"
+        sx={{ backgroundColor: "#0457a4", color: "#fff" }}
+        onClick={exportToPDF}
+      >
+        Export as PDF
+      </Button>
+    </Box>
     </Paper>
   );
   
 }
+  

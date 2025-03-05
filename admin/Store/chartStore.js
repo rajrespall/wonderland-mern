@@ -4,18 +4,16 @@ import axios from "axios";
 const useChartStore = create((set) => ({
     usersPerMonth: [],
     gamesPlayed: [],
+    gamesPlayedByDifficulty: [], // Add state for difficulty-based data
     gameAnalytics: [],
+    reviewsPerMonth: [], // ✅ New State for Reviews
+
 
     fetchUsersPerMonth: async () => {
         try {
             console.log("🔄 Fetching Users Per Month...");
-            
-            const response = await axios.get("http://localhost:5000/api/admin/users-per-month", {
-                withCredentials: true, // Important for CORS
-            });
-
+            const response = await axios.get("http://localhost:5000/api/admin/users-per-month", { withCredentials: true });
             console.log("📊 API Response:", response.data);
-
             set({ usersPerMonth: response.data });
         } catch (error) {
             console.error("❌ Error fetching users per month:", error.response ? error.response.data : error);
@@ -33,6 +31,18 @@ const useChartStore = create((set) => ({
         }
     },
 
+    fetchGamesPlayedByDifficulty: async () => {
+        try {
+            console.log("🔄 Fetching Games Played by Difficulty...");
+            const response = await axios.get("http://localhost:5000/api/admin/games-played-by-difficulty", { withCredentials: true });
+            console.log("📊 Games Played by Difficulty Data:", response.data);
+            set({ gamesPlayedByDifficulty: response.data });
+        } catch (error) {
+            console.error("❌ Error fetching games played by difficulty:", error.response?.data || error);
+        }
+    },
+    
+
     fetchGameAnalytics: async () => {
         try {
             console.log("🔄 Fetching Game Analytics...");
@@ -42,7 +52,20 @@ const useChartStore = create((set) => ({
         } catch (error) {
             console.error("❌ Error fetching game analytics:", error.response?.data || error);
         }
-    }
+    },
+
+    fetchReviewsPerMonth: async () => {
+        try {
+            console.log("🔄 Fetching Reviews Per Month...");
+            const response = await axios.get("http://localhost:5000/api/admin/reviews-per-month", { withCredentials: true });
+            console.log("⭐ Reviews Per Month Data:", response.data);
+            set({ reviewsPerMonth: response.data });
+        } catch (error) {
+            console.error("❌ Error fetching reviews per month:", error.response?.data || error);
+        }
+    },
+
+    
 
 }));
 

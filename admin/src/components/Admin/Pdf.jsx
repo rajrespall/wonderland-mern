@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef,  forwardRef, useImperativeHandle } from "react";
 import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Box, Divider } from "@mui/material";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from "recharts";
 import useChartStore from "../../../Store/chartStore"; // Import Zustand store
@@ -44,8 +44,8 @@ const tableData = [
 ];
 
 
-export default function PDF() {
-  const { usersPerMonth, fetchUsersPerMonth,  gamesPlayed, fetchGamesPlayed, gameAnalytics, fetchGameAnalytics, fetchGamesPlayedByDifficulty, gamesPlayedByDifficulty, fetchReviewsPerMonth, reviewsPerMonth  } = useChartStore();
+const PDF = forwardRef((props, ref) => {
+    const { usersPerMonth, fetchUsersPerMonth,  gamesPlayed, fetchGamesPlayed, gameAnalytics, fetchGameAnalytics, fetchGamesPlayedByDifficulty, gamesPlayedByDifficulty, fetchReviewsPerMonth, reviewsPerMonth  } = useChartStore();
   const navigate = useNavigate();
 
   const pdfRef = useRef();
@@ -115,7 +115,11 @@ export default function PDF() {
 
         pdf.save("game_analytics_report.pdf");
     });
-};
+    };
+
+useImperativeHandle(ref, () => ({
+    exportToPDF
+}));
 
 
   return (
@@ -353,27 +357,28 @@ export default function PDF() {
 
 
       </div>
-      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 3 }}>
+      {/* <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 3 }}> */}
       {/* Back Button */}
-      <Button
+       {/* <Button
         variant="contained"
         sx={{ backgroundColor: "#d32f2f", color: "#fff" }}
         onClick={() => navigate("/")}
       >
         Back
-      </Button>
+      </Button> */}
 
       {/* Export Button (Aligned Right) */}
-      <Button
+      {/* <Button
         variant="contained"
         sx={{ backgroundColor: "#0457a4", color: "#fff" }}
         onClick={exportToPDF}
       >
         Export as PDF
       </Button>
-    </Box>
+    </Box>  */}
     </Paper>
   );
   
-}
+});
+export default PDF;
   

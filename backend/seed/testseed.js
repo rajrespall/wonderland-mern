@@ -1,85 +1,113 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const moment = require('moment');
-const User = require('../models/user.model');
-const Card = require('../models/card.model');
-const Puz = require('../models/puz.model');
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const User = require("../models/user.model");
+const Card = require("../models/card.model");  // Wondercards
+const Puz = require("../models/puz.model");    // Jigsaw Puzzles
 
 dotenv.config();
 
-const generatePerfectCardData = (userId, daysAgo) => ({
-    userId,
-    gameDate: moment().subtract(daysAgo, 'days').toDate(), // Spread over 30 days
-    failed: 0, // No failed attempts
-    difficulty: ['Easy', 'Normal', 'Hard'][Math.floor(Math.random() * 3)], // Random difficulty
-    completed: 1, // Always completed for max score
-    timeTaken: Math.floor(Math.random() * 3) + 1 // Minimal time taken for max bonus
-});
-
-const generatePerfectPuzzleData = (userId, daysAgo) => ({
-    userId,
-    playedAt: moment().subtract(daysAgo, 'days').toDate(), // Spread over 30 days
-    timeSpent: Math.floor(Math.random() * 5) + 1, // Minimal time spent for max bonus
-    difficulty: ['easy', 'medium', 'hard'][Math.floor(Math.random() * 3)], // Random difficulty
-    isCompleted: true // Always completed for max score
-});
-
-const dropAndRecreateCollections = async () => {
-    try {
-        console.log('⚡ Dropping collections and recreating them...');
-
-        // Drop existing collections (tables)
-        await mongoose.connection.dropCollection('wondercards').catch(err => console.log("Collection wondercards doesn't exist, skipping..."));
-        await mongoose.connection.dropCollection('wonderpuz').catch(err => console.log("Collection wonderpuz doesn't exist, skipping..."));
-
-        console.log('✅ Collections dropped successfully.');
-
-        // Recreate collections
-        await mongoose.connection.createCollection('wondercards');
-        await mongoose.connection.createCollection('wonderpuz');
-
-        console.log('✅ Collections recreated successfully.');
-    } catch (error) {
-        console.error('❌ Error dropping/recreating collections:', error);
-    }
+// 🎯 Fetch the specific user (testparent1)
+const fetchTestUser = async () => {
+    return await User.findOne({ username: "testparent1", isTestData: true });
 };
 
-const seedLogicalAbilityData = async () => {
+// 🎯 Function to generate game data ensuring **score of 90** with **gradual improvement**
+const generateGameData = (gameType, dayIndex, difficulty) => {
+    let failedAttempts;
+    let completed = 1; // Always completed
+    let timeSpent;
+
+    // **Start with higher failures and slower times, then improve**
+    if (difficulty === "Easy" || difficulty === "easy") {
+        failedAttempts = Math.max(0, 5 - Math.floor(dayIndex / 3)); // Reducing every 3 days
+        timeSpent = Math.max(2, 10 - Math.floor(dayIndex / 3)); // Reducing every 3 days
+    } else if (difficulty === "Normal" || difficulty === "medium") {
+        failedAttempts = Math.max(0, 7 - Math.floor(dayIndex / 4));
+        timeSpent = Math.max(3, 12 - Math.floor(dayIndex / 4));
+    } else if (difficulty === "Hard" || difficulty === "hard") {
+        failedAttempts = Math.max(0, 9 - Math.floor(dayIndex / 5));
+        timeSpent = Math.max(5, 15 - Math.floor(dayIndex / 5));
+    }
+
+    return {
+        difficulty,
+        failed: failedAttempts,
+        completed,
+        timeTaken: timeSpent, // For Wondercards
+        timeSpent, // For Jigsaw Puzzles
+        isCompleted: true, // For Jigsaw Puzzles
+    };
+};
+
+// 🎯 Generate **5 games per day** for **30 days** with improving trend
+const generateGameRecords = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('✅ Connected to MongoDB');
+        console.log("✅ Connected to MongoDB");
 
-        // Find the test user
-        const user = await User.findOne({ username: 'testparent1' });
-        if (!user) throw new Error('❌ User testparent1 not found');
-
-        // Drop collections and recreate them
-        await dropAndRecreateCollections();
-
-        let cardData = [];
-        let puzzleData = [];
-
-        // Generate 100 data (50 Wondercards + 50 Puzzles) evenly over 30 days
-        for (let i = 0; i < 30; i++) {
-            const numEntriesPerDay = Math.floor(100 / 30); // Distribute across 30 days
-
-            for (let j = 0; j < numEntriesPerDay / 2; j++) {
-                cardData.push(generatePerfectCardData(user._id, i));
-                puzzleData.push(generatePerfectPuzzleData(user._id, i));
-            }
+        const user = await fetchTestUser();
+        if (!user) {
+            console.log("❌ User testparent1 not found. Run user seeder first.");
+            process.exit(1);
         }
 
-        // Insert generated data into the database
-        await Card.insertMany(cardData);
-        await Puz.insertMany(puzzleData);
+        console.log("⚡ Generating 5 game records per day for 30 days for testparent1...");
 
-        console.log(`✅ Seeded 100 logical ability test data (50 cards, 50 puzzles) over 30 days`);
-        process.exit();
+        let gameRecords = [];
+        for (let day = 0; day < 30; day++) {
+            const gameDate = new Date();
+            gameDate.setDate(gameDate.getDate() - day); // Set game date for each of the last 30 days
+
+            // **Easy (2 games per day)**
+            for (let i = 0; i < 2; i++) {
+                gameRecords.push(Card.create({
+                    userId: user._id,
+                    gameDate,
+                    ...generateGameData("Wondercards", day, "Easy"),
+                }));
+                gameRecords.push(Puz.create({
+                    userId: user._id,
+                    playedAt: gameDate,
+                    ...generateGameData("JigsawPuzzle", day, "easy"),
+                }));
+            }
+
+            // **Medium/Normal (2 games per day)**
+            for (let i = 0; i < 2; i++) {
+                gameRecords.push(Card.create({
+                    userId: user._id,
+                    gameDate,
+                    ...generateGameData("Wondercards", day, "Normal"),
+                }));
+                gameRecords.push(Puz.create({
+                    userId: user._id,
+                    playedAt: gameDate,
+                    ...generateGameData("JigsawPuzzle", day, "medium"),
+                }));
+            }
+
+            // **Hard (1 game per day)**
+            gameRecords.push(Card.create({
+                userId: user._id,
+                gameDate,
+                ...generateGameData("Wondercards", day, "Hard"),
+            }));
+            gameRecords.push(Puz.create({
+                userId: user._id,
+                playedAt: gameDate,
+                ...generateGameData("JigsawPuzzle", day, "hard"),
+            }));
+        }
+
+        await Promise.all(gameRecords);
+        console.log("✅ Successfully created **5 Wondercards & 5 Jigsaw Puzzles** per day for the last **30 days**.");
+
+        process.exit(0);
     } catch (error) {
-        console.error('❌ Error seeding logical ability test data:', error);
+        console.error("❌ Error seeding game data:", error);
         process.exit(1);
     }
 };
 
 // Run the seeder
-seedLogicalAbilityData();
+generateGameRecords();

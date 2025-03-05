@@ -62,4 +62,33 @@ const uploadImage = async (req, res) => {
     }
 };
 
-module.exports = { uploadImage };
+// New function to get all user's images
+const getUserImages = async (req, res) => {
+    try {
+        if (!req.user || !req.user._id) {
+            return res.status(401).json({
+                success: false,
+                message: "Authentication required"
+            });
+        }
+
+        const images = await Color.find({ userId: req.user._id })
+            .sort({ createdAt: -1 }) // Sort by newest first
+            .select('imageUrl cloudinaryId createdAt'); // Select only needed fields
+
+        return res.status(200).json({
+            success: true,
+            count: images.length,
+            images
+        });
+
+    } catch (error) {
+        console.error("Error fetching user images:", error);
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Error retrieving images"
+        });
+    }
+};
+
+module.exports = { uploadImage, getUserImages };

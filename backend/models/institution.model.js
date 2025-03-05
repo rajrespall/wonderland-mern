@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const institutionSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    required: true,
-    unique: true
-  },
   name: {
     type: String,
     required: true
@@ -15,8 +10,14 @@ const institutionSchema = new mongoose.Schema({
     required: true
   },
   mapEmbed: {
-    type: String
-  }
+    type: String,
+    required: true
+  },
+  institutionImage: {
+    type: String,
+    required: true,
+    default: ''
+  },
 });
 
 const Institution = mongoose.model('Institution', institutionSchema);

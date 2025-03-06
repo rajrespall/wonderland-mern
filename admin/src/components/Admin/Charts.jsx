@@ -1,8 +1,9 @@
-import React, {useEffect, useRef} from "react";
-import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from "@mui/material";
+import React, {useEffect, useRef, useState} from "react";
+import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Menu, MenuItem, Box } from "@mui/material";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from "recharts";
 import useChartStore from "../../../Store/chartStore"; // Import Zustand store
 import { useNavigate } from "react-router-dom";
+import PDF from "./Pdf"; // ✅ Import PDF component
 
 // import jsPDF from "jspdf";
 // import html2canvas from "html2canvas";
@@ -41,7 +42,10 @@ const tableData = [
 
 export default function Charts() {
   const { usersPerMonth, fetchUsersPerMonth,  gamesPlayed, fetchGamesPlayed, gameAnalytics, fetchGameAnalytics, fetchGamesPlayedByDifficulty, gamesPlayedByDifficulty, fetchReviewsPerMonth, reviewsPerMonth  } = useChartStore();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const pdfRef = useRef(); // ✅ Create ref for PDF component
+  const [pdfVisible, setPdfVisible] = useState(false); // ✅ State to toggle PDF visibility
+    const [anchorEl, setAnchorEl] = useState(null); 
 
   // const pdfRef = useRef();
 
@@ -53,6 +57,18 @@ export default function Charts() {
     fetchReviewsPerMonth(); // ✅ Fetch Reviews Data
 
   }, []);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+};
+
+const handleClose = (option) => {
+    setAnchorEl(null);
+    if (option === "Enable PDF Export") {
+        setPdfVisible(true); // ✅ Show PDF component
+    } else if (option === "Disable PDF Export") {
+        setPdfVisible(false); // ✅ Hide PDF component
+    }
+};
 
   // const exportToPDF = () => {
   //   const input = pdfRef.current;
@@ -87,12 +103,14 @@ export default function Charts() {
   //     pdf.save("game_analytics_report.pdf");
   //   });
   // };
-  
+
 
   return (
 
+   <>
+    
    
-  
+
     <Paper
 
       elevation={3}
@@ -306,14 +324,34 @@ export default function Charts() {
 
 
       {/* </div> */}
-          <Button
-      variant="contained"
-      sx={{ mt: 3, backgroundColor: "#0457a4", color: "#fff" }}
-      onClick={() => navigate("/pdf")} // Navigate to the PDF page
-    >
-      Export as PDF
-    </Button>
+    
+
+      <Box display="flex" justifyContent={pdfVisible ? "space-between" : "flex-start"} alignItems="center" sx={{ mt: 3 }}>
+
+           <Button variant="contained" sx={{ mt: 3, backgroundColor: "#0457a4", color: "#fff" }} onClick={handleClick}>
+                    PDF Options
+                </Button>
+                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => handleClose(null)}>
+                    <MenuItem onClick={() => handleClose("Enable PDF Export")}>Enable PDF Export</MenuItem>
+                    <MenuItem onClick={() => handleClose("Disable PDF Export")}>Disable PDF Export</MenuItem>
+                </Menu> 
+
+                {pdfVisible && (
+                     <Button
+                     variant="contained"
+                     sx={{ backgroundColor: "#28a745", color: "#fff", ml: "auto" }} // Moves it to the right
+                     onClick={() => pdfRef.current?.exportToPDF()}
+                 >
+                     Export as PDF
+                 </Button>
+                 
+                    )}
+
+                    </Box>
+                 {pdfVisible && <PDF ref={pdfRef} />}
+                 
     </Paper>
+    </>
   );
   
 }

@@ -4,9 +4,13 @@ import {
   Modal, TextField, Grid, IconButton
 } from "@mui/material";
 import { LocationOn, Star, Message, Group, Report, Close, AddAPhoto } from "@mui/icons-material";
+import { PictureAsPdf } from '@mui/icons-material';
 import useAuthStore from "../../store/authStore";
 import useProfileStore from "../../store/profileStore";
-import AssessmentHistory from "./AssessmentHistory";  // Add this import
+import AssessmentHistory from "./AssessmentHistory";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import CombinedReport from "./CombinedReport";
 
 function CustomTabPanel({ children, value, index }) {
   return (
@@ -232,39 +236,14 @@ export default function UserProfileCard() {
               View your child's assessment history below. You can see previous assessments and track progress over time.
             </Typography>
           </Box>
-          
+    
           {/* Add the AssessmentHistory component */}
           {user && user.id && (
             <AssessmentHistory userId={user.id} />
           )}
           
           <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-            <Button 
-              variant="contained" 
-              startIcon={<Message />}
-              sx={{
-                bgcolor: "#0457a4",
-                borderRadius: '25px',
-                fontFamily: 'Poppins',
-              }}
-            >
-              Edit Child Details
-            </Button>
-            
-            {/* Add Reassessment Button */}
-            <Button 
-              variant="contained" 
-              sx={{
-                backgroundColor: '#5da802',
-                '&:hover': { backgroundColor: '#4c8a00' },
-                borderRadius: '25px',
-                fontFamily: 'Poppins',
-                padding: '6px 16px',
-              }}
-              onClick={() => window.location.href = '/communication'}  // Simple navigation
-            >
-              Start Reassessment
-            </Button>
+            < CombinedReport />
           </Box>
         </CustomTabPanel>
         

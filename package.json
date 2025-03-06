@@ -1,0 +1,31 @@
+{
+  "name": "wonderland-mern",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "start:admin": "cd admin && npm run dev",
+    "start:wondercards": "cd wondercards && npm run dev",
+    "start:wondercolor": "cd wondercolor && npm run dev",
+    "start:wondermatch": "cd wondermatch && npm run dev",
+    "start:wonderpuz": "cd wonderpuz && npm run dev",
+    "start": "concurrently --names \"BACKEND,FRONTEND,ADMIN,CARDS,COLOR,MATCH,PUZZLE\" --prefix-colors \"blue.bold,green.bold,red.bold,yellow.bold,magenta.bold,cyan.bold,white.bold\" \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:admin\" \"npm run start:wondercards\" \"npm run start:wondercolor\" \"npm run start:wondermatch\" \"npm run start:wonderpuz\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajrespall/wonderland-mern.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajrespall/wonderland-mern/issues"
+  },
+  "homepage": "https://github.com/rajrespall/wonderland-mern#readme",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

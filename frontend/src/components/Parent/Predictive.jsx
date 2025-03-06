@@ -361,6 +361,7 @@ if (creativityRecommendation) recommendations.push({ label: "Creativity", text: 
             </Typography>
         )}
     </Box>
+    
         </Box>
     );
 };

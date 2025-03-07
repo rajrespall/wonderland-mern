@@ -21,5 +21,4 @@ const institutionSchema = new mongoose.Schema({
 });
 
 const Institution = mongoose.model('Institution', institutionSchema);
-
 module.exports = Institution; 

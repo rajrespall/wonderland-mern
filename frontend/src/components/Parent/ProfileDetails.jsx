@@ -138,7 +138,7 @@ export default function UserProfileCard() {
         <Divider sx={{ my: 2 }} />
 
         <Tabs value={value} onChange={handleChange} aria-label="profile tabs">
-          <Tab label="MY ABOUT" />
+          <Tab label="MY PROFILE" />
           <Tab label="CHILD DETAILS" />
           <Tab label="SETTINGS" />
         </Tabs>

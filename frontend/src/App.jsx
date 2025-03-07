@@ -24,11 +24,12 @@ import Social from './screens/Parent/Resources/Social'
 
 import Dashboard from './screens/Children/Dashboard'
 import AboutUs from './screens/AboutUs'
+import AllDonations from './screens/Parent/Donations/AllDonations'
+import Institutions from './screens/Parent/Institutions/Institutions'
+import InstitutionsDetails from './screens/Parent/Institutions/InstitutionDetails'
 
 import ProtectedAssessmentRoute from './components/ProtectedRoutes/ProtectedAssessmentRoute'
 import PublicRoute from './components/ProtectedRoutes/PublicRoute';
-import Institutions from './screens/Parent/Institutions/Institutions'
-import InstitutionsDetails from './screens/Parent/Institutions/InstitutionDetails'
 
 import VerifyEmail from './screens/VerifyEmail';
 import ForgotPassword from './screens/ForgotPassword';
@@ -45,6 +46,7 @@ function App() {
           <Route path='/home' element={<ParentPage />} />
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/institutions' element={<Institutions />} />
+          <Route path='/donations' element={<AllDonations />} />
           <Route path="/institutions/:id" element={<InstitutionsDetails />} />
           <Route path='/resources' element={<Resources />} />
           <Route path='/resources/communication' element={<Communication />} />

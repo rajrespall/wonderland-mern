@@ -17,6 +17,7 @@ const puzRoutes = require('./routes/puz.route');
 const profileRoutes = require('./routes/profile.route.js'); 
 const predictiveRoutes = require('./routes/predictive.route.js'); 
 const institutionRoutes = require('./routes/institution.route.js'); 
+const donationRoutes = require('./routes/donation.route.js');
 const chartRoutes = require('./routes/chart.route.js');
 const progressRoutes = require('./routes/progress.route.js');
 
@@ -66,6 +67,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use('/api/puz', puzRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/institutions', institutionRoutes);
+app.use('/api/donations', donationRoutes);
 app.use('/api/admin', chartRoutes);
 app.use('/api/predictive', predictiveRoutes);
 app.use('/api/progress', progressRoutes);

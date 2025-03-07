@@ -7,6 +7,7 @@ import DashboardCharts from '../../components/Admin/Dashboard';
 import AdminReviews from '../../components/Admin/Reviews';
 import Donations from '../../components/Admin/Donations';
 import Charts from '../../components/Admin/Charts';
+import Institution from '../../components/Admin/Institution';
 import Users from '../../components/Admin/Users';
 
 
@@ -43,7 +44,9 @@ const AdminHome = () => {
         return <Donations />;
       case 'Charts':
         return <Charts />;
-        case 'Users':
+      case 'Institutions':
+        return <Institution />;
+      case 'Users':
           return <Users />;
         default:  
           return <DashboardCharts />;

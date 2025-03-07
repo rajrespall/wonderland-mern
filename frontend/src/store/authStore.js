@@ -9,6 +9,7 @@ const useAuthStore = create((set) => ({
   loading: false,
   error: null,
 
+  
   login: async (email, password) => {
     try {
       set({ loading: true, error: null });
@@ -17,6 +18,16 @@ const useAuthStore = create((set) => ({
         { email, password },
         { withCredentials: true }
       );
+
+      
+      if (response.data.requireReEnable) {
+        console.log("User needs re-enablement.");
+        set({ loading: false });
+        return {
+            requireReEnable: true,
+            email: response.data.email
+        };
+    }
 
       // Handle case where verification is required
       if (response.data.requireVerification) {
@@ -39,10 +50,22 @@ const useAuthStore = create((set) => ({
       return userData;
 
     } catch (error) {
-      set({ 
-        error: error.response?.data?.error || 'Login failed',
-        loading: false 
+      console.error("Auth Store Login Error:", error.response?.data || error);
+
+      // 🔥 Fix: Handle `403` response (FORBIDDEN) for inactive users
+      if (error.response?.status === 403 && error.response.data.requireReEnable) {
+          console.log("Redirecting to re-enable page...");
+          return {
+              requireReEnable: true,
+              email: error.response.data.email
+          };
+      }
+
+      set({
+          error: error.response?.data?.error || 'Login failed',
+          loading: false
       });
+
       throw error;
     }
   },

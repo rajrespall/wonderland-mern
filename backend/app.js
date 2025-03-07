@@ -19,6 +19,7 @@ const predictiveRoutes = require('./routes/predictive.route.js');
 const institutionRoutes = require('./routes/institution.route.js'); 
 const chartRoutes = require('./routes/chart.route.js');
 const progressRoutes = require('./routes/progress.route.js');
+const UserRoute = require ('./routes/admin.user.route.js');
 
 
 const ALLOWED_ORIGINS = [
@@ -69,5 +70,7 @@ app.use('/api/institutions', institutionRoutes);
 app.use('/api/admin', chartRoutes);
 app.use('/api/predictive', predictiveRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/users', UserRoute);
+
 
 module.exports = app;

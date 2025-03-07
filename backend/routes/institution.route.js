@@ -1,14 +1,14 @@
 const express = require('express');
-const { createInstitution, getAllInstitutions, getInstitutionById, updateInstitution, deleteInstitution } = require('../controllers/institution.controller');
+const { createInstitution, getAllInstitutions, getInstitutionById, updateInstitution, deleteInstitution, upload } = require('../controllers/institution.controller');
 const verifyToken = require('../middleware/auth.middleware.js');
 
 
 const router = express.Router();
 
-router.post('/', createInstitution);
-router.get('/', verifyToken, getAllInstitutions);
-router.get('/:id', verifyToken, getInstitutionById);
-router.put('/:id', verifyToken,  updateInstitution);
-router.delete('/:id', verifyToken, deleteInstitution);
+router.post('/', upload.single('image'), createInstitution);
+router.get('/', getAllInstitutions);
+router.get('/:id', getInstitutionById);
+router.put('/:id', upload.single('image'),  updateInstitution);
+router.delete('/:id', deleteInstitution);
 
 module.exports = router;

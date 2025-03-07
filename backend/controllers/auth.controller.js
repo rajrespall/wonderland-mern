@@ -5,7 +5,7 @@ const  adminAuth  = require('firebase-admin');
 const jwt = require('jsonwebtoken');
 const { generateTokenandSetCookie } = require('../utils/generateTokenandSetCookie');
 const { generateOTP, createOTPExpiry } = require('../utils/otpUtils');
-const { sendOTPEmail, sendPasswordResetEmail } = require('../config/mailtrap');
+const { sendOTPEmail, sendPasswordResetEmail, sendReEnableOTPEmail } = require('../config/mailtrap');
 
 adminAuth.initializeApp({
   credential: adminAuth.credential.cert(require('../config/serviceAccountKey.json')),
@@ -29,6 +29,36 @@ const googleLogin = async (req, res) => {
         hasCompletedAssessment: false  
       });
     }
+
+    if (user.isDisabled === "disabled") {
+      return res.status(403).json({ error: "Your account has been disabled. Please contact support." });
+  }
+
+  // ✅ If account is inactive, send OTP and require re-enable
+  if (user.isDisabled === "inactive") {
+      const otp = generateOTP();
+      user.verificationOTP = otp;
+      user.otpExpires = createOTPExpiry();
+      await user.save();
+
+      // ✅ Send reactivation email
+      await sendReEnableOTPEmail(user.email, otp, "Re-enable Your Account",
+        `<h2>Reactivate Your Account</h2>
+        <p>Your account was temporarily disabled due to inactivity.</p>
+        <p>Please use this OTP to reactivate: <strong>${otp}</strong></p>`);
+
+      return res.status(403).json({
+          message: "Your account was inactive for too long. A reactivation code has been sent to your email.",
+          requireReEnable: true,
+          email: user.email
+      });
+  }
+
+  // ✅ Update last login and mark account as active
+  user.lastLogin = new Date();
+  user.isDisabled = "enabled";
+  await user.save();
+
 
     generateTokenandSetCookie(res, user._id);
     // User details
@@ -102,12 +132,42 @@ const loginWithEmail = async (req, res) => {
   try {
       // Firebase authentication
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
+
       // Get user from MongoDB
       const user = await User.findOne({ email });
       if (!user) {
           throw new Error('User not found in database');
       }
+
+      if (user.isDisabled === "disabled") {
+        return res.status(403).json({ error: "Your account has been disabled. Please contact support." });
+    }
+
+    // ✅ If account is inactive, send OTP and require re-enable
+    if (user.isDisabled === "inactive") {
+        const otp = generateOTP();
+        user.verificationOTP = otp;
+        user.otpExpires = createOTPExpiry();
+        await user.save();
+
+        // ✅ Send reactivation email
+        await sendReEnableOTPEmail(user.email, otp, "Re-enable Your Account",
+          `<h2>Reactivate Your Account</h2>
+          <p>Your account was temporarily disabled due to inactivity.</p>
+          <p>Please use this OTP to reactivate: <strong>${otp}</strong></p>`);
+
+        return res.status(403).json({
+            message: "Your account was inactive for too long. A reactivation code has been sent to your email.",
+            requireReEnable: true,
+            email: user.email
+        });
+    }
+
+    // ✅ Update last login and mark account as active
+    user.lastLogin = new Date();
+    user.isDisabled = "enabled";
+    await user.save();
+ 
 
        // Check if user is verified
        if (!user.isVerified) {
@@ -281,6 +341,43 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const reEnableAccount = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      if (user.isDisabled !== "inactive") {
+          return res.status(400).json({ error: "Your account is not auto-disabled." });
+      }
+
+      if (!user.verificationOTP || user.verificationOTP !== otp || new Date() > user.otpExpires) {
+          return res.status(400).json({ error: "Invalid or expired OTP." });
+      }
+
+      // ✅ Re-enable account
+      user.isDisabled = "enabled";
+      user.verificationOTP = null;
+      user.otpExpires = null;
+      user.lastLogin = new Date(); // Update last login time
+      await user.save();
+
+      return res.status(200).json({ 
+          message: "Your account has been re-enabled. You may now log in.", 
+          user: { hasCompletedAssessment: user.hasCompletedAssessment }  // ✅ Return user status
+      });
+
+  } catch (error) {
+      console.error("Re-enable error:", error);
+      res.status(500).json({ error: "Failed to re-enable account." });
+  }
+};
+
+
 module.exports = { 
   googleLogin, 
   registerWithEmail, 
@@ -288,5 +385,6 @@ module.exports = {
   logout, 
   verifyEmail, 
   resendOTP,
-  forgotPassword 
+  forgotPassword,
+  reEnableAccount
 };

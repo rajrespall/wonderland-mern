@@ -243,33 +243,7 @@ export default function UserProfileCard() {
           )}
           
           <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-            <Button 
-              variant="contained" 
-              startIcon={<Message />}
-              sx={{
-                bgcolor: "#0457a4",
-                borderRadius: '25px',
-                fontFamily: 'Poppins',
-              }}
-            >
-              Edit Child Details
-            </Button>
-            
             < CombinedReport />
-            {/* Add Reassessment Button */}
-            <Button 
-              variant="contained" 
-              sx={{
-                backgroundColor: '#5da802',
-                '&:hover': { backgroundColor: '#4c8a00' },
-                borderRadius: '25px',
-                fontFamily: 'Poppins',
-                padding: '6px 16px',
-              }}
-              onClick={() => window.location.href = '/communication'}  // Simple navigation
-            >
-              Start Reassessment
-            </Button>
           </Box>
         </CustomTabPanel>
         

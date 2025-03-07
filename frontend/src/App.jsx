@@ -32,6 +32,7 @@ import InstitutionsDetails from './screens/Parent/Institutions/InstitutionDetail
 
 import VerifyEmail from './screens/VerifyEmail';
 import ForgotPassword from './screens/ForgotPassword';
+import ReEnable from './screens/Re-Enable';
 
 function App() {
 
@@ -62,6 +63,7 @@ function App() {
 
           {/* Public routes with authentication check */}
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/re-enable" element={<ReEnable />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path='/login' element={
             <PublicRoute>

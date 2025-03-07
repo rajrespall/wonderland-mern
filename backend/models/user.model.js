@@ -35,6 +35,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isDisabled: { 
+        type: String, 
+        enum: ["enabled", "inactive", "disabled"], 
+        default: "enabled" 
+    },
     isVerified: {
         type: Boolean,
         default: false
@@ -46,6 +51,10 @@ const userSchema = new mongoose.Schema({
     otpExpires: {
         type: Date,
         default: null
+    },
+    lastLogin: {
+        type: Date,
+        default: Date.now
     }
 }, {
     timestamps: true

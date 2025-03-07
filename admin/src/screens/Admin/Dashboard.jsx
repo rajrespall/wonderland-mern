@@ -7,6 +7,8 @@ import DashboardCharts from '../../components/Admin/Dashboard';
 import AdminReviews from '../../components/Admin/Reviews';
 import Donations from '../../components/Admin/Donations';
 import Charts from '../../components/Admin/Charts';
+import Users from '../../components/Admin/Users';
+
 
 const drawerWidth = 260;
 
@@ -41,6 +43,8 @@ const AdminHome = () => {
         return <Donations />;
       case 'Charts':
         return <Charts />;
+        case 'Users':
+          return <Users />;
         default:  
           return <DashboardCharts />;
     }

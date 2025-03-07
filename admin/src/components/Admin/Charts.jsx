@@ -107,7 +107,7 @@ const handleClose = (option) => {
 
   return (
 
-   <>
+   
     
    
 
@@ -351,7 +351,7 @@ const handleClose = (option) => {
                  {pdfVisible && <PDF ref={pdfRef} />}
                  
     </Paper>
-    </>
+    
   );
   
 }

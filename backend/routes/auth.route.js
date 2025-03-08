@@ -8,9 +8,13 @@ const {
   resendOTP,
   forgotPassword ,
   reEnableAccount
+    // getUserById
 } = require("../controllers/auth.controller.js");
 
 const router = express.Router();
+
+
+// router.get("/:userId", getUserById);
 
 router.post("/google-login", googleLogin);
 router.post("/register", registerWithEmail);

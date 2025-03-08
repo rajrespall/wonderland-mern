@@ -11,6 +11,40 @@ adminAuth.initializeApp({
   credential: adminAuth.credential.cert(require('../config/serviceAccountKey.json')),
 });
 
+
+// const getUserById = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const user = await User.findById(userId);
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // 🚨 If user is disabled, clear token and send redirect instruction 🚨
+//     if (user.isDisabled === "disabled") {
+//       res.clearCookie("token");
+//       return res.status(403).json({ 
+//         error: "Your account has been disabled. Logging out...",
+//         redirect: "/login" // ✅ Tell frontend to redirect
+//       });
+//     }
+
+//     // ✅ Return user details
+//     res.status(200).json({
+//       id: user._id,
+//       username: user.username,
+//       email: user.email,
+//       isDisabled: user.isDisabled,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching user:", error);
+//     res.status(500).json({ message: "Error fetching user data" });
+//   }
+// };
+
+
+
 const googleLogin = async (req, res) => {
   const { idToken } = req.body;  
 
@@ -387,4 +421,5 @@ module.exports = {
   resendOTP,
   forgotPassword,
   reEnableAccount
+  // getUserById
 };

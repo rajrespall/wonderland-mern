@@ -133,6 +133,30 @@ const useAuthStore = create((set) => ({
       throw error;
     }
   },
+
+//    checkUserStatus: async () => {
+//     const storedUser = JSON.parse(localStorage.getItem("user"));
+//     if (!storedUser) return;
+
+//     try {
+//         const response = await axios.get(`http://localhost:5000/api/auth/${storedUser.id}`, {
+//             withCredentials: true,
+//         });
+
+//         // 🚨 If user is disabled, redirect & log out
+//         if (response.data.isDisabled === "disabled") {
+//             console.log("🚨 User is disabled. Redirecting and logging out...");
+//             window.location.href = "/login"; // ✅ Redirect first
+
+//             setTimeout(async () => {
+//                 await useAuthStore.getState().logout(); // ✅ Logout after redirect
+//             }, 500);
+//         }
+//     } catch (error) {
+//         console.error("Error checking user status:", error);
+//     }
+// },
+
   
   logout: async () => {
     try {
@@ -156,4 +180,8 @@ const useAuthStore = create((set) => ({
   }
 }));
 
+
+// window.addEventListener("load", () => {
+//   useAuthStore.getState().checkUserStatus();
+// });
 export default useAuthStore;

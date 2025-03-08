@@ -3,6 +3,8 @@ import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContai
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from "recharts";
 import useChartStore from "../../../Store/chartStore"; // Import Zustand store
 import { useNavigate } from "react-router-dom";
+import { Modal } from "@mui/material";
+
 import PDF from "./Pdf"; // ✅ Import PDF component
 
 // import jsPDF from "jspdf";
@@ -44,8 +46,8 @@ export default function Charts() {
   const { usersPerMonth, fetchUsersPerMonth,  gamesPlayed, fetchGamesPlayed, gameAnalytics, fetchGameAnalytics, fetchGamesPlayedByDifficulty, gamesPlayedByDifficulty, fetchReviewsPerMonth, reviewsPerMonth  } = useChartStore();
   // const navigate = useNavigate();
   const pdfRef = useRef(); // ✅ Create ref for PDF component
-  const [pdfVisible, setPdfVisible] = useState(false); // ✅ State to toggle PDF visibility
-    const [anchorEl, setAnchorEl] = useState(null); 
+  const [modalOpen, setModalOpen] = useState(false);
+
 
   // const pdfRef = useRef();
 
@@ -57,18 +59,9 @@ export default function Charts() {
     fetchReviewsPerMonth(); // ✅ Fetch Reviews Data
 
   }, []);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-};
 
-const handleClose = (option) => {
-    setAnchorEl(null);
-    if (option === "Enable PDF Export") {
-        setPdfVisible(true); // ✅ Show PDF component
-    } else if (option === "Disable PDF Export") {
-        setPdfVisible(false); // ✅ Hide PDF component
-    }
-};
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
 
   // const exportToPDF = () => {
   //   const input = pdfRef.current;
@@ -326,16 +319,17 @@ const handleClose = (option) => {
       {/* </div> */}
     
 
-      <Box display="flex" justifyContent={pdfVisible ? "space-between" : "flex-start"} alignItems="center" sx={{ mt: 3 }}>
 
-           <Button variant="contained" sx={{ mt: 3, backgroundColor: "#0457a4", color: "#fff" }} onClick={handleClick}>
-                    PDF Options
-                </Button>
+
+      <Button variant="contained" sx={{ mt: 3, backgroundColor: "#0457a4", color: "#fff" }} onClick={handleOpenModal}>
+    Show PDF Preview
+</Button>
+{/* 
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => handleClose(null)}>
                     <MenuItem onClick={() => handleClose("Enable PDF Export")}>Enable PDF Export</MenuItem>
                     <MenuItem onClick={() => handleClose("Disable PDF Export")}>Disable PDF Export</MenuItem>
-                </Menu> 
-
+                </Menu>  */}
+{/* 
                 {pdfVisible && (
                      <Button
                      variant="contained"
@@ -345,10 +339,56 @@ const handleClose = (option) => {
                      Export as PDF
                  </Button>
                  
-                    )}
+                    )} */}
 
-                    </Box>
-                 {pdfVisible && <PDF ref={pdfRef} />}
+                    
+<Modal open={modalOpen} onClose={handleCloseModal} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <Paper 
+        sx={{ 
+            width: "80%", 
+            maxHeight: "90vh", 
+            overflowY: "auto", 
+            p: 4, 
+            position: "relative", 
+            borderRadius: "12px", // Rounded corners
+            boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)", // Soft shadow
+            background: "rgba(255, 255, 255, 0.95)", // Subtle transparency effect
+            backdropFilter: "blur(10px)", // Background blur
+            animation: "fadeIn 0.3s ease-in-out" // Smooth fade-in animation
+        }}
+    >
+        {/* Close Button */}
+        <Button 
+            onClick={handleCloseModal} 
+            sx={{ 
+                position: "absolute", 
+                top: 12, 
+                right: 12, 
+                backgroundColor: "#ff4d4d", 
+                color: "white", 
+                "&:hover": { backgroundColor: "#cc0000" }
+            }}
+        >
+            ✖
+        </Button>
+
+        {/* PDF Content */}
+        <PDF ref={pdfRef} />
+
+        {/* Export Button Positioned at Bottom Right */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+            <Button
+                variant="contained"
+                sx={{ backgroundColor: "#28a745", color: "#fff", fontWeight: "bold", px: 3, py: 1 }}
+                onClick={() => pdfRef.current?.exportToPDF()}
+            >
+                Export as PDF
+            </Button>
+        </Box>
+    </Paper>
+</Modal>
+
+
                  
     </Paper>
     

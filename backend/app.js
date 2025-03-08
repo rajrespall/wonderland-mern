@@ -20,7 +20,7 @@ const institutionRoutes = require('./routes/institution.route.js');
 const chartRoutes = require('./routes/chart.route.js');
 const progressRoutes = require('./routes/progress.route.js');
 const UserRoute = require ('./routes/admin.user.route.js');
-
+const adminAuthRoutes = require ('./routes/admin.auth.route.js');
 
 const ALLOWED_ORIGINS = [
     'http://localhost:5173', //main  
@@ -71,6 +71,8 @@ app.use('/api/admin', chartRoutes);
 app.use('/api/predictive', predictiveRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/users', UserRoute);
+app.use('/api/admin-auth', adminAuthRoutes);
+
 
 
 module.exports = app;

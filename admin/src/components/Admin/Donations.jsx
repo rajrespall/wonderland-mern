@@ -28,25 +28,24 @@ export default function Donations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-useEffect(() => {
+  useEffect(() => {
     const fetchDonors = async () => {
-        try {
-            const response = await axios.get("http://localhost:5000/api/donations", {
-                withCredentials: true
-            });
+      try {
+        const response = await axios.get("http://localhost:5000/api/donations", {
+          withCredentials: true
+        });
 
-            setDonors(response.data);
-        } catch (err) {
-            console.error("Error fetching donors:", err);
-            setError("Failed to load donors. Please try again.");
-        } finally {
-            setLoading(false);
-        }
+        setDonors(response.data);
+      } catch (err) {
+        console.error("Error fetching donors:", err);
+        setError("Failed to load donors. Please try again.");
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchDonors();
-}, []);
-
+  }, []);
 
   const handleViewDetails = (donor) => {
     setSelectedDonor(donor);
@@ -57,6 +56,10 @@ useEffect(() => {
     setOpen(false);
     setSelectedDonor(null);
   };
+
+  const topDonors = donors
+    .sort((a, b) => b.donationAmount - a.donationAmount)
+    .slice(0, 2); 
 
   return (
     <Box sx={{ p: 3, bgcolor: "#f9f9f9", borderRadius: 3 }}>
@@ -81,13 +84,13 @@ useEffect(() => {
             </Box>
           ) : error ? (
             <Alert severity="error" sx={{ textAlign: "center" }}>{error}</Alert>
-          ) : donors.length === 0 ? (
+          ) : topDonors.length === 0 ? (
             <Typography textAlign="center" color="textSecondary">
               No donations available.
             </Typography>
           ) : (
             <Grid container spacing={2} justifyContent="center">
-              {donors.map((donation) => (
+              {topDonors.map((donation) => (
                 <Grid item xs={12} sm={6} md={3} key={donation._id}>
                   <Paper
                     sx={{

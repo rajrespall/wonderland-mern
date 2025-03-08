@@ -6,7 +6,7 @@ import ParentNav from "../../../components/ParentNav";
 import InstitutionCard from "../../../components/Parent/Institutions/InsDetails";
 import institutionimage from "../../../assets/institutions1.jpg";
 
-export default function InstitutionsDetails() {
+export default function InstitutionDetails() {
   const { id } = useParams();
   const [institution, setInstitution] = useState(null);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ export default function InstitutionsDetails() {
   useEffect(() => {
     const fetchInstitution = async () => {
       try {
-        const response = await axios.get(`/api/institutions/${id}`);
+        const response = await axios.get(`http://localhost:5000/api/institutions/${id}`);
         setInstitution(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.message : "Error fetching institution");
@@ -53,7 +53,7 @@ export default function InstitutionsDetails() {
         <ParentNav />
         <CardMedia sx={{ mt: 4 }}>
           <img
-            src={institutionimage}
+            src={institution.institutionImage}
             alt="institution"
             style={{ width: "100%", height: "400px", objectFit: "cover" }}
           />
@@ -61,7 +61,7 @@ export default function InstitutionsDetails() {
         <Container maxWidth="100%" sx={{ mt: 4 }}>
           <InstitutionCard
             title={institution.name}
-            description="Now that your eyes are open, make the sun jealous with your burning passion to start the day. Make the sun jealous or stay in bed."
+            description={institution.description}
             address={institution.address}
             mapEmbed={institution.mapEmbed}
           />

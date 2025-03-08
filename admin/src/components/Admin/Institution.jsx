@@ -9,6 +9,7 @@ const Institution = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [newInstitution, setNewInstitution] = useState({
     name: "",
+    description: "",
     address: "",
     mapEmbed: "",
     institutionImage: null,
@@ -29,7 +30,7 @@ const Institution = () => {
 
   const handleOpen = () => {
     setEditMode(false);
-    setNewInstitution({ name: "", address: "", mapEmbed: "", institutionImage: null });
+    setNewInstitution({ name: "", description: "", address: "", mapEmbed: "", institutionImage: null });
     setOpen(true);
   };
 
@@ -38,6 +39,7 @@ const Institution = () => {
     setSelectedId(institution._id);
     setNewInstitution({
       name: institution.name,
+      description: institution.description,
       address: institution.address,
       mapEmbed: institution.mapEmbed,
       institutionImage: institution.institutionImage, 
@@ -64,6 +66,7 @@ const Institution = () => {
     
     const formData = new FormData();
     formData.append("name", newInstitution.name);
+    formData.append("description", newInstitution.description);
     formData.append("address", newInstitution.address);
     formData.append("mapEmbed", newInstitution.mapEmbed);
   
@@ -115,6 +118,7 @@ const Institution = () => {
         <Box sx={{ ...modalStyle }}> 
           <form onSubmit={handleSubmit}>
             <TextField label="Name" name="name" value={newInstitution.name} onChange={handleChange} fullWidth margin="normal" required />
+            <TextField label="Description" name="description" value={newInstitution.description} onChange={handleChange} fullWidth margin="normal" required />
             <TextField label="Address" name="address" value={newInstitution.address} onChange={handleChange} fullWidth margin="normal" required />
             <TextField label="Map Embed URL" name="mapEmbed" value={newInstitution.mapEmbed} onChange={handleChange} fullWidth margin="normal" required />
             <input type="file" name="image" onChange={handleImageChange} />
@@ -130,6 +134,7 @@ const Institution = () => {
           <TableHead>
             <TableRow>
               <TableCell><b>Name</b></TableCell>
+              <TableCell><b>Description</b></TableCell>
               <TableCell><b>Address</b></TableCell>
               <TableCell><b>Map</b></TableCell>
               <TableCell><b>Image</b></TableCell>
@@ -140,6 +145,7 @@ const Institution = () => {
             {institutions.map((institution) => (
               <TableRow key={institution._id}>
                 <TableCell>{institution.name}</TableCell>
+                <TableCell>{institution.description}</TableCell>
                 <TableCell>{institution.address}</TableCell>
                 <TableCell>
                   <a href={institution.mapEmbed} target="_blank" rel="noopener noreferrer">View Map</a>

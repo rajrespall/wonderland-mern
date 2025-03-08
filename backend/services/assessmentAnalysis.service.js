@@ -7,8 +7,7 @@ const analyzeAssessment = (assessmentData) => {
     emotional: analyzeDomain(emotional, 3, "Emotional Responsiveness"),
     communication: analyzeDomain(communication, 4, "Speech, Language and Communication"),
     routine: analyzeDomain(routine, 3, "Behavior Patterns"),
-    sensory: analyzeDomain(sensory, 3, "Sensory Aspects"),
-    cognitive: { severity: 0, needsAttention: false, score: 0, label: "Cognitive Component" }
+    sensory: analyzeDomain(sensory, 3, "Sensory Aspects")
   };
 
   // Calculate overall ISAA score

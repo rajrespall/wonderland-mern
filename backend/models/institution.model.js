@@ -5,6 +5,10 @@ const institutionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  description: {
+    type: String,
+    required: true
+  },
   address: {
     type: String,
     required: true
@@ -21,5 +25,4 @@ const institutionSchema = new mongoose.Schema({
 });
 
 const Institution = mongoose.model('Institution', institutionSchema);
-
 module.exports = Institution; 

@@ -57,6 +57,19 @@ const ParentNav = () => {
             Institutions
           </Button>
           <Button
+            onClick={() => navigate('/donations')}
+            sx={{
+              fontWeight: 'bold', 
+              textTransform: "none",
+              fontFamily: "Poppins",
+              fontSize: "16px",
+              color: isActive('/institutions') ? "#243558" : "#0457a4",
+              "&:hover": { color: "black" },
+            }}
+          >
+            Donations
+          </Button>
+          <Button
             onClick={() => navigate('/aboutus')}
             sx={{
               fontWeight: 'bold', 

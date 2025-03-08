@@ -59,7 +59,7 @@ const Question5 = () => {
         
         setAnswers(updatedAnswers);
         
-        localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);
+        localStorage.setItem(`Routine_${currentQuestion}_answer`, index + 1);
         
         if (currentQuestion < questions.length - 1) {
           setCurrentQuestion(currentQuestion + 1);

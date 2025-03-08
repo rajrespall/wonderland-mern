@@ -2,7 +2,7 @@ const Admin = require("../models/admin.model.js");
 const { adminAuth } = require("../config/firebase-admin");
 const { generateTokenandSetCookie } = require("../utils/generateTokenandSetCookie");
 
-// Admin login function
+
 const loginAdmin = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -12,7 +12,7 @@ const loginAdmin = async (req, res) => {
 
     const userRecord = await adminAuth.getUser(admin.password);
 
-    // Generate JWT token and set it in cookies
+
     const token = generateTokenandSetCookie(res, admin._id);
 
     res.status(200).json({ message: "Login successful", admin });
@@ -22,7 +22,6 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-// ✅ New function to check authentication status
 const checkAuth = async (req, res) => {
   try {
     if (!req.admin) {
@@ -34,7 +33,7 @@ const checkAuth = async (req, res) => {
   }
 };
 
-// ✅ Logout function (Clears cookie)
+
 const logoutAdmin = (req, res) => {
   res.clearCookie("token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" });
   res.status(200).json({ message: "Logout successful" });

@@ -5,7 +5,7 @@ const verifyAdmin = require("../middleware/admin.auth.middleware");
 const router = express.Router();
 
 router.post("/login", loginAdmin);
-router.get("/check-auth", verifyAdmin, checkAuth); // ✅ Check if admin is authenticated
-router.post("/logout", logoutAdmin); // ✅ Clears cookie
+router.get("/check-auth", verifyAdmin, checkAuth); 
+router.post("/logout", logoutAdmin); 
 
 module.exports = router;

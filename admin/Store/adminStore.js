@@ -5,7 +5,7 @@ const useAdminStore = create((set) => ({
   admin: null,
   isAuthenticated: false,
 
-  // Function to check if admin is already authenticated (on page load)
+  
   checkAuth: async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/admin-auth/check-auth", {
@@ -23,7 +23,7 @@ const useAdminStore = create((set) => ({
       const response = await axios.post(
         "http://localhost:5000/api/admin-auth/login",
         { username, password },
-        { withCredentials: true } // ✅ Ensures cookies are stored
+        { withCredentials: true } 
       );
 
       set({ admin: response.data.admin, isAuthenticated: true });

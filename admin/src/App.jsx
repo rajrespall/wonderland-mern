@@ -15,7 +15,7 @@ const App = () => {
   const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
 
   useEffect(() => {
-    checkAuth(); // ✅ Check if admin is already authenticated when the app loads
+    checkAuth(); 
   }, [checkAuth]);
 
   return (
@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/" element={<ProtectedRoute element={<AdminHome />} />} />
         <Route path="/pdf" element={<ProtectedRoute element={<PDF />} />} />
         
-        {/* ✅ Redirect to `/` if already logged in */}
+    
         <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
       </Routes>
     </BrowserRouter>

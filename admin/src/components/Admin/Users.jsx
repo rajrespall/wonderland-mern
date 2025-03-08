@@ -13,7 +13,6 @@ const Users = () => {
         fetchUsers();
     }, []);
 
-    // Define table columns
     const columns = [
         { name: "username", label: "Username", options: { filter: true, sort: true } },
         { name: "email", label: "Email", options: { filter: true, sort: true } },
@@ -67,15 +66,15 @@ const Users = () => {
 
                     switch (user.isDisabled) {
                         case "enabled":
-                            buttonColor = "error"; // Red
+                            buttonColor = "error"; 
                             buttonText = "Disable";
                             break;
                         case "disabled":
-                            buttonColor = "success"; // Green
+                            buttonColor = "success"; 
                             buttonText = "Enable";
                             break;
                         case "inactive":
-                            buttonColor = "warning"; // Yellow
+                            buttonColor = "warning"; 
                             buttonText = "Activate";
                             break;
                         default:
@@ -97,7 +96,7 @@ const Users = () => {
         }
     ];
 
-    // Convert user data for the table
+    
     const formattedUsers = users.map((user) => ({
         _id: user._id,
         username: user.username,
@@ -107,7 +106,7 @@ const Users = () => {
         status: user.isDisabled
     }));
 
-    // Table options
+    
     const options = {
         filterType: "dropdown",
         responsive: "standard",

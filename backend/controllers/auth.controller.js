@@ -68,14 +68,12 @@ const googleLogin = async (req, res) => {
       return res.status(403).json({ error: "Your account has been disabled. Please contact support." });
   }
 
-  // ✅ If account is inactive, send OTP and require re-enable
   if (user.isDisabled === "inactive") {
       const otp = generateOTP();
       user.verificationOTP = otp;
       user.otpExpires = createOTPExpiry();
       await user.save();
 
-      // ✅ Send reactivation email
       await sendReEnableOTPEmail(user.email, otp, "Re-enable Your Account",
         `<h2>Reactivate Your Account</h2>
         <p>Your account was temporarily disabled due to inactivity.</p>
@@ -88,17 +86,15 @@ const googleLogin = async (req, res) => {
       });
   }
 
-  // ✅ Update last login and mark account as active
   user.lastLogin = new Date();
   user.isDisabled = "enabled";
   await user.save();
 
 
     generateTokenandSetCookie(res, user._id);
-    // User details
     res.status(200).json({
       user: {
-        id: user._id,  // MongoDB user ID
+        id: user._id,  
         username: user.username,
         email: user.email,
         firebaseUid: firebaseUid, 
@@ -164,10 +160,8 @@ const loginWithEmail = async (req, res) => {
   const { email, password } = req.body;
   
   try {
-      // Firebase authentication
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-      // Get user from MongoDB
       const user = await User.findOne({ email });
       if (!user) {
           throw new Error('User not found in database');
@@ -177,14 +171,12 @@ const loginWithEmail = async (req, res) => {
         return res.status(403).json({ error: "Your account has been disabled. Please contact support." });
     }
 
-    // ✅ If account is inactive, send OTP and require re-enable
     if (user.isDisabled === "inactive") {
         const otp = generateOTP();
         user.verificationOTP = otp;
         user.otpExpires = createOTPExpiry();
         await user.save();
 
-        // ✅ Send reactivation email
         await sendReEnableOTPEmail(user.email, otp, "Re-enable Your Account",
           `<h2>Reactivate Your Account</h2>
           <p>Your account was temporarily disabled due to inactivity.</p>
@@ -197,15 +189,12 @@ const loginWithEmail = async (req, res) => {
         });
     }
 
-    // ✅ Update last login and mark account as active
     user.lastLogin = new Date();
     user.isDisabled = "enabled";
     await user.save();
  
 
-       // Check if user is verified
        if (!user.isVerified) {
-          // Generate new OTP and send email for unverified users
           const otp = generateOTP();
           const otpExpires = createOTPExpiry();
           
@@ -393,16 +382,15 @@ const reEnableAccount = async (req, res) => {
           return res.status(400).json({ error: "Invalid or expired OTP." });
       }
 
-      // ✅ Re-enable account
       user.isDisabled = "enabled";
       user.verificationOTP = null;
       user.otpExpires = null;
-      user.lastLogin = new Date(); // Update last login time
+      user.lastLogin = new Date(); 
       await user.save();
 
       return res.status(200).json({ 
           message: "Your account has been re-enabled. You may now log in.", 
-          user: { hasCompletedAssessment: user.hasCompletedAssessment }  // ✅ Return user status
+          user: { hasCompletedAssessment: user.hasCompletedAssessment }  
       });
 
   } catch (error) {

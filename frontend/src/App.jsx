@@ -34,6 +34,9 @@ import VerifyEmail from './screens/VerifyEmail';
 import ForgotPassword from './screens/ForgotPassword';
 import ReEnable from './screens/Re-Enable';
 
+
+
+
 function App() {
 
   return (
@@ -59,6 +62,7 @@ function App() {
           {/* Children side */}
              <Route path='/dashboard' element={<Dashboard />} />
           {/* =================================================== */}
+
 
 
           {/* Public routes with authentication check */}

@@ -1,15 +1,15 @@
 import React, {useEffect, useRef,  forwardRef, useImperativeHandle } from "react";
 import { Card, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Box, Divider } from "@mui/material";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, BarChart, Bar, PieChart, Pie, Cell, Legend } from "recharts";
-import useChartStore from "../../../Store/chartStore"; // Import Zustand store
+import useChartStore from "../../../Store/chartStore"; 
 import { useNavigate } from "react-router-dom";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 
-import tupLogo from "../../assets/tup.png"; // Adjust the path based on where you save it
-import wonderlandLogo from "../../assets/logo.png"; // Adjust accordingly
+import tupLogo from "../../assets/tup.png"; 
+import wonderlandLogo from "../../assets/logo.png"; 
 
 
 const dataLine = [
@@ -55,33 +55,33 @@ const PDF = forwardRef((props, ref) => {
     fetchGameAnalytics();
     fetchGamesPlayed(); 
     fetchGamesPlayedByDifficulty();
-    fetchReviewsPerMonth(); // ✅ Fetch Reviews Data
+    fetchReviewsPerMonth(); 
 
   }, []);
 
   const exportToPDF = () => {
     const input = pdfRef.current;
-    const pdf = new jsPDF("p", "mm", "a4"); // A4 Portrait mode
-    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
-    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+    const pdf = new jsPDF("p", "mm", "a4"); 
+    const pageWidth = pdf.internal.pageSize.getWidth(); 
+    const pageHeight = pdf.internal.pageSize.getHeight(); 
     let currentPage = 1;
 
     html2canvas(input, { scale: 3, useCORS: true }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
-        const imgWidth = 190; // Content width to fit within margins
+        const imgWidth = 190;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let yPosition = 60; // Start content below header
+        let yPosition = 60; 
         let remainingHeight = imgHeight;
 
         while (remainingHeight > 0) {
             if (currentPage > 1) {
                 pdf.addPage();
-                yPosition = 20; // Reset Y position for new page
+                yPosition = 20; 
             }
 
-            // **Header (Optimized Logo & Text Positioning)**
-            pdf.addImage(tupLogo, "PNG", 12, 10, 15, 15); // Left logo (Smaller & Top Left)
-            pdf.addImage(wonderlandLogo, "PNG", pageWidth - 27, 10, 15, 15); // Right logo (Smaller & Top Right)
+          
+            pdf.addImage(tupLogo, "PNG", 12, 10, 15, 15); 
+            pdf.addImage(wonderlandLogo, "PNG", pageWidth - 27, 10, 15, 15); 
 
             pdf.setFontSize(14);
             pdf.setFont("times", "bold");
@@ -93,18 +93,18 @@ const PDF = forwardRef((props, ref) => {
             pdf.setFontSize(10);
             pdf.text("Km. 14 East Service Road, Western Bicutan, Taguig City 1630, Metro Manila, Philippines", pageWidth / 2, 30, { align: "center" });
 
-            // **Red Line Separator**
+          
             pdf.setDrawColor(150, 0, 0);
             pdf.setLineWidth(1.5);
-            pdf.line(12, 34, pageWidth - 12, 34); // Adjusted for better spacing
+            pdf.line(12, 34, pageWidth - 12, 34); 
 
-            // **Add Content (Avoid Squeezing)**
+          
             pdf.addImage(imgData, "PNG", 12, yPosition, imgWidth, pageHeight - 90);
 
-            // **Footer (Page Number & Red Line)**
+           
             pdf.setDrawColor(150, 0, 0);
             pdf.setLineWidth(1.5);
-            pdf.line(12, pageHeight - 15, pageWidth - 12, pageHeight - 15); // Footer red line
+            pdf.line(12, pageHeight - 15, pageWidth - 12, pageHeight - 15); 
 
             pdf.setFontSize(10);
             pdf.text(`Page ${currentPage}`, pageWidth / 2, pageHeight - 8, { align: "center" });
@@ -165,8 +165,8 @@ useImperativeHandle(ref, () => ({
       fontWeight: "bold",
       color: "#0457a4",
       textAlign: "center",
-      mt: 3, // Adds margin above
-      mb: 4  // Adds spacing before charts
+      mt: 3, 
+      mb: 4  
     }}
   >
     WonderCharts
@@ -256,7 +256,7 @@ useImperativeHandle(ref, () => ({
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
         <Pie
-          data={gamesPlayedByDifficulty} // ✅ Use correct state variable
+          data={gamesPlayedByDifficulty} 
           cx="50%"
           cy="50%"
           outerRadius={90}
@@ -330,9 +330,9 @@ useImperativeHandle(ref, () => ({
     borderRadius: 2,
     overflow: "hidden",
     boxShadow: 3,
-    margin: "20px auto", // Adds spacing around the table
-    width: "90%", // Restricts the table width
-    maxWidth: "10000px", // Prevents it from being too wide
+    margin: "20px auto", 
+    width: "90%", 
+    maxWidth: "10000px", 
   }}
 >
   <Table>

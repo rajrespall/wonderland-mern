@@ -53,11 +53,10 @@ const LoginPage = () => {
 
       if (response.requireReEnable) {
         console.log("User is inactive, redirecting to /re-enable");
-        navigate('/re-enable', { state: { email: response.email } }); // Pass email dynamically
+        navigate('/re-enable', { state: { email: response.email } }); 
         return;
     }
     
-      // Check if verification is required
       if (response.requireVerification) {
         navigate('/verify-email', { state: { email: response.email } });
         return;

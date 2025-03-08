@@ -6,7 +6,7 @@ const useUserStore = create((set) => ({
     loading: false,
     error: null,
 
-    // Fetch users
+    
     fetchUsers: async () => {
         set({ loading: true, error: null });
         try {
@@ -17,12 +17,12 @@ const useUserStore = create((set) => ({
         }
     },
 
-    // Toggle user status (Enable/Disable)
+    
     toggleUserStatus: async (userId) => {
         set({ loading: true });
         try {
             await axios.put(`http://localhost:5000/api/users/toggle-status/${userId}`);
-            await useUserStore.getState().fetchUsers(); // Refresh user list after update
+            await useUserStore.getState().fetchUsers(); 
         } catch (error) {
             set({ error: "Failed to update user status", loading: false });
         }
@@ -48,7 +48,7 @@ const useUserStore = create((set) => ({
 
         try {
             await axios.put(`http://localhost:5000/api/users/update-status/${userId}`, { status: newStatus });
-            await useUserStore.getState().fetchUsers(); // Refresh user list after update
+            await useUserStore.getState().fetchUsers(); 
         } catch (error) {
             set({ error: "Failed to update user status", loading: false });
         }

@@ -5,7 +5,7 @@ import useChartStore from "../../../Store/chartStore"; // Import Zustand store
 import { useNavigate } from "react-router-dom";
 import { Modal } from "@mui/material";
 
-import PDF from "./Pdf"; // ✅ Import PDF component
+import PDF from "./Pdf"; 
 
 // import jsPDF from "jspdf";
 // import html2canvas from "html2canvas";
@@ -45,7 +45,7 @@ const tableData = [
 export default function Charts() {
   const { usersPerMonth, fetchUsersPerMonth,  gamesPlayed, fetchGamesPlayed, gameAnalytics, fetchGameAnalytics, fetchGamesPlayedByDifficulty, gamesPlayedByDifficulty, fetchReviewsPerMonth, reviewsPerMonth  } = useChartStore();
   // const navigate = useNavigate();
-  const pdfRef = useRef(); // ✅ Create ref for PDF component
+  const pdfRef = useRef(); 
   const [modalOpen, setModalOpen] = useState(false);
 
 
@@ -56,7 +56,7 @@ export default function Charts() {
     fetchGameAnalytics();
     fetchGamesPlayed(); 
     fetchGamesPlayedByDifficulty();
-    fetchReviewsPerMonth(); // ✅ Fetch Reviews Data
+    fetchReviewsPerMonth(); 
 
   }, []);
 
@@ -125,8 +125,8 @@ export default function Charts() {
       fontWeight: "bold",
       color: "#0457a4",
       textAlign: "center",
-      mt: 3, // Adds margin above
-      mb: 4  // Adds spacing before charts
+      mt: 3, 
+      mb: 4  
     }}
   >
     WonderCharts
@@ -216,7 +216,7 @@ export default function Charts() {
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
         <Pie
-          data={gamesPlayedByDifficulty} // ✅ Use correct state variable
+          data={gamesPlayedByDifficulty} 
           cx="50%"
           cy="50%"
           outerRadius={90}
@@ -290,9 +290,9 @@ export default function Charts() {
     borderRadius: 2,
     overflow: "hidden",
     boxShadow: 3,
-    margin: "20px auto", // Adds spacing around the table
-    width: "90%", // Restricts the table width
-    maxWidth: "10000px", // Prevents it from being too wide
+    margin: "20px auto", 
+    width: "90%", 
+    maxWidth: "10000px", 
   }}
 >
   <Table>
@@ -350,11 +350,11 @@ export default function Charts() {
             overflowY: "auto", 
             p: 4, 
             position: "relative", 
-            borderRadius: "12px", // Rounded corners
-            boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)", // Soft shadow
-            background: "rgba(255, 255, 255, 0.95)", // Subtle transparency effect
-            backdropFilter: "blur(10px)", // Background blur
-            animation: "fadeIn 0.3s ease-in-out" // Smooth fade-in animation
+            borderRadius: "12px",
+            boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)",
+            background: "rgba(255, 255, 255, 0.95)", 
+            backdropFilter: "blur(10px)", 
+            animation: "fadeIn 0.3s ease-in-out" 
         }}
     >
         {/* Close Button */}

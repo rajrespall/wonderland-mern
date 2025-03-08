@@ -29,7 +29,6 @@ const useAuthStore = create((set) => ({
         };
     }
 
-      // Handle case where verification is required
       if (response.data.requireVerification) {
         set({ loading: false });
         return { 
@@ -52,7 +51,6 @@ const useAuthStore = create((set) => ({
     } catch (error) {
       console.error("Auth Store Login Error:", error.response?.data || error);
 
-      // 🔥 Fix: Handle `403` response (FORBIDDEN) for inactive users
       if (error.response?.status === 403 && error.response.data.requireReEnable) {
           console.log("Redirecting to re-enable page...");
           return {
@@ -122,14 +120,38 @@ const useAuthStore = create((set) => ({
         { withCredentials: true }
       );
   
+
+      if (response.data.requireReEnable) {
+        console.log("User needs re-enablement.");
+        set({ loading: false });
+        return {
+            requireReEnable: true,
+            email: response.data.email
+        };
+    }
+
+
       const userData = response.data.user;
       localStorage.setItem('user', JSON.stringify(userData));
       set({ user: userData, isAuthenticated: true, loading: false });
   
       return userData;
     } catch (error) {
-      set({ error: error.response?.data?.error || 'Google login failed', loading: false });
-      console.error('Google login failed:', error);
+      console.error("Auth Store Login Error:", error.response?.data || error);
+
+      if (error.response?.status === 403 && error.response.data.requireReEnable) {
+          console.log("Redirecting to re-enable page...");
+          return {
+              requireReEnable: true,
+              email: error.response.data.email
+          };
+      }
+
+      set({
+          error: error.response?.data?.error || 'Login failed',
+          loading: false
+      });
+
       throw error;
     }
   },

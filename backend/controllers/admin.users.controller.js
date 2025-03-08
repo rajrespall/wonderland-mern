@@ -3,7 +3,6 @@ const nodemailer = require("nodemailer");
 require("dotenv").config(); // Ensure Mailtrap credentials are in .env
 const { sendAutoDisableEmail } = require('../config/mailtrap');
 
-// Mailtrap transporter configuration
 const transporter = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
     port: 2525,
@@ -13,7 +12,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Get users
 const getUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -23,7 +21,6 @@ const getUsers = async (req, res) => {
     }
 };
 
-// Toggle user status
 const updateUserStatus = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -51,10 +48,9 @@ const autoDisableInactiveUsers = async () => {
 
         console.log(`Checking for users inactive since: ${oneMonthAgo.toISOString()}`);
 
-        // Find users who have been inactive for 1+ month and are NOT disabled by admin
         const usersToDisable = await User.find({
             lastLogin: { $lte: oneMonthAgo },
-            isDisabled: "enabled"  // Only active users should be marked inactive
+            isDisabled: "enabled"  
         });
 
         if (usersToDisable.length === 0) {
@@ -63,10 +59,10 @@ const autoDisableInactiveUsers = async () => {
         }
 
         for (const user of usersToDisable) {
-            user.isDisabled = "inactive";  // Mark as inactive
+            user.isDisabled = "inactive";  
             await user.save();
 
-            // Send notification email (without OTP)
+            
             await sendAutoDisableEmail(user.email, user.username);
 
             console.log(`🔴 User ${user.username} marked as inactive due to inactivity.`);
@@ -77,10 +73,9 @@ const autoDisableInactiveUsers = async () => {
         console.error("❌ Error auto-disabling users:", error);
     }
 };
-autoDisableInactiveUsers();
+//autoDisableInactiveUsers();
 
-// 🔥 Run auto-disable every 24 hours
-setInterval(autoDisableInactiveUsers, 24 * 60 * 60 * 1000); // Every 24 hours
+setInterval(autoDisableInactiveUsers, 24 * 60 * 60 * 1000); 
 
 
 

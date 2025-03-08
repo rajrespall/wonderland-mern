@@ -11,6 +11,7 @@ class InstitutionController {
       }
       const newInstitution = new Institution({
         name: institution.name,
+        description: institution.description,
         address: institution.address,
         mapEmbed: institution.mapEmbed,
         institutionImage: imageUrl

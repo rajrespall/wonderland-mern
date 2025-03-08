@@ -5,6 +5,10 @@ const institutionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  description: {
+    type: String,
+    required: true
+  },
   address: {
     type: String,
     required: true

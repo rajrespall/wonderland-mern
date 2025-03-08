@@ -35,9 +35,11 @@ export default function InstitutionsPage() {
   useEffect(() => {
     const fetchInstitutions = async () => {
       try {
-        const response = await axios.get('/api/institutions');
+        const response = await axios.get('http://localhost:5000/api/institutions'); // Update the URL to match your backend
+        console.log('API Response:', response.data); // Log the API response
         setInstitutions(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
+        console.error('API Error:', err); // Log any errors
         setError(err.response ? err.response.data.message : "Error fetching institutions");
       }
     };
@@ -66,11 +68,11 @@ export default function InstitutionsPage() {
           <Grid item xs={12} sm={6} md={4} key={institution._id}>
             <InstitutionCard onClick={() => handleCardClick(institution._id)}>
               <img
-                src={ins1}
+                src={institution.institutionImage}
                 alt={institution.name}
                 style={{ width: "100%", height: "200px", objectFit: "cover" }}
               />
-              <InstitutionTitle bgcolor={institution.color}>
+              <InstitutionTitle bgcolor='white'>
                 {institution.name}
                 <Typography component="span" sx={{ color: "yellow", fontSize: "12px", fontFamily: "Poppins" }}>
                   {institution.address}

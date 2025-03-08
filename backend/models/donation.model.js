@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const autopopulate = require('mongoose-autopopulate');
 
 const donationSchema = new mongoose.Schema({
     donator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Profile',
         required: true,
+        autopopulate: true
     },
     donationAmount: {
         type: String,
@@ -16,11 +18,12 @@ const donationSchema = new mongoose.Schema({
     },
     donationReceipt: {
         type: String,
-        default: ''
+        default: '',
     }
 },
   { timestamps: true }
 );
 
+donationSchema.plugin(autopopulate);
 const Donation = mongoose.model('Donation', donationSchema);
 module.exports = Donation; 

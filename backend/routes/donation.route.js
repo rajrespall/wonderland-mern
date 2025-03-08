@@ -5,7 +5,7 @@ const verifyToken = require('../middleware/auth.middleware');
 const router = express.Router();
 
 router.post('/', verifyToken, upload.single('donationReceipt'), createDonation);
-router.get('/', getAllDonations);
+router.get('/', verifyToken, getAllDonations);
 router.get('/:id', getDonationById);
 
 module.exports = router;

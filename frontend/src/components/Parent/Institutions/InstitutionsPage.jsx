@@ -4,7 +4,6 @@ import axios from "axios";
 import { Container, Grid, Card, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import "@fontsource/poppins";
-import ins1 from "../../../assets/institutions1.jpg";
 
 const InstitutionCard = styled(Card)(({ bgcolor }) => ({
   borderRadius: "5px",
@@ -35,11 +34,11 @@ export default function InstitutionsPage() {
   useEffect(() => {
     const fetchInstitutions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/institutions'); // Update the URL to match your backend
-        console.log('API Response:', response.data); // Log the API response
+        const response = await axios.get('http://localhost:5000/api/institutions');
+        console.log('API Response:', response.data); 
         setInstitutions(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
-        console.error('API Error:', err); // Log any errors
+        console.error('API Error:', err); 
         setError(err.response ? err.response.data.message : "Error fetching institutions");
       }
     };

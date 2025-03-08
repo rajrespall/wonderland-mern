@@ -4,7 +4,6 @@ import axios from "axios";
 import { Container, Box, CssBaseline, CardMedia } from "@mui/material";
 import ParentNav from "../../../components/ParentNav";
 import InstitutionCard from "../../../components/Parent/Institutions/InsDetails";
-import institutionimage from "../../../assets/institutions1.jpg";
 
 export default function InstitutionDetails() {
   const { id } = useParams();

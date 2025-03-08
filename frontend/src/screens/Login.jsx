@@ -80,6 +80,14 @@ const LoginPage = () => {
         const user = result.user;
         const idToken = await user.getIdToken();
         const response = await googleLogin(idToken);
+
+
+        if (response.requireReEnable) {
+          console.log("User is inactive, redirecting to /re-enable");
+          navigate('/re-enable', { state: { email: response.email } }); 
+          return;
+      }
+      
         
         if (response.isFirstLogin) {
             navigate('/getstarted');

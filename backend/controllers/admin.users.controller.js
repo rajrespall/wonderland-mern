@@ -73,7 +73,7 @@ const autoDisableInactiveUsers = async () => {
         console.error("❌ Error auto-disabling users:", error);
     }
 };
-//autoDisableInactiveUsers();
+autoDisableInactiveUsers();
 
 setInterval(autoDisableInactiveUsers, 24 * 60 * 60 * 1000); 
 

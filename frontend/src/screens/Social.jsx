@@ -69,7 +69,7 @@ const navigate = useNavigate(); // Use the hook to get the navigate function
       
       setAnswers(updatedAnswers);
       
-      localStorage.setItem(`Communication_${currentQuestion}_answer`, index + 1);
+      localStorage.setItem(`Social_${currentQuestion}_answer`, index + 1);
       
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(currentQuestion + 1);

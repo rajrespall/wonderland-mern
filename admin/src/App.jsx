@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AdminHome from "./screens/Admin/Dashboard";
 import Login from "./screens/Admin/Login";
@@ -10,16 +10,25 @@ const ProtectedRoute = ({ element }) => {
   return isAuthenticated ? element : <Navigate to="/login" />;
 };
 
-function App() {
+const App = () => {
+  const checkAuth = useAdminStore((state) => state.checkAuth);
+  const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
+
+  useEffect(() => {
+    checkAuth(); // ✅ Check if admin is already authenticated when the app loads
+  }, [checkAuth]);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ProtectedRoute element={<AdminHome />} />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/pdf" element={<ProtectedRoute element={<PDF />} />} />
+        
+        {/* ✅ Redirect to `/` if already logged in */}
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, List, ListItemButton, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import logo from '../../assets/logo_red.png';
+import useAdminStore from "../../../Store/adminStore"; 
 
 const SidebarContainer = styled(Box)({
   width: 260,
@@ -34,6 +35,11 @@ const StyledButton = styled(ListItemButton)(({ active }) => ({
 }));
 
 const Sidebar = ({ currentView, onButtonClick }) => {
+  const logout = useAdminStore((state) => state.logout);
+  const handleLogout = async () => {
+    await logout(); 
+    navigate("/login"); 
+  };
   return (
     <SidebarContainer>
       <img src={logo} width="80%" alt="Logo" />
@@ -67,10 +73,11 @@ const Sidebar = ({ currentView, onButtonClick }) => {
       <Box>
         <StyledButton
           sx={{
-            fontSize: '14px',
+            fontSize: "14px",
             mt: "240px",
-            width: '221px'
+            width: "221px",
           }}
+          onClick={handleLogout} 
         >
           Logout
         </StyledButton>

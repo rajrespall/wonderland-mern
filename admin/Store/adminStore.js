@@ -1,32 +1,44 @@
 import { create } from "zustand";
+import axios from "axios";
 
 const useAdminStore = create((set) => ({
   admin: null,
-  token: null,
   isAuthenticated: false,
 
-  login: async (username, password) => {
+  // Function to check if admin is already authenticated (on page load)
+  checkAuth: async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/admin-auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+      const response = await axios.get("http://localhost:5000/api/admin-auth/check-auth", {
+        withCredentials: true, // ✅ Send cookies with the request
       });
 
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message);
-
-      localStorage.setItem("adminToken", data.token);
-      set({ admin: data.admin, token: data.token, isAuthenticated: true });
+      set({ admin: response.data.admin, isAuthenticated: true });
     } catch (error) {
-      console.error("Login Failed:", error.message);
+      set({ admin: null, isAuthenticated: false });
     }
   },
 
-  logout: () => {
-    localStorage.removeItem("adminToken");
-    set({ admin: null, token: null, isAuthenticated: false });
+  login: async (username, password) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/admin-auth/login",
+        { username, password },
+        { withCredentials: true } // ✅ Ensures cookies are stored
+      );
+
+      set({ admin: response.data.admin, isAuthenticated: true });
+    } catch (error) {
+      console.error("Login Failed:", error.response?.data?.message || error.message);
+    }
+  },
+
+  logout: async () => {
+    try {
+      await axios.post("http://localhost:5000/api/admin-auth/logout", {}, { withCredentials: true });
+      set({ admin: null, isAuthenticated: false });
+    } catch (error) {
+      console.error("Logout Failed:", error.response?.data?.message || error.message);
+    }
   },
 }));
 

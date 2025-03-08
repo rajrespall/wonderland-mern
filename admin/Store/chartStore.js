@@ -4,9 +4,9 @@ import axios from "axios";
 const useChartStore = create((set) => ({
     usersPerMonth: [],
     gamesPlayed: [],
-    gamesPlayedByDifficulty: [], // Add state for difficulty-based data
+    gamesPlayedByDifficulty: [], 
     gameAnalytics: [],
-    reviewsPerMonth: [], // ✅ New State for Reviews
+    reviewsPerMonth: [], 
 
 
     fetchUsersPerMonth: async () => {

@@ -9,7 +9,7 @@ const useAdminStore = create((set) => ({
   checkAuth: async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/admin-auth/check-auth", {
-        withCredentials: true, // ✅ Send cookies with the request
+        withCredentials: true, 
       });
 
       set({ admin: response.data.admin, isAuthenticated: true });

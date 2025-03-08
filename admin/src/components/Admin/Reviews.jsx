@@ -12,7 +12,7 @@ export default function AdminReviews() {
     const fetchReviews = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/reviews/all");
-        setReviews(response.data || []); // Ensure it's an array
+        setReviews(response.data || []); 
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }

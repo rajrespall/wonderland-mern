@@ -24,8 +24,8 @@ exports.createReview = async (req, res) => {
       const userId = decoded.userId;
       let { rating, comment } = req.body;
 
-      console.log("✅ Received rating from frontend:", rating, typeof rating); // Debugging log
-      rating = Number(rating); // Convert to number (Ensure no string issues)
+      console.log("✅ Received rating from frontend:", rating, typeof rating); 
+      rating = Number(rating); 
 
       if (!rating || rating < 1 || rating > 5) {
           console.error("⛔ Invalid rating received:", rating);
@@ -35,7 +35,7 @@ exports.createReview = async (req, res) => {
       const review = new Review({ userId, rating, comment });
       await review.save();
 
-      console.log("✅ Review saved:", review); // Debugging log
+      console.log("✅ Review saved:", review); 
       res.status(201).json({ message: "Review submitted successfully", review });
 
   } catch (error) {
@@ -48,16 +48,16 @@ exports.getReviews = async (req, res) => {
   try {
       const reviews = await Review.find().populate("userId", "username");
 
-      // Fetch user profiles and attach profile pictures
-      const userIds = reviews.map(review => review.userId?._id); // Extract user IDs
+      
+      const userIds = reviews.map(review => review.userId?._id); 
       const profiles = await Profile.find({ userId: { $in: userIds } }, "userId profilePicture");
 
-      // Map profile pictures to reviews
+      
       const reviewsWithProfile = reviews.map(review => {
           const userProfile = profiles.find(profile => profile.userId.toString() === review.userId?._id.toString());
           return {
               ...review.toObject(),
-              profilePicture: userProfile ? userProfile.profilePicture : null // Use profile picture or null
+              profilePicture: userProfile ? userProfile.profilePicture : null 
           };
       });
 

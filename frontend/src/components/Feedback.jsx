@@ -10,7 +10,7 @@ const Feedback = () => {
   const [rating, setRating] = useState(null);
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
-  
+
   const handleSubmit = async () => {
     try {
       if (!rating || rating < 1 || rating > 5) {
@@ -31,7 +31,7 @@ const Feedback = () => {
 
       console.log("✅ Feedback submitted successfully:", response.data);
       alert("Feedback submitted successfully!");
-      setRating(null); // ✅ Reset rating to force new selection
+      setRating(null); 
       setComment("");
     } catch (error) {
       console.error("❌ Error submitting feedback:", error.response ? error.response.data : error.message);

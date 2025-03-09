@@ -9,12 +9,13 @@ const createDefaultAdmin = async () => {
     if (!existingAdmin) {
      
       const firebaseUser = await adminAuth.createUser({
-        email: "admin@example.com", 
+        email: "admin@wonderland.com", 
         password: "admin123",
       });
 
       const newAdmin = new Admin({
         username: "admin",
+        email: "admin@wonderland.com",
         password: firebaseUser.uid, 
       });
 

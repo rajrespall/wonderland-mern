@@ -18,8 +18,8 @@ const loginAdmin = async (req, res) => {
 
     // ✅ Verify password using Firebase Authentication
     try {
-      const user = await getAuth().getUserByEmail("admin@example.com"); // Retrieve Firebase user
-      const validPassword = password === "admin123"; // Hardcoded validation since Firebase Admin SDK doesn't support password auth
+      const user = await getAuth().getUserByEmail("admin@wonderland.com");
+      const validPassword = password === "admin123"; 
 
       if (!validPassword) {
         return res.status(401).json({ message: "Invalid Password" });

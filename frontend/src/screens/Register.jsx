@@ -86,7 +86,7 @@ const Register = () => {
           sx={{ px: 2 }}
         >
           <Grid item xs={12} sm={10} md={6} lg={4} sx={{marginRight:"300px"}}>
-            <img src={squirrel} alt="Squirrel" style={{ height: '400px', position: 'absolute', marginTop:"170px", marginLeft: "460px" }} />
+            <img src={squirrel} alt="Squirrel" style={{ height: '390px', position: 'absolute', marginTop:"150px", marginLeft: "460px" }} />
                 <IconButton href="/login" sx={{mt: '16px', position: 'absolute',  color: '#5da802', marginLeft: '15px', fontSize: '30px'}}>
                 <KeyboardBackspaceRoundedIcon fontSize="inherit" />
                 </IconButton>
@@ -121,8 +121,8 @@ const Register = () => {
                     value={formData.username}
                     onChange={handleChange}
                     required
-                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "14px"  },}}
-                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', height: "45px" },}}
+                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
+                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' } }}
                     sx={{
                       mb: 3,
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -147,8 +147,8 @@ const Register = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "14px"  },}}
-                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', height: "45px" },}}
+                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
+                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' } }}
                     sx={{
                       mb: 3,
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -173,10 +173,9 @@ const Register = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "14px"  },}}
-                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', height: "45px" },}}
+                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
+                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' } }}
                     sx={{
-                      mb: 3,
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
                       '& .MuiOutlinedInput-root': {
                         '& fieldset': {
@@ -219,11 +218,8 @@ const Register = () => {
                     {loading ? 'Creating Account...' : 'Sign Up'}
                   </Button>
                 </Box>
-                
               </CardContent>
-            
             </Card>
-
           </Grid>
 
           <Grid item xs={12} sm={10} md={6} lg={4}>
@@ -231,7 +227,7 @@ const Register = () => {
               <Box sx={{marginBottom: "220px"}}>
                 <img src={create} alt="Pagkaki" style={{ maxWidth: '90%',  marginLeft: "60px"}} />
               <Typography sx={{ color: 'white', mb: 3, mt: 4, fontFamily: "Poppins", fontSize: "18px"}}>
-              "Welcome to Wonderland! We are here to help you learn, explore, and have fun in a safe and friendly environment. Our activities are designed to support creativity, problem-solving, and learning at your own pace. Join us today and start your adventure!"
+              Welcome to Wonderland! We are here to help you learn, explore, and have fun in a safe and friendly environment. Our activities are designed to support creativity, problem-solving, and learning at your own pace. Join us today and start your adventure!
               </Typography>
               </Box>
             </Box>

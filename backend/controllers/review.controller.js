@@ -61,3 +61,21 @@ exports.getReviews = async (req, res) => {
       res.status(500).json({ message: "Error fetching reviews", error });
   }
 };
+    
+exports.getUserReviews = async (req, res) => {
+  try {
+      const userId = req.userId;
+      const reviews = await Review.find({ userId }).populate("userId", "username");
+
+      const profile = await Profile.findOne({ userId }, "profilePicture");
+
+      const reviewsWithProfile = reviews.map(review => ({
+          ...review.toObject(),
+          profilePicture: profile ? profile.profilePicture : null 
+      }));
+  
+      res.status(200).json(reviewsWithProfile);
+  } catch (error) {
+      res.status(500).json({ message: "Error fetching user reviews", error });
+  }
+};

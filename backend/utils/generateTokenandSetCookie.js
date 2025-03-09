@@ -18,4 +18,29 @@ const generateTokenandSetCookie = (res, userId) => {
         throw new Error('Failed to generate authentication token');
     }
 };
-module.exports = { generateTokenandSetCookie };
+
+
+const generateAdminTokenandSetCookie = (res, userId, username) => {
+    try {
+        // ✅ Create an admin-specific token
+        const adminToken = jwt.sign(
+            { userId, username, role: "admin" }, // ✅ Only admins get this token
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        res.cookie("adminToken", adminToken, { // ✅ Store admin token in a separate cookie
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000 
+        });
+
+        return adminToken;
+    } catch (error) {
+        console.error("Error generating admin token:", error);
+        throw new Error("Failed to generate admin authentication token");
+    }
+};
+
+module.exports = { generateTokenandSetCookie, generateAdminTokenandSetCookie };

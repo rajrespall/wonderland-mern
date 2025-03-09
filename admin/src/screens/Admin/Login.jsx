@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Box, CssBaseline, Card, CardContent, Typography, Icon, Button, TextField } from "@mui/material";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { Box, CssBaseline, Card, CardContent, Typography, Icon, Button } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import useAdminStore from "../../../Store/adminStore"; // Import Zustand Store
 import { useNavigate } from "react-router-dom";
@@ -7,15 +8,18 @@ import logo from "../../assets/logo_red.png";
 import background from "../../assets/bg_signin.png";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const login = useAdminStore((state) => state.login);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    await login(username, password);
+  const validationSchema = Yup.object({
+    username: Yup.string().required("Username is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
+  const handleLogin = async (values, { setSubmitting }) => {
+    await login(values.username, values.password);
     navigate("/"); // Redirect to Dashboard after login
+    setSubmitting(false);
   };
 
   return (
@@ -33,11 +37,25 @@ const Login = () => {
               </Icon>
               SIGN IN
             </Typography>
-            <Box component="form" onSubmit={handleLogin} sx={{ mt: 3 }}>
-              <TextField fullWidth name="username" label="Username" value={username} onChange={(e) => setUsername(e.target.value)} sx={{ mb: 3 }} />
-              <TextField fullWidth name="password" label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} sx={{ mb: 3 }} />
-              <Button type="submit" fullWidth sx={{ mt: 4, backgroundColor: "#5da802", borderRadius: "30px", height: "50px", color: "#fcf230" }}>Sign In</Button>
-            </Box>
+            <Formik
+              initialValues={{ username: "", password: "" }}
+              validationSchema={validationSchema}
+              onSubmit={handleLogin}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <Field name="username" placeholder="Username" />
+                  <ErrorMessage name="username" component="div" style={{ color: "red" }} />
+
+                  <Field name="password" type="password" placeholder="Password" />
+                  <ErrorMessage name="password" component="div" style={{ color: "red" }} />
+
+                  <Button type="submit" fullWidth disabled={isSubmitting} sx={{ mt: 4, backgroundColor: "#5da802", borderRadius: "30px", height: "50px", color: "#fcf230" }}>
+                    Sign In
+                  </Button>
+                </Form>
+              )}
+            </Formik>
           </CardContent>
         </Card>
       </Box>

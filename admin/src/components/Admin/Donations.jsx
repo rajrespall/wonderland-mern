@@ -30,22 +30,22 @@ export default function Donations() {
 
   useEffect(() => {
     const fetchDonors = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/donations", {
-          withCredentials: true
-        });
+        try {
+            const response = await axios.get("http://localhost:5000/api/donations", {
+                withCredentials: true, 
+            });
 
-        setDonors(response.data);
-      } catch (err) {
-        console.error("Error fetching donors:", err);
-        setError("Failed to load donors. Please try again.");
-      } finally {
-        setLoading(false);
-      }
+            setDonors(response.data);
+        } catch (err) {
+            console.error("Error fetching donors:", err);
+            setError("Failed to load donors. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     fetchDonors();
-  }, []);
+}, []);
 
   const handleViewDetails = (donor) => {
     setSelectedDonor(donor);

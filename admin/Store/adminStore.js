@@ -34,17 +34,18 @@ const useAdminStore = create((set) => ({
       const response = await axios.post(
         "http://localhost:5000/api/admin-auth/login",
         { username, password },
-        { withCredentials: true } // ✅ Ensures cookies are stored
+        { withCredentials: true }
       );
 
       if (response.data.message === "Login successful") {
         set({ admin: response.data.admin, isAuthenticated: true });
+        return { success: true }; // ✅ Return success status
       } else {
         throw new Error("Login failed");
       }
     } catch (error) {
-      console.error("Login Failed:", error.response?.data?.message || error.message);
       set({ admin: null, isAuthenticated: false });
+      return { success: false }; // ✅ Return failure status
     }
   },
 

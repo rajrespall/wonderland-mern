@@ -1,15 +1,53 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Box, CssBaseline, Card, CardContent, Typography, Icon, Button } from "@mui/material";
+import { Box, CssBaseline, Card, CardContent, Typography, Button } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import useAdminStore from "../../../Store/adminStore"; // Import Zustand Store
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo_red.png";
 import background from "../../assets/bg_signin.png";
+import { styled } from "@mui/material/styles";
+import { useState } from "react";
+
+// ✅ Styled Components for Input Fields & Button
+const StyledField = styled(Field)(({ error }) => ({
+  width: "90%",
+  height: "55px",
+  marginBottom: "10px",
+  padding: "12px",
+  borderRadius: "30px",
+  border: `3px solid ${error ? "red" : "#fcf230"}`, // ✅ Turns red when error occurs
+  outline: "none",
+  fontSize: "18px",
+  fontFamily: "Poppins",
+  color: "#0457a4",
+  backgroundColor: error ? "#ffe6e6" : "white", // ✅ Light red background when error occurs
+  "&::placeholder": {
+    color: "#0457a4",
+    fontWeight: "600",
+    textTransform: "capitalize",
+  },
+}));
+
+const StyledButton = styled(Button)({
+  width: "90%",
+  height: "55px",
+  marginTop: "20px",
+  backgroundColor: "#5da802",
+  borderRadius: "30px",
+  fontSize: "20px",
+  fontWeight: "bold",
+  color: "#fcf230",
+  textTransform: "none",
+  "&:hover": {
+    backgroundColor: "#4c9200",
+  },
+});
 
 const Login = () => {
   const login = useAdminStore((state) => state.login);
   const navigate = useNavigate();
+  const [loginError, setLoginError] = useState(false); // ✅ Track login errors
 
   const validationSchema = Yup.object({
     username: Yup.string().required("Username is required"),
@@ -17,42 +55,89 @@ const Login = () => {
   });
 
   const handleLogin = async (values, { setSubmitting }) => {
-    await login(values.username, values.password);
-    navigate("/"); // Redirect to Dashboard after login
+    const result = await login(values.username, values.password);
+  
+    if (!result.success) {
+      setLoginError(true); // ✅ Show red border & error message
+    } else {
+      setLoginError(false);
+      navigate("/"); // ✅ Redirect only if login is successful
+    }
     setSubmitting(false);
   };
+  
 
   return (
     <>
       <CssBaseline />
-      <Box sx={{ backgroundImage: `url(${background})`, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <Box sx={{ mt: -5, mb: 2 }}>
-          <img src={logo} alt="Wonderland Logo" style={{ width: "300px" }} />
+      <Box
+        sx={{
+          backgroundImage: `url(${background})`,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {/* ✅ Bigger Wonderland Logo */}
+        <Box sx={{ mb: 3 }}>
+          <img src={logo} alt="Wonderland Logo" style={{ width: "350px" }} />
         </Box>
-        <Card sx={{ width: "400px", borderRadius: "30px", backgroundColor: "white", textAlign: "center", boxShadow: 4, padding: 3 }}>
+
+        {/* ✅ Bigger Login Card */}
+        <Card
+          sx={{
+            width: "500px",
+            borderRadius: "40px",
+            backgroundColor: "white",
+            textAlign: "center",
+            boxShadow: 6,
+            padding: "40px 30px",
+          }}
+        >
           <CardContent>
-            <Typography variant="h5" sx={{ mt: 1, color: "#5da802", fontWeight: 750 }}>
-              <Icon sx={{ mr: 1 }}>
-                <LockIcon sx={{ fontSize: "30px", color: "#0457a4" }} />
-              </Icon>
+            <Typography variant="h4" sx={{ color: "#5da802", fontWeight: 750 }}>
+              <LockIcon sx={{ fontSize: "35px", color: "#0457a4", marginRight: "8px" }} />
               SIGN IN
             </Typography>
+
+            {/* ✅ Formik Form */}
             <Formik
               initialValues={{ username: "", password: "" }}
               validationSchema={validationSchema}
               onSubmit={handleLogin}
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting, errors, touched }) => (
                 <Form>
-                  <Field name="username" placeholder="Username" />
-                  <ErrorMessage name="username" component="div" style={{ color: "red" }} />
+                  {/* ✅ Username Field with Red Glow on Error */}
+                  <StyledField
+                    name="username"
+                    placeholder="Username"
+                    error={loginError || (errors.username && touched.username)}
+                  />
+                  <ErrorMessage name="username" component="div" style={{ color: "red", fontSize: "14px" }} />
 
-                  <Field name="password" type="password" placeholder="Password" />
-                  <ErrorMessage name="password" component="div" style={{ color: "red" }} />
+                  {/* ✅ Password Field with Red Glow on Error */}
+                  <StyledField
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    error={loginError || (errors.password && touched.password)}
+                  />
+                  <ErrorMessage name="password" component="div" style={{ color: "red", fontSize: "14px" }} />
 
-                  <Button type="submit" fullWidth disabled={isSubmitting} sx={{ mt: 4, backgroundColor: "#5da802", borderRadius: "30px", height: "50px", color: "#fcf230" }}>
+                  {/* ✅ Error message for wrong credentials */}
+                  {loginError && (
+                    <div style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>
+                      ❌ Wrong Username or Password
+                    </div>
+                  )}
+
+                  {/* ✅ Submit Button */}
+                  <StyledButton type="submit" disabled={isSubmitting}>
                     Sign In
-                  </Button>
+                  </StyledButton>
                 </Form>
               )}
             </Formik>

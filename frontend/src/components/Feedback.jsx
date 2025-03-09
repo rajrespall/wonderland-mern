@@ -7,32 +7,39 @@ import sqheart from "../assets/sq_hearts.png"
 import pagkaki from "../assets/aboutus.png";
 
 const Feedback = () => {
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(null);
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
-
+  
   const handleSubmit = async () => {
     try {
+      if (!rating || rating < 1 || rating > 5) {
+        alert("Please select a valid rating before submitting.");
+        return;
+      }
+
       console.log("📤 Sending feedback:", { rating, comment });
-  
+
       const response = await axios.post(
         "http://localhost:5000/api/reviews/submit",
-        { rating, comment },
+        { rating: Number(rating), comment },
         {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
       console.log("✅ Feedback submitted successfully:", response.data);
       alert("Feedback submitted successfully!");
-      setRating(5);
+      setRating(null); // ✅ Reset rating to force new selection
       setComment("");
     } catch (error) {
       console.error("❌ Error submitting feedback:", error.response ? error.response.data : error.message);
       alert("Error submitting feedback: " + (error.response ? error.response.data.message : "Unknown error"));
     }
   };
+
+
   
   return (
     <Grid container spacing={4} justifyContent="center" alignItems="center" position="relative" sx={{ px: 2, height: '92vh' }}>
@@ -53,7 +60,14 @@ const Feedback = () => {
               GIVE US YOUR FEEDBACK!
             </Typography>
 
-            <StyledRating value={rating} onChange={(event, newValue) => setRating(newValue)} />
+            <StyledRating
+              value={rating}
+              onChange={(event, newValue) => {
+                console.log("⭐ Rating Selected:", newValue);
+                setRating(newValue);
+              }}
+            />
+
 
             <Typography 
             sx={{

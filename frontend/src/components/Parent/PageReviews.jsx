@@ -21,7 +21,7 @@ const buttonStyles = (active) => ({
     borderColor: active ? "#fcf230" : "#b80201",
   },
 });
-
+  
 const getRatingIcon = (rating) => {
   switch (rating) {
     case 5:

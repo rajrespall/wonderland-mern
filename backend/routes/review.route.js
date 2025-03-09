@@ -4,8 +4,8 @@ const verifyToken = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
-router.post("/submit", createReview); // ✅ Fix: Ensure the function exists
-router.get("/all", getReviews);       // ✅ Fix: Ensure the function exists
+router.post("/submit", createReview); 
+router.get("/all", getReviews);       
 router.get("/myreviews", verifyToken, getUserReviews);
 
 module.exports = router;

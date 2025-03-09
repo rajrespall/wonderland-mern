@@ -3,7 +3,7 @@ import { CssBaseline, Box, AppBar, Toolbar, Typography, IconButton, InputBase } 
 import { Search, AccountCircle, Reviews } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import Sidebar from '../../components/Admin/SideBar';
-import DashboardCharts from '../../components/Admin/Dashboard';
+// import DashboardCharts from '../../components/Admin/Dashboard';
 import AdminReviews from '../../components/Admin/Reviews';
 import Donations from '../../components/Admin/Donations';
 import Charts from '../../components/Admin/Charts';
@@ -36,8 +36,8 @@ const AdminHome = () => {
 
   const renderContent = () => {
     switch (currentView) {
-      case 'Dashboard':
-        return <DashboardCharts />;
+      // case 'Dashboard':
+      //   return <DashboardCharts />;
       case 'Reviews':
         return <AdminReviews />;
       case 'Donations':
@@ -49,7 +49,7 @@ const AdminHome = () => {
       case 'Users':
           return <Users />;
         default:  
-          return <DashboardCharts />;
+          return <Charts />;
     }
   };
 

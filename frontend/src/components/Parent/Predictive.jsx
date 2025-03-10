@@ -158,20 +158,20 @@ const PredictiveAnalysis = () => {
         },
         F: {
             logical: [
-                "It might be helpful to try a structured logic program at Math & Logic Academy - Click here to redirect.",
-                "Consider working with an instructor to develop problem-solving skills. - Click here to redirect",
+                "It might be helpful to try a structured logic program at Math & Logic Academy.",
+                "Consider working with an instructor to develop problem-solving skills. ",
             ],
             motor: [
-                "A specialized motor skills program at Physical Therapy Center could be helpful. - Click here to redirect.",
-                "Therapeutic exercises like stretching and balancing can help improve coordination. - Click here to redirect",
+                "A specialized motor skills program at Physical Therapy Center could be helpful.",
+                "Therapeutic exercises like stretching and balancing can help improve coordination.",
             ],
             social: [
-                "A speech therapist at Speech and Communication Center may be beneficial - Click here to redirect.",
-                "One-on-one guided social therapy sessions may help improve communication. - Click here to redirect",
+                "A speech therapist at Speech and Communication Center may be beneficial.",
+                "One-on-one guided social therapy sessions may help improve communication. ",
             ],
             creativity: [
-                "A creative arts program at Creative Arts Workshop might be useful - Click here to redirect.",
-                "Trying structured art therapy sessions may be helpful. - Click here to redirect",
+                "A creative arts program at Creative Arts Workshop might be useful.",
+                "Trying structured art therapy sessions may be helpful. ",
             ]
         }
     };

@@ -8,7 +8,7 @@ const verifyToken = require('../middleware/auth.middleware.js');
 
 const router = express.Router();
 
-router.post('/', verifyToken, saveGameData);
+router.post('/save', verifyToken, saveGameData);
 router.get('/user-games', verifyToken, getUserGameData);
 router.get('/user-stats', verifyToken, getUserStats);
 

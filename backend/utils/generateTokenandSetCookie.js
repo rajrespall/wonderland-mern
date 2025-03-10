@@ -22,14 +22,14 @@ const generateTokenandSetCookie = (res, userId) => {
 
 const generateAdminTokenandSetCookie = (res, userId, username) => {
     try {
-        // ✅ Create an admin-specific token
+        
         const adminToken = jwt.sign(
-            { userId, username, role: "admin" }, // ✅ Only admins get this token
+            { userId, username, role: "admin" }, 
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
 
-        res.cookie("adminToken", adminToken, { // ✅ Store admin token in a separate cookie
+        res.cookie("adminToken", adminToken, { 
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",

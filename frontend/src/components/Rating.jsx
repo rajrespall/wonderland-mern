@@ -39,21 +39,23 @@ const customIcons = {
 
 function IconContainer(props) {
   const { value, ...other } = props;
-  return <span {...other}>{customIcons[value].icon}</span>;
+  return <span {...other}>{customIcons[value]?.icon}</span>;
 }
 
 IconContainer.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function RadioGroupRating() {
+export default function StyledRatingComponent({ value, onChange }) {
   return (
     <StyledRating
-      name="highlight-selected-only"
-      defaultValue={2}
+      name="custom-rating"
+      value={value}
+      onChange={onChange}
       IconContainerComponent={IconContainer}
-      getLabelText={(value) => customIcons[value].label}
+      getLabelText={(value) => customIcons[value]?.label || ""}
       highlightSelectedOnly
     />
   );
 }
+

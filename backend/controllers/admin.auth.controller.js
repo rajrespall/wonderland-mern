@@ -10,13 +10,13 @@ const loginAdmin = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // ✅ Check if the username exists in the database
+    
     const admin = await Admin.findOne({ username });
     if (!admin || admin.username !== "admin") {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
 
-    // ✅ Verify password using Firebase Authentication
+    
     try {
       const user = await getAuth().getUserByEmail("admin@wonderland.com");
       const validPassword = password === "admin123"; 
@@ -29,7 +29,7 @@ const loginAdmin = async (req, res) => {
       return res.status(401).json({ message: "Authentication Failed" });
     }
 
-    // ✅ Generate a specific token only for admin
+    
     const adminToken = generateAdminTokenandSetCookie(res, admin._id, admin.username);
 
     res.status(200).json({ message: "Login successful", admin });
@@ -43,20 +43,20 @@ const loginAdmin = async (req, res) => {
 
 const checkAuth = async (req, res) => {
   try {
-    const adminToken = req.cookies.adminToken; // ✅ Read token from cookies
+    const adminToken = req.cookies.adminToken; 
 
     if (!adminToken) {
       return res.status(401).json({ message: "No admin token found" });
     }
 
-    // ✅ Verify JWT token
+    
     const decoded = jwt.verify(adminToken, process.env.JWT_SECRET);
 
     if (!decoded || decoded.role !== "admin") {
       return res.status(403).json({ message: "Unauthorized Access" });
     }
 
-    // ✅ Attach admin info to request
+    
     req.admin = { id: decoded.userId, username: decoded.username, role: decoded.role };
     res.status(200).json({ admin: req.admin });
   } catch (error) {
@@ -66,7 +66,7 @@ const checkAuth = async (req, res) => {
 };
 
 const logoutAdmin = (req, res) => {
-  res.clearCookie("adminToken", { // ✅ Remove only the adminToken
+  res.clearCookie("adminToken", { 
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

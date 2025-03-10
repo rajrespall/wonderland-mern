@@ -8,17 +8,22 @@ const donationSchema = new mongoose.Schema({
         required: true,
         autopopulate: true
     },
-    donationAmount: {
+    category: {
         type: String,
-        required: true
+        require: true
     },
-    paymentMethod: {
-        type: String,
-        required: true
-    },
+    // donationAmount: {x
+    //     type: String,
+    //     required: true
+    // },
+    // paymentMethod: {
+    //     type: String,
+    //     required: true
+    // },
     donationReceipt: {
         type: String,
         default: '',
+        require: true
     }
 },
   { timestamps: true }

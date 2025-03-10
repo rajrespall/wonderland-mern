@@ -13,6 +13,7 @@ import com from '../../assets/resources1.png';
 import soc from '../../assets/resources3.png'; 
 import sen from '../../assets/resources4.png'; 
 import emo from '../../assets/emotional.jpg'; 
+import NavigationBar from "../../components/NavigationBar";
 
 
 const cardData = {
@@ -67,21 +68,15 @@ const Resources = () => {
             <Box
                 sx={{
                     backgroundColor: 'rgba(4, 87, 164, 0.1)',
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    
                     minHeight: '100vh',
                     p: 2
                 }}
             >
                 <ParentNav />
-                <Box sx={{ width: '100%', maxWidth: '1200px', p: 4 }}>
-                {userAssessment?.analysis && (
-                    <AssessmentAnalysis analysis={userAssessment.analysis} />
-                )}
-                    <Typography
+                <Typography
                     sx={{
+                        mt: 4,
                         fontFamily: 'Poppins',
                         fontSize: '30px',
                         fontWeight: 'bold',
@@ -90,7 +85,7 @@ const Resources = () => {
                     }}>
                         Resources 
                     </Typography>
-                    <Typography
+                <Typography
                     sx={{
                         fontFamily: 'Poppins',
                         color: '#0457a4',
@@ -126,6 +121,12 @@ const Resources = () => {
                             </Grid>
                         ))}
                     </Grid>
+                <Box sx={{ width: '100%', maxWidth: '100%', p: 4 }}>
+                {userAssessment?.analysis && (
+                    <AssessmentAnalysis analysis={userAssessment.analysis} />
+                )}
+                    
+                    
                 </Box>
             </Box>
         </>

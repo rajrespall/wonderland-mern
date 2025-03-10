@@ -4,6 +4,7 @@ import NavigationBar from '../components/NavigationBar'
 import Background from '../assets/bg_main.png'
 import FunPlaceHero from '../components/FunPlaceHero'
 import Spinner from '../components/Spinner'
+import MyDonations from '../components/Donations/MyDonations'
 
 const Home = () => {
     const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ const Home = () => {
       }
 
     return (
+      <>
         <Box 
             sx={{ 
             minHeight: '100vh',
@@ -29,6 +31,10 @@ const Home = () => {
             <NavigationBar />
             <FunPlaceHero />
         </Box>
+        <Box sx={{p: 2}}>
+            <MyDonations />
+        </Box>
+      </>
         
     )
 }

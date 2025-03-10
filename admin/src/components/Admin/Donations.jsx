@@ -64,64 +64,6 @@ export default function Donations() {
   return (
     <Box sx={{ p: 3, bgcolor: "#f9f9f9", borderRadius: 3 }}>
       <Grid container spacing={3} justifyContent="center" alignItems="center">
-        <Grid item xs={12} md={8}>
-          <Typography
-            sx={{
-              fontFamily: "Poppins",
-              mb: 2,
-              color: "#0457a4",
-              textAlign: "center",
-              fontWeight: "bold",
-              fontSize: "20px"
-            }}
-          >
-            Top Donations
-          </Typography>
-
-          {loading ? (
-            <Box display="flex" justifyContent="center">
-              <CircularProgress />
-            </Box>
-          ) : error ? (
-            <Alert severity="error" sx={{ textAlign: "center" }}>{error}</Alert>
-          ) : topDonors.length === 0 ? (
-            <Typography textAlign="center" color="textSecondary">
-              No donations available.
-            </Typography>
-          ) : (
-            <Grid container spacing={2} justifyContent="center">
-              {topDonors.map((donation) => (
-                <Grid item xs={12} sm={6} md={3} key={donation._id}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      textAlign: "center",
-                      boxShadow: "none",
-                      backgroundColor: "rgb(4, 87, 164, 0.05)"
-                    }}
-                  >
-                    <Avatar
-                      src={donation.donator?.profilePicture || "https://i.pravatar.cc/150"}
-                      sx={{ width: 56, height: 56, margin: "0 auto" }}
-                    />
-                    <Typography sx={{ fontFamily: "Poppins", fontWeight: "bold", mt: 1 }}>
-                      {donation.donator?.firstName || "Anonymous"} {donation.donator?.lastName || ""}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" sx={{ fontFamily: "Poppins" }}>
-                      {donation.donator?.address || "No Address Available"}
-                    </Typography>
-                    <Typography sx={{ fontFamily: "Poppins", fontWeight: "bold", color: "#b80201", mt: 1 }}>
-                      ${donation.donationAmount} Donation
-                    </Typography>
-                    <Typography sx={{ fontFamily: "Poppins", fontSize: "12px", mt: 1 }}>
-                      Payment Method: {donation.paymentMethod}
-                    </Typography>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-          )}
-        </Grid>
 
         <Grid item xs={12}>
           <Typography variant="h7" sx={{ fontFamily: "Poppins", color: "#0457a4" }}>
@@ -141,7 +83,7 @@ export default function Donations() {
               >
                 <ListItemText
                   primary={`${donation.donator?.firstName || "Anonymous"} ${donation.donator?.lastName || ""}`}
-                  secondary={`Donated: $${donation.donationAmount} | Payment: ${donation.paymentMethod}`}
+                  secondary={`Donated: $${donation.category} | Payment: ${donation.createdAt}`}
                 />
               </ListItem>
             ))}
@@ -161,10 +103,13 @@ export default function Donations() {
                 Address: {selectedDonor.donator?.address || "No Address Available"}
               </Typography>
               <Typography sx={{ fontFamily: "Poppins" }}>
-                Amount Donated: ${selectedDonor.donationAmount}
+                In-kind Donation: {selectedDonor.category}
               </Typography>
+              <Box>
+              <img src={selectedDonor.donationReceipt} width={400}></img>
+              </Box>
               <Typography sx={{ fontFamily: "Poppins" }}>
-                Payment Method: {selectedDonor.paymentMethod}
+                Date of Donation: {selectedDonor.createdAt}
               </Typography>
             </DialogContentText>
           )}

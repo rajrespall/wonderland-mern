@@ -6,6 +6,7 @@ import FunPlaceHero from '../components/FunPlaceHero'
 import Spinner from '../components/Spinner'
 import MyDonations from '../components/Donations/MyDonations'
 import TeamSection from '../components/Parent/About Us/OurTeam'
+import MissionVision from '../components/Parent/Home/OurMission'
 
 const Home = () => {
     const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ const Home = () => {
         </Box>
         <Box>
           <TeamSection />
+          <MissionVision />
         </Box>
       </>
         

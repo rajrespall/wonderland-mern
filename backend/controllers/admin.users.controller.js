@@ -1,6 +1,6 @@
 const User = require("../models/user.model");
 const nodemailer = require("nodemailer");
-require("dotenv").config(); // Ensure Mailtrap credentials are in .env
+require("dotenv").config(); 
 const { sendAutoDisableEmail, sendAdvanceDisableEmail  } = require('../config/mailtrap');
 
 const transporter = nodemailer.createTransport({
@@ -47,30 +47,30 @@ const autoDisableInactiveUsers = async () => {
       oneMonthAgo.setMonth(today.getMonth() - 1);
   
       const sevenDaysBeforeDisable = new Date(today);
-      sevenDaysBeforeDisable.setDate(today.getDate() - 23); // 30 - 7 = 23 days ago
+      sevenDaysBeforeDisable.setDate(today.getDate() - 23); 
   
       console.log(`Checking for inactive users since: ${oneMonthAgo.toISOString()}`);
       console.log(`Checking for users to receive advance disable email since: ${sevenDaysBeforeDisable.toISOString()}`);
   
-      // Find users who haven't logged in for 30 days (to be disabled now)
+     
       const usersToDisable = await User.find({
         lastLogin: { $lte: oneMonthAgo },
         isDisabled: "enabled",
       });
   
-      // Find users who will be disabled in 7 days (to send advance email)
+   
       const usersForAdvanceEmail = await User.find({
-        lastLogin: { $lte: sevenDaysBeforeDisable, $gt: oneMonthAgo }, // Between 23 and 30 days inactive
+        lastLogin: { $lte: sevenDaysBeforeDisable, $gt: oneMonthAgo }, 
         isDisabled: "enabled",
       });
   
-      // Send advance email to users who are approaching 30 days of inactivity
+   
       for (const user of usersForAdvanceEmail) {
         console.log(`📢 Sending advance disable warning to: ${user.username}`);
         await sendAdvanceDisableEmail(user.email, user.username);
       }
   
-      // Disable accounts that have reached 30 days of inactivity
+   
       for (const user of usersToDisable) {
         user.isDisabled = "inactive";  
         await user.save();

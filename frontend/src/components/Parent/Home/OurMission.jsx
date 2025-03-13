@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Container, Card, CardContent } from '@mui/material';
+import { Box, Typography, Container, Card } from '@mui/material';
 import { styled } from '@mui/system';
 import { Target, Lightbulb } from 'lucide-react';
 
@@ -79,7 +79,7 @@ const IconWrapper = styled(Box)({
 const MissionVision = () => {
   return (
     <StyledContainer>
-      {/* Mission Card */}
+      {/* Mission */}
       <MissionCard>
         <IconWrapper>
           <Target size={40} color="#ff5722" />
@@ -90,7 +90,7 @@ const MissionVision = () => {
         </CardContentText>
       </MissionCard>
 
-      {/* Vision Card */}
+      {/* Vision */}
       <VisionCard>
         <IconWrapper>
           <Lightbulb size={40} color="#03a9f4" />
@@ -105,3 +105,4 @@ const MissionVision = () => {
 };
 
 export default MissionVision;
+    

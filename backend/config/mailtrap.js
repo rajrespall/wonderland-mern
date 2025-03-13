@@ -81,6 +81,46 @@ const sendAutoDisableEmail = async (email, username) => {
   }
 };
 
+const sendAdvanceDisableEmail = async (email, username) => {
+  try {
+    const mailOptions = {
+      from: '"Wonderland Support" <support@wonderland.com>',
+      to: email,
+      subject: "Important Notice: Your Account May Be Disabled Due to Inactivity",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #0457a4; border-radius: 10px;">
+          <div style="background-color: #0457a4; padding: 15px; text-align: center; border-radius: 8px;">
+            <h1 style="color: #fcf230; margin: 0;">Wonderland</h1>
+          </div>
+          <div style="padding: 20px; text-align: center;">
+            <h2 style="color: #d9534f;">Action Required: Your Account May Be Disabled</h2>
+            <p>Dear <strong>${username}</strong>,</p>
+            <p>We have noticed that you have not logged into your Wonderland account for an extended period. To keep your account active, please log in within the next <strong>7 days</strong>.</p>
+            <p>If you do not log in before this period, your account will be <strong>temporarily disabled</strong>. You will need to go through a reactivation process to regain access.</p>
+            <div style="margin: 25px 0;">
+              <a href="http://localhost:5173/login" style="background-color: #5da802; color: #fcf230; padding: 12px 24px; text-decoration: none; border-radius: 30px; font-weight: bold; display: inline-block;">
+                Log In Now
+              </a>
+            </div>
+            <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
+          </div>
+          <div style="background-color: #f9f9f9; padding: 15px; text-align: center; border-radius: 8px;">
+            <p style="margin: 0; color: #666;">If you have already logged in recently, please disregard this message.</p>
+          </div>
+        </div>
+      `
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Advance disable email sent: %s", info.messageId);
+    return true;
+  } catch (error) {
+    console.error("Error sending advance disable email:", error);
+    return false;
+  }
+};
+
+
 
 const sendReEnableOTPEmail = async (email, otp) => {
   try {
@@ -153,4 +193,4 @@ const sendPasswordResetEmail = async (email, resetLink) => {
   }
 };
 
-module.exports = { sendOTPEmail, sendPasswordResetEmail, sendReEnableOTPEmail, sendAutoDisableEmail };
+module.exports = { sendOTPEmail, sendPasswordResetEmail, sendReEnableOTPEmail, sendAutoDisableEmail, sendAdvanceDisableEmail };

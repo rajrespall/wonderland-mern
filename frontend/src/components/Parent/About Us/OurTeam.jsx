@@ -1,13 +1,20 @@
 import React from "react";
-import { Card, CardContent, Typography, Avatar, Grid, Container, Box } from "@mui/material";
+import { Grid, Container, Typography, Box } from "@mui/material";
+import popsImage from "../../../assets/OurTeam/MaamPops.jpg";
+// import rajeshImage from "../../assets/OurTeam/Rajesh.jpg";
+import dianaImage from "../../../assets/OurTeam/Diana.jpg";
+import ernestoImage from "../../../assets/OurTeam/Ernesto.jpg";
+// import jeanImage from "../../assets/OurTeam/Jean.jpg";
+
 
 const teamMembers = [
-  { name: "Pops", role: "Adviser", image: "alex.jpg" },
-  { name: "Rajesh", role: "Developer", image: "samantha.jpg" },
-  { name: "Diana", role: "Developer", image: "john.jpg" },
-  { name: "Ernesto", role: "Developer", image: "emma.jpg" },
-  { name: "Jean", role: "Developer", image: "michael.jpg" }
+  { name: "Pops", role: "Adviser", image: popsImage },
+  { name: "Rajesh", role: "Developer", image: "rajeshImage" },
+  { name: "Diana", role: "Developer", image: dianaImage },
+  { name: "Ernesto", role: "Developer", image: ernestoImage },
+  { name: "Jean", role: "Developer", image: "jeanImage" }
 ];
+
 
 const TeamSection = () => {
   return (
@@ -18,47 +25,58 @@ const TeamSection = () => {
       <Typography variant="body1" color="text.secondary" maxWidth="md" mx="auto" mb={4}>
         A dedicated team of developers and researchers working on an innovative system for young children with autism.
       </Typography>
-      <Grid container spacing={4} justifyContent="center">
+      <Grid container spacing={5} justifyContent="center">
         {teamMembers.map((member, index) => (
           <Grid item key={index} xs={12} sm={6} md={4} lg={2.4}>
             <Box
               sx={{
                 position: "relative",
+                width: "220px",
+                height: "270px",
+                borderRadius: "50px 0px 50px 0px",
+                overflow: "hidden",
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "column-reverse",
                 alignItems: "center",
-                backgroundColor: "#0457a4",
-                borderRadius: "12px",
-                padding: "16px",
-                color: "white",
                 boxShadow: 3,
                 textAlign: "center",
+                backgroundImage: `url(${member.image})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.3)",
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(0, 0, 0, 0.2)", 
+                  }
+                }
               }}
             >
               <Box
                 sx={{
-                  position: "absolute",
-                  top: 0,
-                  width: "100px",
-                  height: "40px",
-                  backgroundColor: "#0457a4",
-                  borderTopLeftRadius: "12px",
-                  borderTopRightRadius: "12px",
+                  width: "100%",
+                  height: "70px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              ></Box>
-              <Avatar
-                src={member.image}
-                alt={member.name}
-                sx={{ width: 120, height: 120, mb: 2, border: "4px solid white" }}
-              />
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold" sx={{ fontFamily: "Poppins" }}>
+              >
+                <Typography variant="h6" fontWeight="bold" sx={{ fontFamily: "Poppins", color: "#fff" }}>
                   {member.name}
                 </Typography>
-                <Typography variant="body2" sx={{ fontFamily: "Poppins" }}>
+                <Typography variant="body2" sx={{ fontFamily: "Poppins", color: "#fff" }}>
                   {member.role}
                 </Typography>
-              </CardContent>
+              </Box>
             </Box>
           </Grid>
         ))}

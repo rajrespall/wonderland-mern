@@ -71,7 +71,6 @@ const Register = () => {
   return (
     <>
       <CssBaseline />
-      <RegisterNav />
       <Box
         sx={{
           minHeight: '100vh',

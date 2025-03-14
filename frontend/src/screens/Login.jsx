@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -19,7 +19,7 @@ import squirrel from '../assets/sq_twohands.png';
 import Background from '../assets/bg_signin.png';
 import LockIcon from '@mui/icons-material/Lock';
 import GoogleIcon from '@mui/icons-material/Google';
-import ButtonAppBar from '../components/LoginNav';
+import Spinner from '../components/Spinner'; 
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { auth } from '../config/firebase';
@@ -113,6 +113,15 @@ const validationSchema = Yup.object().shape({
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, googleLogin, loading, error } = useAuthStore();
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsPageLoading(false);
+    }, 1000);
+  }, []);
+
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -160,6 +169,7 @@ const LoginPage = () => {
       const idToken = await user.getIdToken();
       const response = await googleLogin(idToken);
 
+     
       if (response.requireReEnable) {
         console.log("User is inactive, redirecting to /re-enable");
         navigate('/re-enable', { state: { email: response.email } });
@@ -180,10 +190,15 @@ const LoginPage = () => {
     }
   };
 
+  if (isPageLoading) {
+    return (
+        <Spinner />
+    );
+  }
+
   return (
     <>
       <CssBaseline />
-      <ButtonAppBar />
       <StyledBox>
         <Grid container spacing={4} alignItems="center" justifyContent="center" position='relative' sx={{ px: 2 }}>
           <Grid item xs={12} sm={10} md={6} lg={4} sx={{ marginRight: "300px" }}>

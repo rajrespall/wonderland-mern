@@ -5,6 +5,7 @@ import axios from "axios";
 
 import sqheart from "../assets/sq_hearts.png"
 import pagkaki from "../assets/aboutus.png";
+import MissionVision from "./Parent/Home/OurMission";
 
 const Feedback = () => {
   const [rating, setRating] = useState(null);
@@ -42,6 +43,7 @@ const Feedback = () => {
 
   
   return (
+    <>
     <Grid container spacing={4} justifyContent="center" alignItems="center" position="relative" sx={{ px: 2, height: '92vh' }}>
       <Grid item xs={12} sm={10} md={6} lg={4} sx={{ marginRight: "300px" }}>
         <Card
@@ -136,6 +138,10 @@ const Feedback = () => {
         </Box>
       </Grid>
     </Grid>
+      <Box>
+        <MissionVision />
+      </Box>
+      </>
   );
 };
 

@@ -36,7 +36,7 @@ const Home = () => {
         <Box sx={{p: 2}}>
             <MyDonations />
         </Box>
-        <Box sx={{backgroundColor: '#5da802'}}>
+        <Box sx={{backgroundColor: '#0457a4'}}>
           <MissionVision />
         </Box>
         <Box >

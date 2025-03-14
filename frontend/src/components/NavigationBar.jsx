@@ -48,9 +48,13 @@ const NavigationBar = () => {
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Button onClick={() => navigate('/')} sx={navButtonStyle('/')}>Home</Button>
-              <Button onClick={() => navigate('/resources')} sx={navButtonStyle('/resources')}>Resources</Button>
-              <Button onClick={() => navigate('/institutions')} sx={navButtonStyle('/institutions')}>Institutions</Button>
+              {isAuthenticated && (
+                <>
+                  <Button onClick={() => navigate('/')} sx={navButtonStyle('/')}>Home</Button>
+                  <Button onClick={() => navigate('/resources')} sx={navButtonStyle('/resources')}>Resources</Button>
+                  <Button onClick={() => navigate('/institutions')} sx={navButtonStyle('/institutions')}>Institutions</Button>
+                </>
+              )}
               <Button onClick={() => navigate('/aboutus')} sx={navButtonStyle('/aboutus')}>About Us</Button>
               {isAuthenticated ? (
                 <Avatar
@@ -63,22 +67,7 @@ const NavigationBar = () => {
                   onClick={() => navigate('/profile')}
                 />
               ) : (
-                <Button
-                  onClick={() => navigate('/login')}
-                  sx={{
-                    fontWeight: 'bold',
-                    textTransform: 'none',
-                    fontFamily: 'Poppins',
-                    fontSize: '14px',
-                    color: '#b80201',
-                    width: '100px',
-                    backgroundColor: '#fcf230',
-                    '&:hover': { color: '#fcf230', backgroundColor: 'transparent' },
-                    borderRadius: '20px',
-                  }}
-                >
-                  Sign In
-                </Button>
+                <Button onClick={() => navigate('/login')} sx={navButtonStyle('/login')}>Sign In</Button>
               )}
             </Box>
           </Toolbar>

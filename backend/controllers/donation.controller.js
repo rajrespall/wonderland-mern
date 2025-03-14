@@ -27,8 +27,7 @@ class DonationController {
     
             const newDonation = new Donation({
                 donator: userProfile._id,
-                donationAmount: req.body.donationAmount,
-                paymentMethod: req.body.paymentMethod,
+                category: req.body.category,
                 donationReceipt: imageUrl
             });
     
@@ -47,7 +46,7 @@ class DonationController {
                 .populate({
                     path: "donator",
                     model: "Profile",
-                    select: "firstName lastName email address profilePicture"
+                    select: "firstName lastName address profilePicture"
                 });
 
             console.log("Fetched Donations:", donations);

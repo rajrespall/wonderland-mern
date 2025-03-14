@@ -1,16 +1,41 @@
 import React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import logo from '../assets/logo_red.png';
-import { CssBaseline } from '@mui/material';
+import { AppBar, Box, Toolbar, Button, Avatar, CssBaseline } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import logo from '../assets/logo_red.png';
 
 const NavigationBar = () => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
+
+  const navButtonStyle = (path) => ({
+    fontWeight: 'bold',
+    textTransform: 'none',
+    fontFamily: 'Poppins',
+    fontSize: '14px',
+    color: isActive(path) ? 'white' : '#fcf230',
+    position: 'relative',
+    '&:after': {
+      content: '""',
+      display: 'block',
+      width: isActive(path) ? '100%' : '0%',
+      height: '2px',
+      backgroundColor: 'white',
+      transition: 'width 0.3s ease-in-out',
+      position: 'absolute',
+      bottom: '-3px',
+      left: '0',
+    },
+    '&:hover': {
+      color: 'white',
+    },
+    '&:hover:after': {
+      width: '100%',
+    },
+  });
 
   return (
     <>
@@ -18,65 +43,40 @@ const NavigationBar = () => {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
           <Toolbar sx={{ justifyContent: 'space-between' }}>
-            <img src={logo} width='180px' alt="Logo" />
-            <Box>
-              <Button href="/aboutus"
-                sx={{
-                  marginRight: '10px',
-                  width: '100px',
-                  height: '30px',
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontFamily: 'Poppins',
-                  fontSize: '14px',
-                  color: '#fcf230',
-                  '&:hover': {
-                    color: '#0457a4',
-                    backgroundColor: '#fcf230',
-                  },
-                  borderRadius: '20px'
-                }}>
-                About Us
-              </Button>
+            <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer', mt: 1 }}>
+              <img src={logo} width="150px" alt="Logo" />
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Button onClick={() => navigate('/')} sx={navButtonStyle('/')}>Home</Button>
+              <Button onClick={() => navigate('/resources')} sx={navButtonStyle('/resources')}>Resources</Button>
+              <Button onClick={() => navigate('/institutions')} sx={navButtonStyle('/institutions')}>Institutions</Button>
+              <Button onClick={() => navigate('/aboutus')} sx={navButtonStyle('/aboutus')}>About Us</Button>
               {isAuthenticated ? (
-                <>
-                  <Button href="/resources"
-                    sx={{
-                      marginRight: '10px',
-                      width: '100px',
-                      height: '30px',
-                      textTransform: 'none',
-                      fontWeight: 600,
-                      fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      color: '#fcf230',
-                      '&:hover': {
-                        color: '#0457a4',
-                        backgroundColor: '#fcf230',
-                      },
-                      borderRadius: '20px'
-                    }}>
-                    Resources
-                  </Button>
-                  {/* <Avatar alt={user?.username || "User"} src={user?.profileImage || ""} sx={{ cursor: 'pointer' }} /> */}
-                </>
-              ) : (
-                <Button href="/login"
+                <Avatar
                   sx={{
-                    width: '100px',
-                    height: '30px',
+                    bgcolor: 'transparent',
+                    color: '#fcf230',
+                    cursor: 'pointer',
+                    '&:hover': { opacity: 0.8 },
+                  }}
+                  onClick={() => navigate('/profile')}
+                />
+              ) : (
+                <Button
+                  onClick={() => navigate('/login')}
+                  sx={{
+                    fontWeight: 'bold',
                     textTransform: 'none',
-                    fontWeight: 600,
                     fontFamily: 'Poppins',
                     fontSize: '14px',
                     color: '#b80201',
+                    width: '100px',
                     backgroundColor: '#fcf230',
-                    '&:hover': {
-                      color: '#fcf230',
-                      backgroundColor: 'transparent',
-                    },
-                    borderRadius: '20px'
-                  }}>
+                    '&:hover': { color: '#fcf230', backgroundColor: 'transparent' },
+                    borderRadius: '20px',
+                  }}
+                >
                   Sign In
                 </Button>
               )}
@@ -86,6 +86,6 @@ const NavigationBar = () => {
       </Box>
     </>
   );
-}
+};
 
 export default NavigationBar;

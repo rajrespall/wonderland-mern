@@ -3,25 +3,6 @@ import { Box, Typography, Button, Card, CardContent } from "@mui/material";
 import { SentimentVerySatisfied, SentimentNeutral, SentimentVeryDissatisfied, Delete } from "@mui/icons-material";
 import axios from "axios";
 
-const buttonStyles = (active) => ({
-  width: "25%",
-  p: 2,
-  height: "40px",
-  borderRadius: "20px",
-  border: "2px solid yellow",
-  fontFamily: "Poppins",
-  fontWeight: "400",
-  justifyContent: "left",
-  backgroundColor: active ? "white" : "transparent",
-  borderColor: active ? "#0457a4" : "#b80201",
-  color: active ? "#0457a4" : "#b80201",
-
-  "&:hover": {
-    backgroundColor: active ? "transparent" : "#fcf230",
-    borderColor: active ? "#fcf230" : "#b80201",
-  },
-});
-  
 const getRatingIcon = (rating) => {
   switch (rating) {
     case 5:
@@ -95,11 +76,6 @@ export default function PageReviews() {
                 {review.comment}
               </Typography>
 
-              <Box mt={2} display="flex" justifyContent="flex-start">
-                <Button sx={buttonStyles(false)} startIcon={<Delete />}>
-                  Delete
-                </Button>
-              </Box>
             </CardContent>
           </Card>
         ))

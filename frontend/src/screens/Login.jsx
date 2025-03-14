@@ -24,6 +24,8 @@ import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { auth } from '../config/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
@@ -44,6 +46,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   boxShadow: 3,
 }));
 
+
 const StyledTextField = styled(TextField)(({ theme }) => ({
   mb: 3,
   backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -60,7 +63,28 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     },
   },
 }));
-
+const StyledErrorTextField = styled(TextField)(({ theme }) => ({
+  mb: 3,
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#0457a4',
+      borderWidth: '2px',
+    },
+    '&:hover fieldset': {
+      borderColor: '#5da802',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#5da802',
+    },
+  },
+  '&.error': {
+    '& .MuiOutlinedInput-root fieldset': {
+      borderColor: 'red !important',
+      boxShadow: '0px 0px 10px rgba(255, 0, 0, 0.5)',
+    }
+  },
+}));
 const StyledButton = styled(Button)(({ theme }) => ({
   mt: 2,
   backgroundColor: '#0457a4',
@@ -76,7 +100,15 @@ const StyledButton = styled(Button)(({ theme }) => ({
     color: '#5da802',
     backgroundColor: 'transparent',
   },
+
+
+
 }));
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email address").required("Email is required"),
+  password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+});
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -153,14 +185,7 @@ const LoginPage = () => {
       <CssBaseline />
       <ButtonAppBar />
       <StyledBox>
-        <Grid
-          container
-          spacing={4}
-          alignItems="center"
-          justifyContent="center"
-          position='relative'
-          sx={{ px: 2 }}
-        >
+        <Grid container spacing={4} alignItems="center" justifyContent="center" position='relative' sx={{ px: 2 }}>
           <Grid item xs={12} sm={10} md={6} lg={4} sx={{ marginRight: "300px" }}>
             <img src={squirrel} alt="Squirrel" style={{ height: '400px', position: 'absolute', marginTop: "170px", marginLeft: "420px" }} />
             <StyledCard>
@@ -168,77 +193,116 @@ const LoginPage = () => {
                 <Box component="a" href="/">
                   <img src={logo} width="70%" alt="Logo" />
                 </Box>
-                <Typography
-                  variant="h5"
-                  fontWeight="bold"
-                  gutterBottom
-                  sx={{ mt: 5, color: '#5da802', fontWeight: 750, fontFamily: "Poppins", fontSize: "24px" }}
-                >
+                <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ mt: 5, color: '#5da802', fontWeight: 750, fontFamily: "Poppins", fontSize: "24px" }}>
                   <Icon sx={{ mr: 1 }}>
                     <LockIcon sx={{ fontSize: '27px', fontWeight: 'bold', color: '#0457a4' }} />
                   </Icon>
                   SIGN IN
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
-                  <StyledTextField
-                    fullWidth
-                    name="email"
-                    label="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
-                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' } }}
-                  />
 
-                  <StyledTextField
-                    fullWidth
-                    name="password"
-                    label="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
-                    InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4' } }}
-                    sx={{ mb: 1, mt: 2 }}
-                  />
+                {/* Formik Form */}
+                <Formik
+  initialValues={{ email: "", password: "" }}
+  validationSchema={validationSchema}
+  onSubmit={async (values, { setSubmitting }) => {
+    try {
+      const response = await login(values.email, values.password);
 
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                    <Link href="/forgot-password" variant="body2" sx={{
-                      color: '#0457a4',
-                      fontWeight: 'bold',
-                      textDecoration: 'none',
-                      fontFamily: 'Poppins',
-                      mb: 2,
-                      '&:hover': {
-                        textDecoration: 'underline',
-                      },
-                    }}>
-                      Forgot password?
-                    </Link>
-                  </Box>
+      if (response.requireReEnable) {
+        navigate('/re-enable', { state: { email: response.email } });
+      } else if (response.requireVerification) {
+        navigate('/verify-email', { state: { email: response.email } });
+      } else if (response.isFirstLogin) {
+        navigate('/getstarted');
+      } else {
+        navigate('/whosusing');
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  }}
+>
+  {({ errors, touched, isSubmitting }) => (
+    <Form noValidate style={{ marginTop: "1rem" }}>
+      {/* Email Field */}
+      <Field
+        as={StyledTextField}
+        fullWidth
+        name="email"
+        label="Email"
+        type="email"
+        className={errors.email && touched.email ? "error" : error ? "error" : ""}
+        InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
+        InputProps={{
+          style: {
+            color: 'black',
+            borderRadius: '50px',
+            borderColor: errors.email && touched.email ? 'red' : error ? 'red' : '#0457a4',
+            boxShadow: errors.email && touched.email ? '0px 0px 10px rgba(255, 0, 0, 0.5)' : error ? '0px 0px 10px rgba(255, 0, 0, 0.5)' : 'none',
+          }
+        }}
+      />
+      <ErrorMessage name="email" component="div" style={{ color: "red", fontSize: "12px", marginBottom: "10px" }} />
 
-                  {error && (
-                    <Typography color="error" sx={{ mt: 2 }}>
-                      {error}
-                    </Typography>
-                  )}
+      {/* Password Field */}
+      <Field
+        as={StyledTextField}
+        fullWidth
+        name="password"
+        label="Password"
+        type="password"
+        className={errors.password && touched.password ? "error" : error ? "error" : ""}
+        InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
+        InputProps={{
+          style: {
+            color: 'black',
+            borderRadius: '50px',
+            borderColor: errors.password && touched.password ? 'red' : error ? 'red' : '#0457a4',
+            boxShadow: errors.password && touched.password ? '0px 0px 10px rgba(255, 0, 0, 0.5)' : error ? '0px 0px 10px rgba(255, 0, 0, 0.5)' : 'none',
+          }
+        }}
+        sx={{ mb: 1, mt: 2 }}
+      />
+      <ErrorMessage name="password" component="div" style={{ color: "red", fontSize: "12px", marginBottom: "10px" }} />
 
-                  <Typography variant="body2" align="center" sx={{ color: '#5da802', fontFamily: 'Poppins', fontSize: '14px', mt: 2, mb: 2 }}>
-                    Don't have an account?{' '}
-                    <Link href="/register" fontWeight="bold" sx={{ color: '#5da802' }}>
-                      Sign Up
-                    </Link>
-                  </Typography>
-                  <StyledButton
-                    type="submit"
-                    variant='outlined'
-                    fullWidth
-                    disabled={loading}
-                  >
-                    {loading ? 'Signing in...' : 'Sign In'}
-                  </StyledButton>
-                </Box>
+      {/* Forgot Password Link */}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+        <Link href="/forgot-password" variant="body2" sx={{
+          color: '#0457a4',
+          fontWeight: 'bold',
+          textDecoration: 'none',
+          fontFamily: 'Poppins',
+          mb: 2,
+          '&:hover': {
+            textDecoration: 'underline',
+          },
+        }}>
+          Forgot password?
+        </Link>
+      </Box>
+
+      {/* Display Incorrect Login Error */}
+      {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
+
+      {/* Sign Up Link */}
+      <Typography variant="body2" align="center" sx={{ color: '#5da802', fontFamily: 'Poppins', fontSize: '14px', mt: 2, mb: 2 }}>
+        Don't have an account?{' '}
+        <Link href="/register" fontWeight="bold" sx={{ color: '#5da802' }}>
+          Sign Up
+        </Link>
+      </Typography>
+
+      {/* Submit Button */}
+      <StyledButton type="submit" variant='outlined' fullWidth disabled={isSubmitting || loading}>
+        {isSubmitting || loading ? 'Signing in...' : 'Sign In'}
+      </StyledButton>
+    </Form>
+  )}
+</Formik>
+
+
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
                   <StyledButton
                     onClick={handleGoogleLogin}
@@ -275,5 +339,6 @@ const LoginPage = () => {
     </>
   );
 };
+
 
 export default LoginPage;

@@ -51,6 +51,7 @@ const useAuthStore = create((set) => ({
     } catch (error) {
       console.error("Auth Store Login Error:", error.response?.data || error);
 
+      
       if (error.response?.status === 403 && error.response.data.requireReEnable) {
           console.log("Redirecting to re-enable page...");
           return {
@@ -59,11 +60,12 @@ const useAuthStore = create((set) => ({
           };
       }
 
-      set({
-          error: error.response?.data?.error || 'Login failed',
-          loading: false
-      });
-
+      // set({
+      //     error: error.response?.data?.error || 'Login failed',
+      //     loading: false
+      // });
+      set({ error: "Email or password is incorrect", loading: false });
+      
       throw error;
     }
   },

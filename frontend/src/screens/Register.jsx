@@ -51,22 +51,22 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await register(formData.username, formData.email, formData.password);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await register(formData.username, formData.email, formData.password);
       
-      // Check if verification is required
-      if (response.requireVerification) {
-        navigate('/verify-email', { state: { email: response.email } });
-        return;
-      }
+  //     // Check if verification is required
+  //     if (response.requireVerification) {
+  //       navigate('/verify-email', { state: { email: response.email } });
+  //       return;
+  //     }
       
-      navigate('/getstarted');
-    } catch (err) {
-      console.error('Registration error:', err);
-    }
-  };
+  //     navigate('/getstarted');
+  //   } catch (err) {
+  //     console.error('Registration error:', err);
+  //   }
+  // };
 
   return (
     <>
@@ -215,40 +215,40 @@ const Register = () => {
 
                       {/* Password Field */}
                       <Field
-  as={TextField}
-  fullWidth
-  name="password"
-  label="Password"
-  type="password"
-  className={errors.password && touched.password ? "error" : ""}
-  InputLabelProps={{ 
-    style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } 
-  }}
-  InputProps={{
-    style: {
-      color: 'black',
-      borderRadius: '50px',
-      borderColor: errors.password && touched.password ? 'red' : '#b80201',
-      boxShadow: errors.password && touched.password ? '0px 0px 10px rgba(255, 0, 0, 0.5)' : 'none',
-    }
-  }}
-  sx={{
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: errors.password && touched.password ? 'red !important' : '#b80201',
-        borderWidth: '2px',
-      },
-      '&:hover fieldset': {
-        borderColor: errors.password && touched.password ? 'red' : '#5da802',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: errors.password && touched.password ? 'red' : '#5da802',
-      },
-    },
-  }}
-/>
-<ErrorMessage name="password" component="div" style={{ color: "red", fontSize: "12px", marginBottom: "10px" }} />
+                        as={TextField}
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        className={errors.password && touched.password ? "error" : ""}
+                        InputLabelProps={{ 
+                          style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } 
+                        }}
+                        InputProps={{
+                          style: {
+                            color: 'black',
+                            borderRadius: '50px',
+                            borderColor: errors.password && touched.password ? 'red' : '#b80201',
+                            boxShadow: errors.password && touched.password ? '0px 0px 10px rgba(255, 0, 0, 0.5)' : 'none',
+                          }
+                        }}
+                        sx={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: errors.password && touched.password ? 'red !important' : '#b80201',
+                              borderWidth: '2px',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: errors.password && touched.password ? 'red' : '#5da802',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: errors.password && touched.password ? 'red' : '#5da802',
+                            },
+                          },
+                        }}
+                      />
+                      <ErrorMessage name="password" component="div" style={{ color: "red", fontSize: "12px", marginBottom: "10px" }} />
 
 
                       {/* Display Server Error */}

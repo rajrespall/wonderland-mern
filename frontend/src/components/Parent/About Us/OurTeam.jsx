@@ -19,10 +19,10 @@ const teamMembers = [
 const TeamSection = () => {
   return (
     <Container sx={{ py: 8, textAlign: "center", fontFamily: "Poppins" }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: "#0457a4" }}>
+      <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: "#fcf230", fontFamily: 'Poppins', }}>
         Meet Our Team
       </Typography>
-      <Typography variant="body1" color="text.secondary" maxWidth="md" mx="auto" mb={4}>
+      <Typography variant="body1" maxWidth="md" mx="auto" mb={4} sx={{color: '#0457a4'}}>
         A dedicated team of developers and researchers working on an innovative system for young children with autism.
       </Typography>
       <Grid container spacing={5} justifyContent="center">

@@ -151,7 +151,7 @@ const LoginPage = () => {
   //   }
   // };
 
-  // const handleGoogleLogin = async (event) => {
+  const handleGoogleLogin = async (event) => {
     event.preventDefault();
     try {
       const provider = new GoogleAuthProvider();

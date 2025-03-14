@@ -36,9 +36,11 @@ const Home = () => {
         <Box sx={{p: 2}}>
             <MyDonations />
         </Box>
-        <Box>
-          <TeamSection />
+        <Box sx={{backgroundColor: '#5da802'}}>
           <MissionVision />
+        </Box>
+        <Box >
+          <TeamSection />
         </Box>
       </>
         

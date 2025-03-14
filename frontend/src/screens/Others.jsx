@@ -137,7 +137,7 @@ const OtherSymptoms = () => {
             localStorage.removeItem(`Social_${i}_answer`);
           }
           localStorage.removeItem("Others_answers");
-          navigate('/resources');
+          navigate('/whosusing');
         }
       } catch (error) {
         if (error.response && error.response.data && error.response.data.message && 
@@ -225,33 +225,64 @@ const OtherSymptoms = () => {
           {questions[currentQuestion].question}
         </Typography>
 
-        <Box sx={{ display: "grid", gap: 2, maxWidth: "500px", margin: "auto", overflowY: "auto", maxHeight: "40vh", backgroundColor: 'white', padding: 3, borderRadius: '20px' }}>
-          {questions[currentQuestion].answers.map((answer, index) => (
-            <FormControlLabel
+        <Box sx={{ display: "grid", gap: 2, margin: "auto", overflowY: "auto", maxHeight: "40vh", width: '80%', backgroundColor: 'white', padding: 3, borderRadius: '20px' }}>
+        {questions[currentQuestion].answers.map((answer, index) => (
+          <FormControlLabel
             key={index}
             control={
               <Checkbox
                 checked={answers.includes(answer)}
                 onChange={() => handleAnswer(answer)}
-                color="primary"
+                sx={{
+                  display: "none", 
+                }}
               />
             }
             label={answer}
             sx={{
-              '& .MuiTypography-root': {
-                fontFamily: 'Poppins',
-                fontSize: '18px', 
+              width: "100%",
+              backgroundColor: answers.includes(answer) ? "#0457a4" : "white",
+              color: answers.includes(answer) ? "white" : "black",
+              border: "2px solid #5da802",
+              borderRadius: "30px",
+              padding: "10px 20px",
+              fontFamily: "Poppins",
+              fontSize: "18px",
+              fontWeight: "bold",
+              textAlign: "center",
+              transition: "all 0.3s ease-in-out",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: answers.includes(answer) ? "#5da802" : "#f5f5f5",
               },
             }}
           />
-          ))}
+        ))}
           <TextField
             label="Other (please specify)"
             variant="outlined"
             fullWidth
             value={other}
             onChange={(e) => setOther(e.target.value)}
-            sx={{ mt: 2 }}
+            InputLabelProps={{ style: { color: '#5da802', fontWeight: 600, fontFamily: "Poppins", fontSize: "16px" } }}
+            InputProps={{ style: { color: 'black', borderRadius: '50px', borderColor: '#0457a4', } }}
+            sx={{
+              mt: 2,
+              mb: 3,
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#0457a4',
+                  borderWidth: '2px',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#5da802',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#5da802',
+                },
+              },
+            }}
           />
         </Box>
 
@@ -275,7 +306,7 @@ const OtherSymptoms = () => {
               py: 1,
               "&:hover": { backgroundColor: "#4c9000" },
             }}
-            onClick={handleButtonClick}  // Use the combined handler
+            onClick={handleButtonClick} 
             disabled={!allAnswered || submitting}
           >
             {submitting ? 'Submitting...' : 'Submit'}

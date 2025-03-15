@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
-  Paper,
   Grid,
-  Avatar,
   List,
   ListItem,
   ListItemText,
@@ -14,8 +12,6 @@ import {
   DialogContent,
   DialogContentText,
   Tooltip,
-  CircularProgress,
-  Alert
 } from "@mui/material";
 import "@fontsource/poppins";
 import { Visibility } from "@mui/icons-material";
@@ -42,9 +38,9 @@ export default function Donations() {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
-    fetchDonors();
+    fetchDonors();  
 }, []);
 
   const handleViewDetails = (donor) => {

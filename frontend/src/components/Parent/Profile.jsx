@@ -74,7 +74,7 @@ export default function ProfilePage() {
 
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4, minHeight: "635px" }}>
+    <Container maxWidth="xl" sx={{ minHeight: "635px", py: 2 }}>
       <Box
         sx={{
           display: "flex",

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box, CssBaseline } from "@mui/material";
-import ParentNav from "../../../components/ParentNav";
 import Spinner from "../../../components/Spinner";
 import InstitutionsPage from "../../../components/Parent/Institutions/InstitutionsPage";
+import NavigationBar from "../../../components/NavigationBar";
 
 export default function Institutions() {
     const [loading, setLoading] = useState(true);
@@ -21,10 +21,9 @@ export default function Institutions() {
                 sx={{
                     minHeight: '100vh',
                     backgroundColor: 'rgb(4, 87, 164, .1)',
-                    p: 2
                 }}
             >
-                <ParentNav />
+                <NavigationBar />
                 {loading ? <Spinner /> : <InstitutionsPage />}
             </Box>
         </>

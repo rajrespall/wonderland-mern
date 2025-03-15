@@ -4,7 +4,6 @@ import useAssessmentStore from '../../store/assessmentStore';
 import { Box, Typography, Card, CardContent, CardMedia, IconButton, Grid, CssBaseline } from "@mui/material";
 import EastRoundedIcon from '@mui/icons-material/EastRounded';
 import Spinner from "../../components/Spinner";
-import ParentNav from '../../components/ParentNav'; 
 import AssessmentAnalysis from "../../components/AssessmentAnalysis";
 
 // image imports
@@ -70,10 +69,9 @@ const Resources = () => {
                     backgroundColor: 'rgba(4, 87, 164, 0.1)',
                     
                     minHeight: '100vh',
-                    p: 2
                 }}
             >
-                <ParentNav />
+                <NavigationBar />
                 <Typography
                     sx={{
                         mt: 4,

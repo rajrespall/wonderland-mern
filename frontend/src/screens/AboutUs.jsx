@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, CssBaseline } from "@mui/material";
 import Spinner from "../components/Spinner";
 import Feedback from "../components/Feedback";
-import ParentNav from "../components/ParentNav";
+import NavigationBar from "../components/NavigationBar";
 
 const AboutUs = () => {
   const [loading, setLoading] = useState(true);
@@ -23,14 +23,9 @@ const AboutUs = () => {
       <Box
         sx={{
           backgroundColor: 'rgba(4, 87, 164, 0.1)',
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-between",
-          p: 2
         }}
       >
-        <ParentNav />
+        <NavigationBar />
         <Feedback />
       </Box>
     </>

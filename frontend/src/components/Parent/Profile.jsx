@@ -13,7 +13,7 @@ import Gallery from "./Gallery";
 
 const buttonStyles = (active) => ({
   width: '100%',
-  height: '40px',
+  height: '40px', 
   borderRadius: '20px',
   border: '2px solid yellow',
   fontFamily: 'Poppins',

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Box, Typography, Paper, Grid, Divider } from '@mui/material';
+import { Box, Typography, Paper, Grid } from '@mui/material';
 
 const AssessmentAnalysis = ({ analysis }) => {
   if (!analysis) return null;
 
-  // ISAA color coding based on category
   const getCategoryColor = (category) => {
     switch (category) {
       case "No Autism": return "#4caf50";
@@ -16,56 +15,68 @@ const AssessmentAnalysis = ({ analysis }) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 8 }}>
-      <Typography variant="h5" gutterBottom sx={{ color: '#0457a4', fontFamily: 'Poppins' }}>
-        Assessment Analysis (ISAA)
+    <>
+    <Typography
+      sx={{
+        color: "white",
+        fontWeight: "400",
+        fontFamily: 'Poppins',
+        fontSize: '50px',
+        backgroundImage: "linear-gradient(to bottom right, #0457a4, #5da802)",
+        WebkitBackgroundClip: "text",
+        color: "transparent",
+        }}
+      >
+        Assessment Analysis
       </Typography>
-      
-      <Box sx={{ mb: 3, p: 2, borderRadius: 4, bgcolor: 'rgba(4, 87, 164, 0.1)' }}>
-        <Typography variant="h6">
-          Overall Score: {analysis.totalScore || 0}
-        </Typography>
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            fontWeight: 'bold', 
-            color: getCategoryColor(analysis.isaaCategory)
-          }}
-        >
-          Category: {analysis.isaaCategory || "Not Categorized"}
-        </Typography>
-        <Typography variant="body2" sx={{ mt: 1 }}>
-          Based on Indian Scale for Assessment of Autism (ISAA)
-        </Typography>
-      </Box>
-      
-      <Divider sx={{ mb: 3 }} />
-      
-      <Typography variant="h6" gutterBottom>
-        Priority Areas
-      </Typography>
-      
-      <Grid container spacing={2}>
-        {analysis.priorityAreas.map((area) => (
-          <Grid item xs={12} sm={6} key={area.domain}>
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 4,
-                bgcolor: 'rgba(4, 87, 164, 0.1)',
-              }}
-            >
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#5da802' }}>
-                {area.label}
-              </Typography>
-              <Typography variant="body2">
-                Recommended focus area based on assessment results
-              </Typography>
-            </Box>
-          </Grid>
-        ))}
+    <Grid container spacing={3} sx={{ mt: 4 }}>
+      {/* Overall Score Card */}
+      <Grid item xs={12} md={4}>
+        <Paper elevation={3} sx={{ height: 150, p: 3, borderRadius: 4, textAlign: 'center', bgcolor: 'rgba(4, 87, 164, 0.1)' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#0457a4' }}>
+            Overall Score
+          </Typography>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 1, color: '#000' }}>
+            {analysis.totalScore || 0}
+          </Typography>
+        </Paper>
       </Grid>
-    </Paper>
+
+      {/* Category Card */}
+      <Grid item xs={12} md={4}>
+        <Paper elevation={3} sx={{ height: 150, p: 3, borderRadius: 4, textAlign: 'center', bgcolor: 'rgba(4, 87, 164, 0.1)' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#0457a4' }}>
+            Category
+          </Typography>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 1, color: getCategoryColor(analysis.isaaCategory) }}>
+            {analysis.isaaCategory || "Not Categorized"}
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            Based on ISAA (Indian Scale for Assessment of Autism)
+          </Typography>
+        </Paper>
+      </Grid>
+
+      {/* Priority Areas Card */}
+      <Grid item xs={12} md={4}>
+        <Paper elevation={3} sx={{ height: 150, p: 3, borderRadius: 4, textAlign: 'center', bgcolor: 'rgba(4, 87, 164, 0.1)' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#0457a4' }}>
+            Priority Areas
+          </Typography>
+          <Grid container spacing={1} sx={{ mt: 1 }}>
+            {analysis.priorityAreas.map((area) => (
+              <Grid item xs={12} key={area.domain}>
+                <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#5da802' }}>
+                  {area.label}
+                </Typography>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      </Grid>
+    </Grid>
+    </>
+
   );
 };
 

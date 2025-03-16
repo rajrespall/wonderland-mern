@@ -145,7 +145,7 @@ const UserSelection = () => {
                   },
                 }}
               >
-                <Box component="a" href="/resources">
+                <Box component="a" href="/">
                   <img src={ParentIcon} alt="Parent Icon" />
                 </Box>
                 <Typography

@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import logo from '../assets/logo_blue.png';
 import logo1 from '../assets/logo_red.png';
+import { AlignCenter } from 'lucide-react';
 
 
 const NavigationBar = () => {

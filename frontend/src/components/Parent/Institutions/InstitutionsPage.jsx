@@ -83,7 +83,6 @@ export default function InstitutionsPage() {
           color: "#333" 
         }}
       >
-        Recommended Institutions
       </Typography>
       <Grid container spacing={4}>
         {institutions.map((institution) => (

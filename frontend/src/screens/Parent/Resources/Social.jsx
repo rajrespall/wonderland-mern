@@ -5,6 +5,7 @@ import useResourceStore from '../../../store/resourceStore';
 import Spinner from '../../../components/Spinner';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import NavigationBar from '../../../components/NavigationBar';
 
 const Social = () => {
   const { resources, loading, error, fetchResources, getResourcesByType } = useResourceStore();
@@ -31,19 +32,17 @@ const Social = () => {
       <CssBaseline />
       <Box
         sx={{
-          backgroundColor: '#9C27B0',
+          backgroundColor: 'rgba(4, 87, 164, 0.1)',
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
           justifyContent: "space-between",
           minHeight: '100vh',
-          p: 2
         }}
       >
-        <ParentNav />
+        <NavigationBar />
         <Container maxWidth="lg" sx={{ flex: 1 }}>
           <Box sx={{ mt: 4, mb: 4 }}>
-            <Typography variant="h4" gutterBottom sx={{ color: 'white', textAlign: 'center', mb: 4, fontFamily: 'Poppins' }}>
+            <Typography variant="h4" gutterBottom sx={{ color: '#0457a4', textAlign: 'center', mb: 4, fontFamily: 'Poppins' }}>
               Social Resources
             </Typography>
           <Grid container spacing={4} alignItems="flex-start">

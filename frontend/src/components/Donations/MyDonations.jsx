@@ -62,12 +62,11 @@ const MyDonations = () => {
   return (
     <>
       <CssBaseline />
-        <Card sx={{ display: 'flex', boxShadow: 5, overflow: 'hidden', width: '100%', height: '80vh' }}>
+        <Card sx={{ display: 'flex', overflow: 'hidden', width: '100%', height: '100vh', boxShadow:'none', }}>
           {/* Left Side */}
           <Box
             sx={{
               width: '50%',
-              background: 'white',
               p: 10,
               display: 'flex',
               flexDirection: 'column',
@@ -92,12 +91,12 @@ const MyDonations = () => {
 
           {/* Right Side */}
           <Box sx={{ width: '50%', p: 5, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <Box sx={{width: '80%', margin: 'auto', boxShadow: 2, borderRadius: '30px', p: 5, backgroundImage: 'linear-gradient(to top , #badeff, #fff)'}}>
+            <Box sx={{width: '80%', margin: 'auto', borderRadius: '30px', p: 5, boxShadow: 2, backgroundImage: '#fff'}}>
             <Typography variant="h4" sx={{ fontWeight: 700, color: '#0457a4', mb: 4, fontFamily: 'Poppins', textAlign: 'center' }}>
               Contribute to the Community!
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
-              <Typography variant="body1" sx={{ mb: 2, fontFamily: 'Poppins', fontWeight: 500 }}>
+              <Typography variant="body1" sx={{ mb: 2, fontFamily: 'Poppins', fontWeight: 500, color: '#5da802' }}>
                 What are you going to donate in-kind?
               </Typography>
               <FormControl
@@ -128,7 +127,7 @@ const MyDonations = () => {
                 </Select>
               </FormControl>
 
-              <Typography variant="body1" sx={{ mb: 2, fontFamily: 'Poppins', fontWeight: 500 }}>
+              <Typography variant="body1" sx={{ mb: 2, fontFamily: 'Poppins', fontWeight: 500, color: '#5da802' }}>
                 Attach an image of your donation
               </Typography>
               <TextField
@@ -165,7 +164,7 @@ const MyDonations = () => {
                   textTransform: 'none',
                   height: '50px',
                   color: '#fcf230',
-                  '&:hover': { color: '#fcf230', backgroundColor: '#5da802' }
+                  '&:hover': { color: '#5da802', backgroundColor: 'transparent', border: '2px solid #0457a4' }
                 }}
               >
                 Donate

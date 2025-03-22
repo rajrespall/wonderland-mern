@@ -23,7 +23,6 @@ const HeroSection = () => {
             </Typography> */}
             <Typography
               sx={{
-                color: "white",
                 fontWeight: "400",
                 fontFamily: 'Poppins',
                 fontSize: '70px',

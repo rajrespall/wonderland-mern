@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Container, Box, CssBaseline, CardMedia } from "@mui/material";
-import ParentNav from "../../../components/ParentNav";
 import InstitutionCard from "../../../components/Parent/Institutions/InsDetails";
+import NavigationBar from "../../../components/NavigationBar";
 
 export default function InstitutionDetails() {
   const { id } = useParams();
@@ -26,7 +26,7 @@ export default function InstitutionDetails() {
   if (error) {
     return (
       <>
-        <ParentNav />
+        <NavigationBar />
         <Container sx={{ mt: 4 }}>
           <h2>{error}</h2>
         </Container>
@@ -37,7 +37,7 @@ export default function InstitutionDetails() {
   if (!institution) {
     return (
       <>
-        <ParentNav />
+        <NavigationBar />
         <Container sx={{ mt: 4 }}>
           <h2>Loading...</h2>
         </Container>
@@ -48,9 +48,9 @@ export default function InstitutionDetails() {
   return (
     <>
       <CssBaseline />
-      <Box sx={{ backgroundColor: 'rgb(4, 87, 164, .1)', minHeight: '100vh', p: 2 }}>
-        <ParentNav />
-        <CardMedia sx={{ mt: 4 }}>
+      <Box sx={{ backgroundColor: 'rgb(4, 87, 164, .1)', minHeight: '100vh' }}>
+        <NavigationBar />
+        <CardMedia>
           <img
             src={institution.institutionImage}
             alt="institution"

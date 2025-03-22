@@ -1,18 +1,18 @@
 import React from "react";
 import { Grid, Container, Typography, Box } from "@mui/material";
 import popsImage from "../../../assets/OurTeam/MaamPops.jpg";
-// import rajeshImage from "../../assets/OurTeam/Rajesh.jpg";
+import rajeshImage from "../../../assets/OurTeam/Rajesh.jpg";
 import dianaImage from "../../../assets/OurTeam/Diana.jpg";
 import ernestoImage from "../../../assets/OurTeam/Ernesto.jpg";
-// import jeanImage from "../../assets/OurTeam/Jean.jpg";
+import jeanImage from "../../../assets/OurTeam/Jean.jpg";
 
 
 const teamMembers = [
   { name: "Pops", role: "Adviser", image: popsImage },
-  { name: "Rajesh", role: "Developer", image: "rajeshImage" },
+  { name: "Rajesh", role: "Developer", image: rajeshImage },
   { name: "Diana", role: "Developer", image: dianaImage },
   { name: "Ernesto", role: "Developer", image: ernestoImage },
-  { name: "Jean", role: "Developer", image: "jeanImage" }
+  { name: "Jean", role: "Research Specialist", image: jeanImage }
 ];
 
 

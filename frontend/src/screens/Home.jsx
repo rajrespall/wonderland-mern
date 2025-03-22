@@ -33,7 +33,7 @@ const Home = () => {
             <NavigationBar />
             <FunPlaceHero />
         </Box>
-        <Box sx={{p: 2}}>
+        <Box>
             <MyDonations />
         </Box>
         <Box sx={{backgroundColor: '#0457a4'}}>

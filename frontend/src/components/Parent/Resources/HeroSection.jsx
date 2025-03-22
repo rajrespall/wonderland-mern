@@ -1,46 +1,54 @@
 import React from "react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
-
-import autism from '../../../assets/autismElements/resources.png';
+import { BookOpen, FileText, BrainCircuit } from "lucide-react"; 
 
 const HeroSection = () => {
   return (
-    <Box sx={{ backgroundColor: "transparent", py: 10 }}>
-      <Container maxWidth="lg">
-        <Grid container spacing={4} alignItems="center">
-          <Grid item xs={12} md={6} mb={10  }>
-            {/* <Typography variant="subtitle1" sx={{ color: "#0457a4", textTransform: "uppercase" }}>
-              Learn how improve the commuincation skills and more!
-            </Typography> */}
+    <Box sx={{ py: 10, height: "100vh" }}>
+      <Container maxWidth="lg" >
+          
             <Typography
               sx={{
-                color: "white",
-                fontWeight: "400",
-                fontFamily: 'Poppins',
+                mt: 5,
+                fontFamily: 'Luckiest Guy',
                 fontSize: '100px',
+                textAlign: 'left',
                 backgroundImage: "linear-gradient(to bottom right, #0457a4, #5da802)",
                 WebkitBackgroundClip: "text",
-                textAlign: 'left',
                 color: "transparent",
+                textShadow: "2px 2px 8px rgba(0,0,0,0.2)",
               }}
             >
               Resources
             </Typography>
-            <Typography sx={{ color: "#0457a4", mt: 2, fontSize: '20px', textAlign: 'left' }}>
-            Access valuable resources tailored to high-priority areas, determined through comprehensive evaluations to maximize effectiveness and results
-            </Typography>
-          </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Box sx={{ textAlign: "center", ml: 5 }}>
-              <img
-                src={autism}
-                alt="Hero Illustration"
-                style={{ maxWidth: "100%", width: 500 }}
-              />
+            <Typography 
+              sx={{ 
+                color: "#0457a4", 
+                mt: 2, 
+                fontSize: '18px', 
+                fontFamily: 'Poppins', 
+                textAlign: 'left' 
+              }}
+            >
+              Access valuable resources tailored to high-priority areas, determined through comprehensive evaluations to maximize effectiveness and results.
+            </Typography>
+
+            <Box sx={{ display: "flex", gap: 3, mt: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <BookOpen size={30} color="#ff7eb3" />
+                <Typography sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Guides</Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <FileText size={30} color="#5da802" />
+                <Typography sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Documents</Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <BrainCircuit size={30} color="#ffcc00" />
+                <Typography sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>Learning</Typography>
+              </Box>
             </Box>
-          </Grid>
-        </Grid>
+
       </Container>
     </Box>
   );

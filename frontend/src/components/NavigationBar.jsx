@@ -31,7 +31,7 @@ const NavigationBar = () => {
       transition: 'width 0.3s ease-in-out',
       position: 'absolute',
       bottom: '-3px',
-      left: '0',
+      transform: 'scaleX(1)',
     },
     '&:hover': {
       color: isNotHome ? 'white' : '#5da802',

@@ -15,6 +15,7 @@ import {
   Alert
 } from '@mui/material';
 import autism from '../../assets/autismElements/5.png';
+import {motion} from 'framer-motion';
 import axios from 'axios';
 
 const MyDonations = () => {
@@ -62,6 +63,13 @@ const MyDonations = () => {
   return (
     <>
       <CssBaseline />
+      
+      <motion.div
+        initial={{ x: 100, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        viewport={{ once: true }}
+      >
         <Card sx={{ display: 'flex', overflow: 'hidden', width: '100%', height: '100vh', boxShadow:'none', }}>
           {/* Left Side */}
           <Box
@@ -173,6 +181,8 @@ const MyDonations = () => {
             </Box>
           </Box>
         </Card>
+        </motion.div>
+
 
       <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={() => setOpenSnackbar(false)}>
         <Alert onClose={() => setOpenSnackbar(false)} severity={severity} sx={{ width: '100%' }}>

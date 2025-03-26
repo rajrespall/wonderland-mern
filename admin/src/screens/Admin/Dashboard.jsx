@@ -1,29 +1,15 @@
 import React, { useState } from 'react';
 import { CssBaseline, Box, AppBar, Toolbar, Typography, IconButton, InputBase } from '@mui/material';
-import { Search, AccountCircle, Reviews } from '@mui/icons-material';
+import { Search, AccountCircle } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import Sidebar from '../../components/Admin/SideBar';
-// import DashboardCharts from '../../components/Admin/Dashboard';
 import AdminReviews from '../../components/Admin/Reviews';
 import Donations from '../../components/Admin/Donations';
 import Charts from '../../components/Admin/Charts';
 import Institution from '../../components/Admin/Institution';
 import Users from '../../components/Admin/Users';
 
-
-const drawerWidth = 260;
-
-const SearchBar = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': { backgroundColor: alpha(theme.palette.common.white, 0.25) },
-  width: '250px',
-  display: 'flex',
-  alignItems: 'center',
-  padding: '4px 10px',
-  border: '2px solid #003366',
-}));
+const drawerWidth = 220;
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
@@ -36,8 +22,6 @@ const AdminHome = () => {
 
   const renderContent = () => {
     switch (currentView) {
-      // case 'Dashboard':
-      //   return <DashboardCharts />;
       case 'Reviews':
         return <AdminReviews />;
       case 'Donations':
@@ -47,63 +31,43 @@ const AdminHome = () => {
       case 'Institutions':
         return <Institution />;
       case 'Users':
-          return <Users />;
-        default:  
-          return <Charts />;
+        return <Users />;
+      default:
+        return <Charts />;
     }
   };
 
   return (
-    <Box sx={{ display: 'flex'}}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar 
-        position="fixed" 
-        sx={{ 
-          width: `calc(100% - ${drawerWidth}px)`, 
-          ml: `${drawerWidth}px`, 
-          bgcolor: '#DCEAF7', 
-          color: 'black', 
-          boxShadow: 'none' 
-        }}
-      >
-        <Toolbar>
-          <Typography 
-            variant="h6" 
-            noWrap 
-            sx={{ 
-              fontWeight: 'bold', 
-              color: '#0457a4' 
-            }}
-          >
-            DASHBOARD
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <SearchBar sx={{ borderRadius: '25px' }}>
-            <Search sx={{ color: '#003366' }} />
-            <StyledInputBase
-              placeholder="Search"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </SearchBar>
-          <IconButton color="inherit">
-            <AccountCircle sx={{ fontSize: 32 }} />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-
+      
       <Sidebar currentView={currentView} onButtonClick={setCurrentView} />
 
-      <Box 
-        component="main" 
-        sx={{ 
-          flexGrow: 1, 
-          bgcolor: '#DCEAF7', 
-          p: 3 
-          
-        }}
-      >
-        <Toolbar />
-        {renderContent()}
+      <Box sx={{ flexGrow: 1, ml: `${drawerWidth}px` }}>
+        <AppBar 
+          position="fixed" 
+          sx={{ 
+            width: `calc(100% - ${drawerWidth}px)`, 
+            ml: `${drawerWidth}px`, 
+            bgcolor: '#fff', 
+            color: 'black', 
+            boxShadow: 'none',
+          }}
+        >
+          <Toolbar>
+            <Typography variant="h6" noWrap sx={{ fontWeight: 'bold', color: '#0457a4' }}>
+              {currentView.toUpperCase()}
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <IconButton color="inherit">
+              <AccountCircle sx={{ fontSize: 32 }} />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+
+        <Box component="main" sx={{ flexGrow: 1, bgcolor: '#DCEAF7', p: 3, mt: 8 }}>
+          {renderContent()}
+        </Box>
       </Box>
     </Box>
   );

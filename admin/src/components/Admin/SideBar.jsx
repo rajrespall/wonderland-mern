@@ -1,38 +1,42 @@
 import React from 'react';
-import { Box, List, ListItemButton, Typography } from '@mui/material';
+import { Box, List, ListItemButton, Typography, TextField, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import logo from '../../assets/logo_red.png';
-import useAdminStore from "../../../Store/adminStore"; 
-import { useNavigate } from "react-router-dom";
+import logo from '../../assets/logo_blue.png';
+import useAdminStore from '../../../Store/adminStore';
+import { useNavigate } from 'react-router-dom';
+import { HomeOutlined, ReviewsOutlined, AccountBalanceOutlined, VolunteerActivismOutlined, PeopleOutlined, BarChartOutlined, LogoutOutlined } from '@mui/icons-material';
 
 const SidebarContainer = styled(Box)({
-  width: 260,
+  width: 220,
   height: '100vh',
-  backgroundColor: '#0457a4',
-  color: 'white',
+  backgroundColor: '#ffffff',
+  color: '#333',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  paddingTop: '20px',
+  padding: '15px',
+  boxShadow: 'none',
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  overflow: 'hidden',
+  zIndex: 1200
 });
 
 const StyledButton = styled(ListItemButton)(({ active }) => ({
-  width: '85%',
-  height: '40px',
-  margin: '10px 0',
-  borderRadius: '20px',
-  border: '2px solid yellow',
-  fontFamily: 'Poppins', 
-  fontWeight: '400',
-  justifyContent: 'center',
-  backgroundColor: active ? 'yellow' : 'transparent',
-  borderColor: active ? '#b80201' : '#fcf230',
-  color: active ? '#b80201' : 'white',
+  width: '100%',
+  height: '45px',
+  margin: '6px 0',
+  borderRadius: '8px',
+  justifyContent: 'flex-start',
+  color: active ? '#ffffff' : '#333',
+  backgroundColor: active ? '#635bff' : 'transparent',
   '&:hover': {
-    backgroundColor: active ? 'transparent' : '#fcf230',
-    color: active ? 'white' : '#b80201',
-    borderColor: active ? '#fcf230' : '#b80201'
+    backgroundColor: active ? '#5548d9' : '#f5f5f5',
   },
+  fontSize: '14px',
+  fontWeight: '500',
+  paddingLeft: '15px',
+  fontFamily: 'Poppins' 
 }));
 
 const Sidebar = ({ currentView, onButtonClick }) => {
@@ -40,49 +44,43 @@ const Sidebar = ({ currentView, onButtonClick }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout(); 
-    navigate("/login"); 
+    await logout();
+    navigate('/login');
   };
+
   return (
     <SidebarContainer>
-      <img src={logo} width="80%" alt="Logo" />
-      <Typography variant="h6"
-        sx={{ 
-          fontFamily: 'Poppins', 
-          fontWeight: 'bold',
-          fontSize: '15px',
-          mb: 2,
-          mt: 3 
-        }}
-      >
-        Admin
-      </Typography>
-      <List 
-      sx={{ 
-        fontSize: '14px', 
-        width: '100%', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center'
-        }}>
-        {/* <StyledButton onClick={() => onButtonClick('Dashboard')} active={currentView === 'Dashboard'}>Dashboard</StyledButton> */}
-        <StyledButton onClick={() => onButtonClick('Reviews')} active={currentView === 'Reviews'}>Reviews</StyledButton>
-        <StyledButton onClick={() => onButtonClick('Institutions')} active={currentView === 'Institutions'}>Institutions</StyledButton>
-        <StyledButton onClick={() => onButtonClick('Donations')} active={currentView === 'Donations'}>Donations</StyledButton>
-        <StyledButton onClick={() => onButtonClick('Users')} active={currentView === 'Users'}>Users</StyledButton>
-        <StyledButton onClick={() => onButtonClick('Charts')} active={currentView === 'Charts'}>Charts</StyledButton>
-        {/* <StyledButton onClick={() => onButtonClick('Reports')} active={currentView === 'Reports'}>Reports</StyledButton> */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', paddingBottom: '5px', }}>
+        <img src={logo} width='160' alt='Logo' />
+      </Box>
+      <List sx={{ width: '100%', flexGrow: 1, mt: 3 }}>
+        <StyledButton onClick={() => onButtonClick('Dashboard')} active={currentView === 'Dashboard'}>
+          <HomeOutlined sx={{ marginRight: 1 }} /> Dashboard
+        </StyledButton>
+        <Divider sx={{ width: '100%', mt: 2 }} />
+
+        <StyledButton onClick={() => onButtonClick('Reviews')} active={currentView === 'Reviews'}>
+          <ReviewsOutlined sx={{ marginRight: 1 }} /> Reviews
+        </StyledButton>
+        <StyledButton onClick={() => onButtonClick('Institutions')} active={currentView === 'Institutions'}>
+          <AccountBalanceOutlined sx={{ marginRight: 1 }} /> Institutions
+        </StyledButton>
+        <StyledButton onClick={() => onButtonClick('Donations')} active={currentView === 'Donations'}>
+          <VolunteerActivismOutlined sx={{ marginRight: 1 }} /> Donations
+        </StyledButton>
+        <Divider sx={{ width: '100%', mt: 2 }} />
+        <StyledButton onClick={() => onButtonClick('Users')} active={currentView === 'Users'}>
+          <PeopleOutlined sx={{ marginRight: 1 }} /> Users
+        </StyledButton>
+        <StyledButton onClick={() => onButtonClick('Charts')} active={currentView === 'Charts'}>
+          <BarChartOutlined sx={{ marginRight: 1 }} /> Charts
+        </StyledButton>
       </List>
-      <Box>
-        <StyledButton
-          sx={{
-            fontSize: "14px",
-            mt: "240px",
-            width: "221px",
-          }}
-          onClick={handleLogout} 
-        >
-          Logout
+      <Divider sx={{ width: '100%', mt: 2 }} />
+
+      <Box sx={{ paddingTop: '10px' }}>
+        <StyledButton onClick={handleLogout}>
+          <LogoutOutlined sx={{ marginRight: 1 }} /> Logout
         </StyledButton>
       </Box>
     </SidebarContainer>

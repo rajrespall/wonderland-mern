@@ -110,7 +110,7 @@ export default function Charts() {
       sx={{
         p: 2,
         borderRadius: 3,
-        bgcolor: "#f9f9f9",
+        bgcolor: "#fff",
         boxShadow: "none"
       }}
     >

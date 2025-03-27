@@ -37,7 +37,7 @@ export default function AdminReviews() {
       sx={{
         p: 3,
         borderRadius: 3,
-        bgcolor: "#f9f9f9",
+        bgcolor: "#fff",
         boxShadow: "none",
       }}
     >

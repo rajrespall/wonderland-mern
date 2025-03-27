@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Modal, Box, TextField } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Modal, Box, TextField, Icon } from "@mui/material";
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import axios from "axios";
 
 const Institution = () => {
@@ -109,7 +111,22 @@ const Institution = () => {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={handleOpen} style={{ marginBottom: "20px" }}>
+      <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2,
+        backgroundColor: '#0457a4',
+        borderColor: '#5da802',
+        borderRadius: '30px',
+        fontSize: '14px',
+        fontFamily: 'Poppins',
+        textTransform: 'none',
+        height: '40px',
+        color: '#fcf230',
+        '&:hover': {
+          color: '#5da802',
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+          borderColor: '#5da802',
+          border: '2px solid',
+        }, }}>
         Add Institution
       </Button>
 
@@ -129,39 +146,35 @@ const Institution = () => {
         </Box>
       </Modal>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ p: 3, bgcolor: "#fff", borderRadius: 3, boxShadow: "none" }}>
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell><b>Name</b></TableCell>
-              <TableCell><b>Description</b></TableCell>
-              <TableCell><b>Address</b></TableCell>
-              <TableCell><b>Map</b></TableCell>
-              <TableCell><b>Image</b></TableCell>
-              <TableCell><b>Actions</b></TableCell>
+            <TableRow >
+              <TableCell><b style={{fontFamily: 'Poppins'}}>Name</b></TableCell>
+              <TableCell><b style={{fontFamily: 'Poppins'}}>Description</b></TableCell>
+              <TableCell><b style={{fontFamily: 'Poppins'}}>Address</b></TableCell>
+              <TableCell><b style={{fontFamily: 'Poppins'}}>Map</b></TableCell>
+              <TableCell><b style={{fontFamily: 'Poppins'}}>Image</b></TableCell>
+              <TableCell><b style={{fontFamily: 'Poppins'}}>Actions</b></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {institutions.map((institution) => (
               <TableRow key={institution._id}>
-                <TableCell>{institution.name}</TableCell>
-                <TableCell>{institution.description}</TableCell>
-                <TableCell>{institution.address}</TableCell>
-                <TableCell>
-                  <a href={institution.mapEmbed} target="_blank" rel="noopener noreferrer">View Map</a>
+                <TableCell  style={{fontFamily: 'Poppins'}}>{institution.name}</TableCell>
+                <TableCell style={{fontFamily: 'Poppins'}}>{institution.description}</TableCell>
+                <TableCell style={{fontFamily: 'Poppins'}}>{institution.address}</TableCell>
+                <TableCell style={{fontFamily: 'Poppins'}}>
+                  <iframe src={institution.mapEmbed} width="100" height="100" title={institution.name} />
                 </TableCell>
                 <TableCell>
                   {institution.institutionImage && (
-                    <img src={institution.institutionImage} alt={institution.name} width="50" height="50" />
+                    <img src={institution.institutionImage} alt={institution.name} width="100" height="100" />
                   )}
                 </TableCell>
                 <TableCell>
-                  <Button variant="contained" color="primary" size="small" style={{ marginRight: "5px" }} onClick={() => handleEditOpen(institution)}>
-                    Edit
-                  </Button>
-                  <Button variant="contained" color="error" size="small" onClick={() => handleDelete(institution._id)}>
-                    Delete
-                  </Button>
+                    <EditRoundedIcon sx={{color: 'green'}} onClick={() => handleEditOpen(institution)}/>
+                    <DeleteRoundedIcon sx={{color: 'red'}} onClick={() => handleDelete(institution._id)}/>
                 </TableCell>
               </TableRow>
             ))}

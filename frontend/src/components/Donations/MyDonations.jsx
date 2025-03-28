@@ -12,13 +12,23 @@ import {
   CssBaseline,
   InputLabel,
   Snackbar,
-  Alert
+  Alert,
+   Dialog,
+   DialogTitle,
+   DialogContent,
+   DialogContentText,
+   DialogActions,
+   Link
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import useAuthStore from '../../store/authStore';
 import autism from '../../assets/autismElements/5.png';
 import {motion} from 'framer-motion';
 import axios from 'axios';
 
 const MyDonations = () => {
+  const { isAuthenticated } = useAuthStore();
+  const [showDialog, setShowDialog] = useState(false);
   const [message, setMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [severity, setSeverity] = useState('success');
@@ -36,30 +46,97 @@ const MyDonations = () => {
     setNewDonation((prev) => ({ ...prev, donationReceipt: e.target.files[0] }));
   };
 
-  const handleSubmit = async (e) => {
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+    if (isAuthenticated) {
+        handleAuthenticatedDonation(e);
+    } else {
+        setShowDialog(true); 
+    }
+};
+
+  const handleAuthenticatedDonation = async (e) => {
     e.preventDefault();
+
+    if (!newDonation.category) {
+        setMessage('Please select a category for your donation.');
+        setSeverity('warning');
+        setOpenSnackbar(true);
+        return;
+    }
+
     const formData = new FormData();
     formData.append('category', newDonation.category);
     if (newDonation.donationReceipt) {
-      formData.append('donationReceipt', newDonation.donationReceipt);
+        formData.append('donationReceipt', newDonation.donationReceipt);
     }
 
     try {
-      await axios.post(`http://localhost:5000/api/donations`, formData, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      setMessage('Donation created successfully!');
-      setSeverity('success');
-      setOpenSnackbar(true);
-    } catch (error) {
-      console.error('Error:', error);
-      setMessage('Failed to create donation.');
-      setSeverity('error');
-      setOpenSnackbar(true);
-    }
-  };
+        const response = await axios.post('http://localhost:5000/api/donations/user', formData, {
+            withCredentials: true,
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
 
+        if (response.data && response.data.status) {
+            setMessage('Donation created successfully!');
+            setSeverity('success');
+            setNewDonation({ category: '', donationReceipt: null });
+        } else {
+            setMessage('Unexpected response from the server. Please try again.');
+            setSeverity('warning');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        const errorMessage =
+            error.response?.data?.message || 'Failed to create donation. Please try again.';
+        setMessage(errorMessage);
+        setSeverity('error');
+    } finally {
+        setOpenSnackbar(true);
+    }
+};
+
+const handleAnonymousDonation = async () => {
+  setShowDialog(false);
+
+  if (!newDonation.category) {
+      setMessage('Please select a category for your donation.');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+      return;
+  }
+
+  const formData = new FormData();
+  formData.append('category', newDonation.category);
+  if (newDonation.donationReceipt) {
+      formData.append('donationReceipt', newDonation.donationReceipt);
+  }
+
+  try {
+      console.log("Sending anonymous donation request:", formData);
+      const response = await axios.post('http://localhost:5000/api/donations/anonymous', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      if (response.data && response.data.status) {
+          setMessage('Anonymous donation created successfully!');
+          setSeverity('success');
+          setNewDonation({ category: '', donationReceipt: null });
+      } else {
+          setMessage('Unexpected response from the server. Please try again.');
+          setSeverity('warning');
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      const errorMessage =
+          error.response?.data?.message || 'Failed to create anonymous donation. Please try again.';
+      setMessage(errorMessage);
+      setSeverity('error');
+  } finally {
+      setOpenSnackbar(true);
+  }
+};
   return (
     <>
       <CssBaseline />
@@ -102,6 +179,19 @@ const MyDonations = () => {
             <Box sx={{width: '80%', margin: 'auto', borderRadius: '30px', p: 5, boxShadow: 2, backgroundImage: '#fff'}}>
             <Typography variant="h4" sx={{ fontWeight: 700, color: '#0457a4', mb: 4, fontFamily: 'Poppins', textAlign: 'center' }}>
               Contribute to the Community!
+            </Typography>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                mb: 2, 
+                fontFamily: 'Poppins', 
+                color: isAuthenticated ? '#5da802' : '#0457a4',
+                textAlign: 'center'
+              }}
+            >
+              {isAuthenticated ? 
+                "You are donating as a registered user" : 
+                "You are making an anonymous donation"}
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
               <Typography variant="body1" sx={{ mb: 2, fontFamily: 'Poppins', fontWeight: 500, color: '#5da802' }}>
@@ -182,6 +272,65 @@ const MyDonations = () => {
           </Box>
         </Card>
         </motion.div>
+
+        <Dialog 
+         open={showDialog} 
+         onClose={() => setShowDialog(false)}
+         sx={{
+          '& .MuiDialog-paper': {
+            borderRadius: 5,
+            backgroundColor: '#fff',
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+            width: '80%',
+            maxWidth: '600px',
+            margin: 'auto'
+          }
+         }}>
+          <DialogTitle sx={{ fontFamily: 'Poppins', color: '#0457a4' }}>
+            Making an Anonymous Donation
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ fontFamily: 'Poppins' }}>
+              You are not currently logged in. Your donation will be recorded anonymously.
+              If you'd like to track your donations, please consider 
+              <Link 
+                component={RouterLink} 
+                to="/login" 
+                sx={{ ml: 1, color: '#5da802' }}
+              >
+                logging in
+              </Link>.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button 
+              onClick={(e) => {
+                e.preventDefault();
+                handleAnonymousDonation();
+              }}
+              sx={{
+                color: '#0457a4',
+                fontFamily: 'Poppins'
+              }}
+            >
+              Continue as Anonymous
+            </Button>
+            <Button 
+              component={RouterLink} 
+              to="/login" 
+              variant="contained"
+              sx={{
+                backgroundColor: '#5da802',
+                fontFamily: 'Poppins',
+                '&:hover': {
+                  backgroundColor: '#4a8702'
+                }
+              }}
+            >
+              Log In
+            </Button>
+          </DialogActions>
+        </Dialog>
 
 
       <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={() => setOpenSnackbar(false)}>

@@ -4,17 +4,8 @@ const { cloudinary, upload } = require('../config/cloudinary');
 
 class DonationController {
     async createDonation(req, res) {
-        console.log("Request body:", req.body);
-        console.log("User from Request:", req.user); 
-    
-        if (!req.user) {
-            return res.status(401).json({ message: "Unauthorized: No user detected" });
-        }
-    
         try {
             const userProfile = await Profile.findOne({ userId: req.user._id }).lean();
-
-            console.log("Found Profile:", userProfile); 
 
             if (!userProfile) {
                 return res.status(404).json({ message: "Profile not found for this user." });
@@ -24,23 +15,52 @@ class DonationController {
             if (req.file) {
                 imageUrl = req.file.path;
             }
-    
+
             const newDonation = new Donation({
                 donator: userProfile._id,
                 category: req.body.category,
-                donationReceipt: imageUrl
+                donationReceipt: imageUrl,
             });
-    
+
             await newDonation.save();
-            res.status(201).json({ status: true, newDonation });
-        }
-        catch (error) {
-            console.error("Error saving donation:", error);
-            res.status(400).json({ message: "Donation not created", error });
+            res.status(201).json({
+                status: true,
+                newDonation,
+                message: "Donation created successfully",
+            });
+        } catch (error) {
+            console.error("Error creating donation with user:", error);
+            res.status(400).json({ message: "Failed to create donation", error });
         }
     }
 
-    async getAllDonations(req, res) {
+    async createAnonymousDonation(req, res) {
+        try {
+            let imageUrl = null;
+            if (req.file) {
+                imageUrl = req.file.path;
+            }
+
+            const newDonation = new Donation({
+                category: req.body.category,
+                donationReceipt: imageUrl,
+                isAnonymous: true,
+                donator: null,
+            });
+
+            await newDonation.save();
+            res.status(201).json({
+                status: true,
+                newDonation,
+                message: "Anonymous donation created successfully",
+            });
+        } catch (error) {
+            console.error("Error creating anonymous donation:", error);
+            res.status(400).json({ message: "Failed to create anonymous donation", error });
+        }
+    }
+
+    async getAllDonations(req, res) {   
         try {
             const donations = await Donation.find()
                 .populate({

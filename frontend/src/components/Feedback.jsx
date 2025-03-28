@@ -137,9 +137,6 @@ const Feedback = () => {
         </Box>
       </Grid>
     </Grid>
-      <Box>
-        <MissionVision />
-      </Box>
       </>
   );
 };

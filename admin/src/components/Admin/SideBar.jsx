@@ -29,9 +29,9 @@ const StyledButton = styled(ListItemButton)(({ active }) => ({
   borderRadius: '8px',
   justifyContent: 'flex-start',
   color: active ? '#ffffff' : '#333',
-  backgroundColor: active ? '#635bff' : 'transparent',
+  backgroundColor: active ? '#0457a4' : 'transparent',
   '&:hover': {
-    backgroundColor: active ? '#5548d9' : '#f5f5f5',
+    backgroundColor: active ? '#0457a4' : '#f5f5f5',
   },
   fontSize: '14px',
   fontWeight: '500',

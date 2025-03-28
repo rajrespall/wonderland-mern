@@ -58,7 +58,7 @@ export default function Donations() {
     .slice(0, 2); 
 
   return (
-    <Box sx={{ p: 3, bgcolor: "#f9f9f9", borderRadius: 3 }}>
+    <Box sx={{ p: 3, bgcolor: "#fff", borderRadius: 3 }}>
       <Grid container spacing={3} justifyContent="center" alignItems="center">
 
         <Grid item xs={12}>

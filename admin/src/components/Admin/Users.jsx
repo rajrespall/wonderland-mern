@@ -117,11 +117,10 @@ const Users = () => {
 
     return (
         <Box sx={{ width: "95%", margin: "20px auto", textAlign: "center" }}>
-            <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3, color: "#1976d2" }}>User List</Typography>
             {loading && <Typography sx={{ color: "gray" }}>Loading users...</Typography>}
             {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
 
-            <Paper elevation={5} sx={{ padding: 2, borderRadius: 3 }}>
+            <Paper elevation={5} sx={{ borderRadius: 3 }}>
                 <MUIDataTable title="Registered Users" data={formattedUsers} columns={columns} options={options} />
             </Paper>
         </Box>

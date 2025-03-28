@@ -11,7 +11,17 @@
     "start:wondercolor": "cd wondercolor && npm run dev",
     "start:wondermatch": "cd wondermatch && npm run dev",
     "start:wonderpuz": "cd wonderpuz && npm run dev",
-    "start": "concurrently --names \"BACKEND,FRONTEND,ADMIN,CARDS,COLOR,MATCH,PUZZLE\" --prefix-colors \"blue.bold,green.bold,red.bold,yellow.bold,magenta.bold,cyan.bold,white.bold\" \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:admin\" \"npm run start:wondercards\" \"npm run start:wondercolor\" \"npm run start:wondermatch\" \"npm run start:wonderpuz\""
+    "start": "concurrently --names \"BACKEND,FRONTEND,ADMIN,CARDS,COLOR,MATCH,PUZZLE\" --prefix-colors \"blue.bold,green.bold,red.bold,yellow.bold,magenta.bold,cyan.bold,white.bold\" \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:admin\" \"npm run start:wondercards\" \"npm run start:wondercolor\" \"npm run start:wondermatch\" \"npm run start:wonderpuz\"",
+
+       
+    "install:backend": "cd backend && npm install --legacy-peer-deps",
+    "install:frontend": "cd frontend && npm install --legacy-peer-deps",
+    "install:admin": "cd admin && npm install --legacy-peer-deps",
+    "install:wondercards": "cd wondercards && npm install --legacy-peer-deps",
+    "install:wondercolor": "cd wondercolor && npm install --legacy-peer-deps",
+    "install:wondermatch": "cd wondermatch && npm install --legacy-peer-deps", 
+    "install:wonderpuz": "cd wonderpuz && npm install --legacy-peer-deps",
+    "install:all": "npm install && concurrently --names \"BACKEND,FRONTEND,ADMIN,CARDS,COLOR,MATCH,PUZZLE\" --prefix-colors \"blue.bold,green.bold,red.bold,yellow.bold,magenta.bold,cyan.bold,white.bold\" \"npm run install:backend\" \"npm run install:frontend\" \"npm run install:admin\" \"npm run install:wondercards\" \"npm run install:wondercolor\" \"npm run install:wondermatch\" \"npm run install:wonderpuz\""
   },
   "repository": {
     "type": "git",

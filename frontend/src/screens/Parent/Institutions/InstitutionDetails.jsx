@@ -57,7 +57,7 @@ export default function InstitutionDetails() {
             style={{ width: "100%", height: "400px", objectFit: "cover" }}
           />
         </CardMedia>
-        <Container maxWidth="100%" sx={{ mt: 4 }}>
+        <Container maxWidth="100%" sx={{ mt: 2 }}>
           <InstitutionCard
             title={institution.name}
             description={institution.description}

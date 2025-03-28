@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { CssBaseline, Box, AppBar, Toolbar, Typography, IconButton, InputBase } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+
 import { Search, AccountCircle } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import Sidebar from '../../components/Admin/SideBar';
@@ -55,17 +57,15 @@ const AdminHome = () => {
           }}
         >
           <Toolbar>
-            <Typography variant="h6" noWrap sx={{ fontWeight: 'bold', color: '#0457a4' }}>
-              {currentView.toUpperCase()}
+            <Typography variant="h6" noWrap sx={{ fontWeight: 'bold', color: '#0457a4', fontFamily: 'Poppins' }}>
+              {currentView}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <IconButton color="inherit">
-              <AccountCircle sx={{ fontSize: 32 }} />
-            </IconButton>
-          </Toolbar>
+            <Avatar sx={{ bgcolor: '#0457a4'}}>A</Avatar>          
+            </Toolbar>
         </AppBar>
 
-        <Box component="main" sx={{ flexGrow: 1, bgcolor: '#DCEAF7', p: 3, mt: 8 }}>
+        <Box component="main" sx={{ flexGrow: 1, bgcolor: '#DCEAF7', p: 3, mt: 8, minHeight: '100vh' }}>
           {renderContent()}
         </Box>
       </Box>

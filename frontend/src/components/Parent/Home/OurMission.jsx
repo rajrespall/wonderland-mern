@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Container, IconButton } from '@mui/material';
+import { Box, Typography, Container, IconButton, Paper } from '@mui/material';
 import { styled } from '@mui/system';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import MissionIcon from '../../../assets/otherElements/Mission.png';
@@ -9,47 +9,104 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  minHeight: '80vh',
   padding: theme.spacing(4),
+  position: 'relative',
+  background: 'linear-gradient(135deg, #1a3a54 0%, #0457a4 100%)',
+  borderRadius: '12px',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+  margin: '32px auto',
+  minHeight: '70vh'
 }));
 
 const TextSection = styled(Box)({
   maxWidth: '60%',
   position: 'relative',
+  padding: '2.5rem',
+  background: 'rgba(255, 255, 255, 0.1)',
+  borderRadius: '12px',
+  backdropFilter: 'blur(10px)',
+  transition: 'all 0.3s ease-in-out',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  '&:hover': {
+    background: 'rgba(255, 255, 255, 0.15)',
+    transform: 'translateY(-5px)',
+  }
 });
 
-const ImageWrapper = styled(Box)({
-  width: '400px',
-  height: '400px',
+const ImageWrapper = styled(Paper)({
+  width: '350px',
+  height: '350px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  borderRadius: '10px',
+  overflow: 'hidden',
+  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
+  background: '#ffffff',
+  padding: '20px',
+  transition: 'transform 0.2s ease-in-out',
+  '&:hover': {
+    transform: 'translateY(-5px)'
+  }
 });
 
 const ArrowButton = styled(IconButton)({
-  backgroundColor: '#fff',
-  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+  padding: '12px',
+  position: 'absolute',
+  top: '50%',
+  transform: 'translateY(-50%)',
   '&:hover': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ffffff',
+    transform: 'translateY(-50%) scale(1.05)'
   },
+  transition: 'all 0.2s ease'
 });
+
+const SlideIndicator = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '12px',
+  position: 'absolute',
+  bottom: '30px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  padding: '10px 20px',
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  borderRadius: '30px',
+  backdropFilter: 'blur(8px)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+});
+
+const Indicator = styled(Box)(({ active }) => ({
+  width: active ? '35px' : '12px',
+  height: '12px',
+  borderRadius: '6px',
+  backgroundColor: active ? '#5da802' : 'rgba(255, 255, 255, 0.4)',
+  transition: 'all 0.3s ease-in-out',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: active ? '#5da802' : 'rgba(255, 255, 255, 0.6)',
+    transform: 'scale(1.1)',
+  },
+  boxShadow: active ? '0 0 10px rgba(93, 168, 2, 0.5)' : 'none',
+}));
 
 const MissionVision = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      title: 'Our Mission',
-      image: MissionIcon,
-      content:
-        'To provide exceptional experiences through innovation, dedication, and a passion for excellence. We strive to empower communities, drive sustainable growth, and foster a culture of inclusivity and progress.',
+      title: "Our Mission",
+      content: "To provide exceptional early childhood education that nurtures creativity, curiosity, and character in a safe and engaging environment. We are committed to fostering each child's unique potential through innovative learning experiences and personalized attention.",
+      image: MissionIcon
     },
     {
-      title: 'Our Vision',
-      image: VisionIcon,
-      content:
-        'To inspire and lead by setting new standards in quality, sustainability, and creativity. Our vision is to shape a future where innovation meets responsibility, creating impactful solutions for generations to come.',
-    },
+      title: "Our Vision",
+      content: "To be the leading preschool that empowers children to become lifelong learners, creative thinkers, and compassionate individuals. We envision a future where every child discovers their talents and develops the confidence to shape tomorrow's world.",
+      image: VisionIcon
+    }
   ];
 
   const handleNext = () => {
@@ -62,36 +119,97 @@ const MissionVision = () => {
 
   return (
     <StyledContainer>
-      {/* Left - Text Section with Arrow */}
       <TextSection>
-        <ArrowButton onClick={handlePrev} sx={{ position: 'absolute', left: '-100px', top: '50%', transform: 'translateY(-50%)' }}>
-          <ChevronLeft size={30} color="#0457a4" />
-        </ArrowButton>
         <Typography
-          variant="h3"
-          sx={{ fontWeight: 'bold', fontFamily: 'Poppins', color: '#fff', ml: 10, mb: 5}}
+          variant="h4"
+          sx={{ 
+            fontFamily: 'Poppins',
+            fontWeight: 600, 
+            color: '#fff',
+            mb: 3,
+            borderBottom: '3px solid #5da802',
+            paddingBottom: 1,
+            width: 'fit-content'
+          }}
         >
           {slides[currentSlide].title}
         </Typography>
+        
         <Typography
           variant="body1"
-          sx={{ fontSize: '1.2rem', color: '#c9e5ff', marginTop: 2, fontFamily: 'Poppins', ml: 10 }}
+          sx={{ 
+            fontFamily: 'Poppins',
+            fontSize: '1.1rem', 
+            color: '#fff', 
+            lineHeight: 1.8,
+            mt: 3,
+            letterSpacing: '0.3px'
+          }}
         >
           {slides[currentSlide].content}
         </Typography>
       </TextSection>
-
-      {/* Right - Image Section */}
+  
       <Box display="flex" justifyContent="center" width="40%" ml={5}>
-        <ImageWrapper>
-          <img src={slides[currentSlide].image} alt={slides[currentSlide].title} style={{ width: '100%', height: '100%' }} />
+        <ImageWrapper elevation={2}>
+          <img 
+            src={slides[currentSlide].image} 
+            alt={slides[currentSlide].title} 
+            style={{ 
+              width: '100%', 
+              height: '100%',
+              objectFit: 'contain'
+            }} 
+          />
         </ImageWrapper>
       </Box>
-        <ArrowButton onClick={handleNext} sx={{right: '-100px'}}>
-          <ChevronRight size={30} color="#0457a4" />
-        </ArrowButton>
-    </StyledContainer>
-  );
+  
+      <ArrowButton 
+        onClick={handlePrev} 
+        sx={{ left: 10 }}
+        aria-label="Previous slide"
+      >
+        <ChevronLeft size={28} color="#0457a4" />
+      </ArrowButton>
+  
+      <ArrowButton 
+        onClick={handleNext} 
+        sx={{ right: 10 }}
+        aria-label="Next slide"
+      >
+        <ChevronRight size={28} color="#0457a4" />
+      </ArrowButton>
+
+    <Box 
+      sx={{
+        position: 'absolute',
+        bottom: 24,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        gap: 1.5,
+        padding: '8px 16px',
+        borderRadius: '20px',
+        background: 'rgba(255, 255, 255, 0.15)'
+      }}
+    >
+      {slides.map((_, index) => (
+        <Box
+          key={index}
+          onClick={() => setCurrentSlide(index)}
+          sx={{
+            width: currentSlide === index ? 28 : 10,
+            height: 10,
+            borderRadius: 5,
+            backgroundColor: currentSlide === index ? '#fff' : 'rgba(255, 255, 255, 0.6)',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+        />
+      ))}
+    </Box>
+  </StyledContainer>
+);  
 };
 
 export default MissionVision;

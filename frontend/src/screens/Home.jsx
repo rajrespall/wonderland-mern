@@ -41,12 +41,11 @@ const Home = () => {
           <MyDonations />
         </Box>
 
-        <Box sx={{height: '50vh'}}>
-          <Typography variant="h4" align="center" sx={{color: '#0457a4', mb: 5, fontFamily: 'Poppins'}}>What Parents Say</Typography>
+        <Box sx={{height: '80vh'}}>
           <Reviews />
         </Box>
 
-        <Box sx={{ backgroundColor: '#0457a4' }}>
+        <Box>
           <MissionVision />
         </Box>
 

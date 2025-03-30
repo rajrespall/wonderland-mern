@@ -15,7 +15,8 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   borderRadius: '12px',
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
   margin: '32px auto',
-  minHeight: '70vh'
+  minHeight: '70vh',
+  width: '100%',
 }));
 
 const TextSection = styled(Box)({

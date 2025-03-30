@@ -32,7 +32,6 @@ export default function UserProfileCard() {
   const [profileImage, setProfileImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   
-  // Get auth data from authStore
   const { user } = useAuthStore();
   
   // Get profile data from profileStore
@@ -82,7 +81,6 @@ export default function UserProfileCard() {
     const file = e.target.files[0];
     if (file) {
       setProfileImage(file);
-      // Create a preview URL
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setPreviewUrl(fileReader.result);
@@ -95,7 +93,6 @@ export default function UserProfileCard() {
     e.preventDefault();
     
     try {
-      // Instead of creating FormData in the component, pass the data separately to updateProfile
       await updateProfile(formData, profileImage);
       handleCloseModal();
     } catch (err) {
@@ -140,7 +137,6 @@ export default function UserProfileCard() {
         <Tabs value={value} onChange={handleChange} aria-label="profile tabs">
           <Tab label="MY PROFILE" />
           <Tab label="CHILD DETAILS" />
-          <Tab label="SETTINGS" />
         </Tabs>
 
         <Divider sx={{ my: 2 }} />
@@ -230,14 +226,12 @@ export default function UserProfileCard() {
             mb: 2
           }}>Child Details</Typography>
           
-          {/* General info section - you can expand this later */}
           <Box sx={{ mb: 3 }}>
             <Typography variant="body2" sx={{ fontFamily: 'Poppins' }}>
               View your child's assessment history below. You can see previous assessments and track progress over time.
             </Typography>
           </Box>
     
-          {/* Add the AssessmentHistory component */}
           {user && user.id && (
             <AssessmentHistory userId={user.id} />
           )}
@@ -247,7 +241,6 @@ export default function UserProfileCard() {
           </Box>
         </CustomTabPanel>
         
-        {/* Edit Profile Modal */}
         <Modal
           open={openModal}
           onClose={handleCloseModal}

@@ -79,7 +79,7 @@ export default function Donations() {
               >
                 <ListItemText
                   primary={`${donation.donator?.firstName || "Anonymous"} ${donation.donator?.lastName || ""}`}
-                  secondary={`Donated: $${donation.category} | Payment: ${donation.createdAt}`}
+                  secondary={`Donated: ${donation.category} | Donated At: ${donation.createdAt}`}
                 />
               </ListItem>
             ))}
@@ -102,7 +102,7 @@ export default function Donations() {
                 In-kind Donation: {selectedDonor.category}
               </Typography>
               <Box>
-              <img src={selectedDonor.donationReceipt} width={400}></img>
+                <img src={selectedDonor.donationReceipt} width={400}></img>
               </Box>
               <Typography sx={{ fontFamily: "Poppins" }}>
                 Date of Donation: {selectedDonor.createdAt}

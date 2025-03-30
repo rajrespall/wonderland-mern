@@ -85,7 +85,7 @@ const Gallery = () => {
   }
 
   return (
-    <Box>
+    <Box maxWidth={1000}>
       <Typography 
         sx={{
           fontFamily: 'Poppins',

@@ -8,10 +8,8 @@ import {
 import { Box } from '@mui/material';
 import axios from 'axios';
 
-// Colors for the pie chart
 const COLORS = ['#0457a4', '#ff8000', '#00C49F'];
 
-// Helper function to calculate total games for pie chart
 const getTotalGames = (data) => {
   if (!data.length) return [];
   const lastMonth = data[data.length - 1];
@@ -79,7 +77,7 @@ const ProgressCharts = () => {
   const averages = calculateAverages();
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} maxWidth={1000}>
       {/* Line Chart for Trends */}
       <Grid item xs={12} md={6}>
         <Card sx={{ 

@@ -40,6 +40,7 @@ const useInfoStore = create((set) => ({
       const response = await axios.get(
         'http://localhost:5000/api/general-info',
         {
+          withCredentials: true,
           headers: {
             Authorization: `Bearer ${token}`,
           },

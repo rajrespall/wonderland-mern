@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Box, Typography, Paper, Table, TableBody, TableCell, 
-  TableContainer, TableHead, TableRow, Button, CircularProgress 
+  TableContainer, TableHead, TableRow, CircularProgress 
 } from '@mui/material';
 import { format } from 'date-fns';
 import useAssessmentStore from '../../store/assessmentStore';
@@ -27,9 +27,9 @@ const AssessmentHistory = ({ userId }) => {
     loadHistory();
   }, [userId, fetchAssessmentHistory]);
 
+  // Keeping the function in case it's used elsewhere but removing the button
   const handleViewAssessment = async (version) => {
     await fetchSpecificAssessment(userId, version);
-    // You can add navigation logic here if needed
   };
 
   if (loading) {
@@ -57,7 +57,6 @@ const AssessmentHistory = ({ userId }) => {
                 <TableCell>Version</TableCell>
                 <TableCell>Score</TableCell>
                 <TableCell>Category</TableCell>
-                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -79,15 +78,6 @@ const AssessmentHistory = ({ userId }) => {
                     }}>
                       {assessment.analysis.isaaCategory}
                     </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Button 
-                      variant="outlined" 
-                      size="small"
-                      onClick={() => handleViewAssessment(assessment.version)}
-                    >
-                      View
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   Container, Box, Typography, Avatar, Button, Divider, Link, Tabs, Tab, CircularProgress, 
-  Modal, TextField, Grid, IconButton
+  Modal, TextField, Grid, IconButton, Paper
 } from "@mui/material";
 import { LocationOn, Star, Message, Group, Report, Close, AddAPhoto } from "@mui/icons-material";
 import { PictureAsPdf } from '@mui/icons-material';
@@ -11,6 +11,7 @@ import AssessmentHistory from "./AssessmentHistory";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import CombinedReport from "./CombinedReport";
+import useInfoStore from "../../store/infoStore";
 
 function CustomTabPanel({ children, value, index }) {
   return (
@@ -31,16 +32,34 @@ export default function UserProfileCard() {
   });
   const [profileImage, setProfileImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
-  
+  const [childInfo, setChildInfo] = useState(null);
+
   const { user } = useAuthStore();
   
   // Get profile data from profileStore
   const { profile, loading, error, getProfile, updateProfile } = useProfileStore();
+  const { getGeneralInfo, loading: infoLoading } = useInfoStore();
 
   // Fetch profile data when component mounts
   useEffect(() => {
     getProfile().catch(err => console.error("Failed to fetch profile:", err));
   }, [getProfile]);
+
+  // Fetch child general information
+  useEffect(() => {
+    const fetchChildInfo = async () => {
+      try {
+        const info = await getGeneralInfo();
+        setChildInfo(info);
+      } catch (err) {
+        console.error("Failed to fetch child information:", err);
+      }
+    };
+
+    if (user && user.id) {
+      fetchChildInfo();
+    }
+  }, [user, getGeneralInfo]);
 
   // Initialize form data when profile data is loaded
   useEffect(() => {
@@ -98,6 +117,29 @@ export default function UserProfileCard() {
     } catch (err) {
       console.error('Failed to update profile:', err);
     }
+  };
+
+  const calculateAge = (dateOfBirth) => {
+    if (!dateOfBirth) return "N/A";
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+  
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
   };
 
   return (
@@ -226,6 +268,73 @@ export default function UserProfileCard() {
             mb: 2
           }}>Child Details</Typography>
           
+          <Paper elevation={2} sx={{ p: 3, borderRadius: 2, mb: 4, bgcolor: 'rgba(4, 87, 164, 0.05)' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Avatar sx={{ bgcolor: '#0457a4', mr: 2 }}>
+              </Avatar>
+              <Typography variant="h6" sx={{ fontFamily: 'Poppins', color: '#0457a4' }}>
+                General Information
+              </Typography>
+            </Box>
+            
+            {infoLoading ? (
+              <Box display="flex" justifyContent="center" p={2}>
+                <CircularProgress size={30} />
+              </Box>
+            ) : childInfo ? (
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                    Child's Name
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500, mb: 1 }}>
+                    {childInfo.childName || "Not provided"}
+                  </Typography>
+                </Grid>
+                
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                    Age
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500, mb: 1 }}>
+                    {calculateAge(childInfo.dateOfBirth)} years
+                  </Typography>
+                </Grid>
+                
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                    Date of Birth
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500, mb: 1 }}>
+                    {formatDate(childInfo.dateOfBirth)}
+                  </Typography>
+                </Grid>
+                
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                    Gender
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500, mb: 1 }}>
+                    {childInfo.gender || "Not specified"}
+                  </Typography>
+                </Grid>
+                
+                <Grid item xs={12}>
+                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                    Diagnosis Year
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontFamily: 'Poppins', fontWeight: 500 }}>
+                    {childInfo.diagnosisYear || "Not provided"}
+                  </Typography>
+                </Grid>
+              </Grid>
+            ) : (
+              <Typography variant="body1" sx={{ fontFamily: 'Poppins', color: 'text.secondary', py: 2 }}>
+                No child information available. Please complete the assessment to add child details.
+              </Typography>
+            )}
+          </Paper>
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="body2" sx={{ fontFamily: 'Poppins' }}>
               View your child's assessment history below. You can see previous assessments and track progress over time.

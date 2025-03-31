@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Paper, Divider, Avatar, Rating, List, ListItem, ListItemAvatar, ListItemText, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText } from "@mui/material";
+import { Box, Typography, Paper, Rating, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText } from "@mui/material";
 import { Visibility } from "@mui/icons-material";
+import MUIDataTable from "mui-datatables";
 import axios from "axios";
 
 export default function AdminReviews() {
@@ -12,12 +13,11 @@ export default function AdminReviews() {
     const fetchReviews = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/reviews/all");
-        setReviews(response.data || []); 
+        setReviews(response.data || []);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
     };
-
     fetchReviews();
   }, []);
 
@@ -31,66 +31,73 @@ export default function AdminReviews() {
     setSelectedReview(null);
   };
 
+  const columns = [
+    {
+      name: "userId.username",
+      label: "Username",
+      options: {
+        customBodyRender: (value) => value || "Anonymous User"
+      }
+    },
+    {
+      name: "rating",
+      label: "Rating",
+      options: {
+        customBodyRender: (value) => <Rating value={value || 0} readOnly />
+      }
+    },
+    {
+      name: "comment",
+      label: "Comment",
+      options: {
+        customBodyRender: (value) => value?.slice(0, 50) + (value?.length > 50 ? "..." : "")
+      }
+    },
+    {
+      name: "createdAt",
+      label: "Date",
+      options: {
+        customBodyRender: (value) => new Date(value).toLocaleString()
+      }
+    },
+    {
+      name: "_id",
+      label: "Action",
+      options: {
+        customBodyRender: (value, tableMeta) => {
+          const review = reviews[tableMeta.rowIndex];
+          return (
+            <Tooltip title="View Details">
+              <IconButton onClick={() => handleViewDetails(review)}>
+                <Visibility sx={{ color: "#0457a4" }} />
+              </IconButton>
+            </Tooltip>
+          );
+        }
+      }
+    }
+  ];
+
+  const options = {
+    selectableRows: "none",
+    elevation: 0,
+    rowsPerPage: 5,
+    rowsPerPageOptions: [5, 10, 20],
+    responsive: "standard"
+  };
+
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        p: 3,
-        borderRadius: 3,
-        bgcolor: "#fff",
-        boxShadow: "none",
-      }}
-    >
-      <Typography
-        variant="h6"
-        sx={{
-          fontFamily: "Poppins",
-          mb: 2,
-          color: "#0457a4",
-        }}
-      >
+    <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#fff", boxShadow: "none" }}>
+      <Typography variant="h6" sx={{ fontFamily: "Poppins", mb: 2, color: "#0457a4" }}>
         User Reviews
       </Typography>
-      <Divider sx={{ mb: 2 }} />
 
-      {reviews.length > 0 ? (
-        <List>
-          {reviews.map((review) => (
-            <ListItem key={review._id} alignItems="flex-start" sx={{ display: "flex", alignItems: "center" }}>
-              <ListItemAvatar>
-                <Avatar
-                  src={review.profilePicture || ""}
-                  alt={review.userId?.username || "Anonymous User"}
-                />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <Typography sx={{ fontWeight: "bold", color: "#0457a4" }}>
-                    {review.userId?.username || "Anonymous User"}
-                  </Typography>
-                }
-                secondary={
-                  <Box>
-                    <Rating value={review.rating || 0} readOnly />
-                    <Typography variant="body2" sx={{ fontFamily: "Poppins", color: "#333" }}>
-                      {review.comment || "No comment provided."}
-                    </Typography>
-                  </Box>
-                }
-              />
-              <Tooltip title="View Details">
-                <IconButton onClick={() => handleViewDetails(review)}>
-                  <Visibility sx={{ color: "#0457a4" }} />
-                </IconButton>
-              </Tooltip>
-            </ListItem>
-          ))}
-        </List>
-      ) : (
-        <Typography sx={{ textAlign: "center", mt: 2 }}>No reviews available.</Typography>
-      )}
+      <MUIDataTable
+        data={reviews}
+        columns={columns}
+        options={options}
+      />
 
-      {/* Review Details Dialog */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Review Details</DialogTitle>
         <DialogContent>

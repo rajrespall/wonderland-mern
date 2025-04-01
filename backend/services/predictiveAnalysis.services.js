@@ -121,13 +121,16 @@ const calculateTrend = async (userId) => {
         });
 
         // Compute trend over 7 days
-        const calculatePercentageChange = (arr) => {
-            if (arr.length < 2) return 0;
-            const first = arr[0];
-            const last = arr[arr.length - 1];
-            return ((last - first) / Math.abs(first || 1)) * 100;
-        };
+        const average = (nums) => nums.reduce((a, b) => a + b, 0) / nums.length;
 
+        const calculatePercentageChange = (arr) => {
+            if (arr.length < 3) return 0;
+        
+            const firstAvg = average(arr.slice(0, 3));
+            const lastAvg = average(arr.slice(-3));
+        
+            return ((lastAvg - firstAvg) / Math.abs(firstAvg || 1)) * 100;
+        };
         const failedTrend = calculatePercentageChange(failedAttempts) * -1; // Lower failed is better
         const timeTrend = calculatePercentageChange(timeTaken) * -1; // Lower time is better
         const completedTrend = calculatePercentageChange(completedGames); // Higher completed is better
@@ -150,46 +153,44 @@ const calculateTrend = async (userId) => {
 
 const currentMotor = async (userId) => {
     try {
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-        // Fetch all games played in the last 7 days
-        const wondercards = await Card.find({ userId, gameDate: { $gte: sevenDaysAgo } });
-        const wonderpuz = await Puz.find({ userId, playedAt: { $gte: sevenDaysAgo } });
-        const wondercolor = await Color.find({ userId, createdAt: { $gte: sevenDaysAgo } });
-        const wondermatch = await Match.find({ userId, playedAt: { $gte: sevenDaysAgo } });
-
-        // Compute total score and count number of games
-        let totalScore = 0;
-        let totalGames = wondercards.length + wonderpuz.length + wondercolor.length + wondermatch.length;
-
-        // Each game played earns 5 points
-        totalScore += totalGames * 5;
-
-        // Calculate inactivity penalties
-        const lastPlayedDates = [
-            ...wondercards.map(game => game.gameDate),
-            ...wonderpuz.map(game => game.playedAt),
-            ...wondercolor.map(game => game.createdAt),
-            ...wondermatch.map(game => game.playedAt)
-        ];
-
-        if (lastPlayedDates.length > 0) {
-            const lastPlayed = new Date(Math.max(...lastPlayedDates.map(date => new Date(date))));
-            const daysInactive = Math.floor((new Date() - lastPlayed) / (1000 * 60 * 60 * 24));
-
-            totalScore -= Math.floor(daysInactive / 3) * 3; // Deduct 3 points for every 3 days of inactivity
-        }
-
-        // 🔹 Compute the average score instead of percentage
-        const avgScore = totalGames > 0 ? (totalScore / totalGames).toFixed(1) : 0;
-
-        return avgScore; // Ensure a numeric value is returned
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  
+      const wondercards = await Card.find({ userId, gameDate: { $gte: sevenDaysAgo } });
+      const wonderpuz = await Puz.find({ userId, playedAt: { $gte: sevenDaysAgo } });
+      const wondercolor = await Color.find({ userId, createdAt: { $gte: sevenDaysAgo } });
+      const wondermatch = await Match.find({ userId, playedAt: { $gte: sevenDaysAgo } });
+  
+      const allGames = [
+        ...wondercards.map(g => g.gameDate),
+        ...wonderpuz.map(g => g.playedAt),
+        ...wondercolor.map(g => g.createdAt),
+        ...wondermatch.map(g => g.playedAt),
+      ];
+  
+      let totalGames = allGames.length;
+      let totalScore = totalGames * 5;
+  
+      // Penalty for inactivity
+      if (allGames.length > 0) {
+        const lastPlayed = new Date(Math.max(...allGames.map(date => new Date(date))));
+        const daysInactive = Math.floor((new Date() - lastPlayed) / (1000 * 60 * 60 * 24));
+        totalScore -= Math.floor(daysInactive / 3) * 3;
+      }
+  
+      // Clamp & normalize
+      totalScore = Math.max(0, Math.min(totalScore, 100));
+  
+      // Apply minimum score floor if there's activity
+      if (totalGames > 0) totalScore = Math.max(totalScore, 30);
+  
+      return Number(totalScore.toFixed(1));
     } catch (error) {
-        console.error("Error calculating motor skills score:", error);
-        throw error;
+      console.error("Error calculating motor skills score:", error);
+      return 0;
     }
-};
+  };
+  
 
 
 const predictiveMotor = async (userId) => {
@@ -265,16 +266,16 @@ const currentSocial = async (userId) => {
 
             // Deduct points based on difficulty level and time spent
             if (match.difficulty === "easy") {
-                if (timeSpent >= 40) {
-                    totalDeduction += Math.floor((timeSpent - 20) / 20) * 5;
+                if (timeSpent >= 100) {
+                    totalDeduction += Math.floor((timeSpent - 100) / 20) * 5;
                 }
             } else if (match.difficulty === "medium") {
-                if (timeSpent >= 50) {
-                    totalDeduction += Math.floor((timeSpent - 25) / 25) * 3;
+                if (timeSpent >= 70) {
+                    totalDeduction += Math.floor((timeSpent - 70) / 25) * 3;
                 }
             } else if (match.difficulty === "hard") {
                 if (timeSpent >= 60) {
-                    totalDeduction += Math.floor((timeSpent - 30) / 30) * 1;
+                    totalDeduction += Math.floor((timeSpent - 60) / 30) * 1;
                 }
             }
         });
@@ -318,8 +319,9 @@ const predictiveSocial = async (userId) => {
 
         // Determine trend
         let trend = "neutral";
-        if (scoreChange > 0 && timeChange < 0) trend = "improving";
-        else if (scoreChange < 0 && timeChange > 0) trend = "declining";
+        if (scoreChange > 0 || timeChange < 0) trend = "improving";
+        else if (scoreChange < 0 || timeChange > 0) trend = "declining";
+        
 
         console.log("📈 Predicted Social Trend:", { trend, scoreChange, percentageChange });
 
@@ -334,25 +336,27 @@ const predictiveSocial = async (userId) => {
 
 const currentColor = async (userId) => {
     try {
-        console.log("📌 Fetching Wondercolors for User:", userId);
-
-        const colors = await Color.find({ userId });
-
-        if (!colors || colors.length === 0) {
-            console.log("🚨 No Wondercolor Data Found for User:", userId);
-            return 0;
-        }
-
-        console.log("🟢 Fetched Wondercolors:", colors.length, "entries");
-        let totalScore = Math.min(colors.length, 100); // Score between 0-100
-
-        console.log("🎨 Current Creativity Score:", totalScore);
-        return totalScore;
-    } catch (error) {
-        console.error("❌ Error calculating creativity score:", error);
+      console.log("📌 Fetching Wondercolors for User:", userId);
+  
+      const colors = await Color.find({ userId });
+  
+      if (!colors || colors.length === 0) {
+        console.log("🚨 No Wondercolor Data Found for User:", userId);
         return 0;
+      }
+  
+      const score = Math.min(colors.length * 10, 100); // 10 pts per upload
+  
+      console.log("🟢 Fetched Wondercolors:", colors.length, "entries");
+      console.log("🎨 Current Creativity Score:", score);
+  
+      return score;
+    } catch (error) {
+      console.error("❌ Error calculating creativity score:", error);
+      return 0;
     }
-};
+  };
+  
 
 
 

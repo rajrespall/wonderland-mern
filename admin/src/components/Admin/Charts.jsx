@@ -161,7 +161,13 @@ export default function Charts() {
             </Typography>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={usersPerMonth}>
-                <XAxis dataKey="name" />
+                <XAxis 
+                  dataKey="name" 
+                  angle={-30} 
+                  textAnchor="end" 
+                  height={60} 
+                  tick={{fontSize: 12}}
+                />
                 <YAxis />
                 <Tooltip />
                 <Line type="monotone" dataKey="value" stroke="#ff8000" strokeWidth={3} />
@@ -266,13 +272,19 @@ export default function Charts() {
             Reviews Per Month
         </Typography>
         <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={reviewsPerMonth}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#28A745" strokeWidth={3} />
-            </LineChart>
-        </ResponsiveContainer>
+        <LineChart data={reviewsPerMonth}>
+          <XAxis 
+            dataKey="name" 
+            angle={-30} 
+            textAnchor="end" 
+            height={60} 
+            tick={{fontSize: 12}} 
+          />
+          <YAxis />
+          <Tooltip />
+          <Line type="monotone" dataKey="value" stroke="#28A745" strokeWidth={3} />
+        </LineChart>
+      </ResponsiveContainer>
     </Card>
 </Grid>
 

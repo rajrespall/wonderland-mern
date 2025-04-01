@@ -12,12 +12,15 @@ const getUsersPerMonth = async (req, res) => {
         const usersPerMonth = await User.aggregate([
             {
                 $group: {
-                    _id: { $month: "$createdAt" },
+                    _id: { 
+                        month: { $month: "$createdAt" },
+                        year: { $year: "$createdAt" }
+                    },
                     count: { $sum: 1 }
                 }
             },
             {
-                $sort: { "_id": 1 } // Sort in ascending order (Jan to Dec)
+                $sort: { "_id.year": 1, "_id.month": 1 } // Sort by year then month
             }
         ]);
 
@@ -27,12 +30,17 @@ const getUsersPerMonth = async (req, res) => {
             console.warn("⚠ No user data found!");
         }
 
-        // Convert numeric month to name
+        // Convert numeric month to name with year
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const formattedData = usersPerMonth.map(item => ({
-            name: monthNames[item._id - 1],
-            value: item.count
+            name: `${monthNames[item._id.month - 1]} ${item._id.year}`,
+            value: item.count,
+            // Include raw data for sorting if needed
+            sortKey: item._id.year * 100 + item._id.month
         }));
+
+        // Ensure chronological order
+        formattedData.sort((a, b) => a.sortKey - b.sortKey);
 
         console.log("📊 Formatted Data:", formattedData);
 
@@ -152,8 +160,6 @@ const getGamesPlayedByDifficulty = async (req, res) => {
     }
 };
 
-
-
 const getReviewsPerMonth = async (req, res) => {
     try {
         console.log("📊 Fetching reviews per month...");
@@ -161,23 +167,30 @@ const getReviewsPerMonth = async (req, res) => {
         const reviewsPerMonth = await Review.aggregate([
             {
                 $group: {
-                    _id: { $month: "$createdAt" },
+                    _id: { 
+                        month: { $month: "$createdAt" },
+                        year: { $year: "$createdAt" }
+                    },
                     count: { $sum: 1 }
                 }
             },
-            { $sort: { "_id": 1 } }
+            { $sort: { "_id.year": 1, "_id.month": 1 } }
         ]);
 
         if (!reviewsPerMonth.length) {
             console.warn("⚠ No reviews found!");
         }
 
-        // Convert numeric month to name
+        // Convert numeric month to name with year
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const formattedData = reviewsPerMonth.map(item => ({
-            name: monthNames[item._id - 1],
-            value: item.count
+            name: `${monthNames[item._id.month - 1]} ${item._id.year}`,
+            value: item.count,
+            sortKey: item._id.year * 100 + item._id.month
         }));
+
+        // Ensure chronological order
+        formattedData.sort((a, b) => a.sortKey - b.sortKey);
 
         console.log("📊 Reviews Per Month:", formattedData);
         res.json(formattedData);
@@ -185,6 +198,6 @@ const getReviewsPerMonth = async (req, res) => {
         console.error("❌ Error fetching reviews per month:", error);
         res.status(500).json({ message: "Internal server error", error });
     }
-};  
+};
 
 module.exports = { getUsersPerMonth, getGamesPlayed, getGameAnalytics, getGamesPlayedByDifficulty, getReviewsPerMonth };

@@ -7,7 +7,7 @@ const Color = require('../models/color.model');
 
 dotenv.config();
 
-const TARGET_USER_ID = '67ea4a59ed3d191822ee52a8';
+const TARGET_USER_ID = '67ea4a58ed3d191822ee52a4';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

@@ -1,130 +1,149 @@
 import React, { useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import useUserStore from "../../../Store/userStore";
-import { Box, Typography, Paper, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  Tooltip,
+} from "@mui/material";
 import CheckIcon from "@mui/icons-material/CheckCircle";
 import CloseIcon from "@mui/icons-material/Cancel";
 import BlockIcon from "@mui/icons-material/Block";
 
 const Users = () => {
-    const { users, fetchUsers, updateUserStatus, loading, error } = useUserStore();
+  const { users, fetchUsers, updateUserStatus, loading, error } = useUserStore();
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-    const columns = [
-        { name: "username", label: "Username", options: { filter: true, sort: true } },
-        { name: "email", label: "Email", options: { filter: true, sort: true } },
-        {
-            name: "isVerified",
-            label: "Verified",
-            options: {
-                filter: true,
-                sort: true,
-                customBodyRender: (value) => (value ? <CheckIcon sx={{ color: "green" }} /> : <CloseIcon sx={{ color: "red" }} />)
-            }
-        },
-        {
-            name: "hasCompletedAssessment",
-            label: "Completed Assessment",
-            options: {
-                filter: true,
-                sort: true,
-                customBodyRender: (value) => (value ? <CheckIcon sx={{ color: "green" }} /> : <CloseIcon sx={{ color: "red" }} />)
-            }
-        },
-        {
-            name: "status",
-            label: "Status",
-            options: {
-                filter: true,
-                sort: true,
-                customBodyRender: (value) => {
-                    switch (value) {
-                        case "enabled":
-                            return <CheckIcon sx={{ color: "green" }} />;
-                        case "inactive":
-                            return <BlockIcon sx={{ color: "orange" }} />;
-                        case "disabled":
-                            return <CloseIcon sx={{ color: "red" }} />;
-                        default:
-                            return <CloseIcon sx={{ color: "gray" }} />;
-                    }
-                }
-            }
-        },
-        {
-            name: "actions",
-            label: "Actions",
-            options: {
-                customBodyRender: (value, tableMeta) => {
-                    const user = users[tableMeta.rowIndex];
-
-                    let buttonColor = "default";
-                    let buttonText = "";
-
-                    switch (user.isDisabled) {
-                        case "enabled":
-                            buttonColor = "error"; 
-                            buttonText = "Disable";
-                            break;
-                        case "disabled":
-                            buttonColor = "success"; 
-                            buttonText = "Enable";
-                            break;
-                        case "inactive":
-                            buttonColor = "warning"; 
-                            buttonText = "Activate";
-                            break;
-                        default:
-                            buttonColor = "default";
-                            buttonText = "Unknown";
-                    }
-
-                    return (
-                        <Button
-                            variant="contained"
-                            color={buttonColor}
-                            onClick={() => updateUserStatus(user._id, user.isDisabled)}
-                        >
-                            {buttonText}
-                        </Button>
-                    );
-                }
-            }
+  const columns = [
+    {
+      name: "username",
+      label: "Username",
+      options: {
+        customBodyRender: (value) => value || "Anonymous"
+      }
+    },
+    {
+      name: "email",
+      label: "Email"
+    },
+    {
+      name: "isVerified",
+      label: "Verified",
+      options: {
+        customBodyRender: (value) => (
+          value ? <CheckIcon sx={{ color: "green" }} /> : <CloseIcon sx={{ color: "red" }} />
+        )
+      }
+    },
+    {
+      name: "hasCompletedAssessment",
+      label: "Completed Assessment",
+      options: {
+        customBodyRender: (value) => (
+          value ? <CheckIcon sx={{ color: "green" }} /> : <CloseIcon sx={{ color: "red" }} />
+        )
+      }
+    },
+    {
+      name: "status",
+      label: "Status",
+      options: {
+        customBodyRender: (value) => {
+          switch (value) {
+            case "enabled":
+              return <CheckIcon sx={{ color: "green" }} />;
+            case "disabled":
+              return <CloseIcon sx={{ color: "red" }} />;
+            case "inactive":
+              return <BlockIcon sx={{ color: "orange" }} />;
+            default:
+              return <CloseIcon sx={{ color: "gray" }} />;
+          }
         }
-    ];
+      }
+    },
+    {
+      name: "actions",
+      label: "Action",
+      options: {
+        customBodyRender: (value, tableMeta) => {
+          const user = users[tableMeta.rowIndex];
+          const status = user.isDisabled;
 
-    
-    const formattedUsers = users.map((user) => ({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        isVerified: user.isVerified,
-        hasCompletedAssessment: user.hasCompletedAssessment,
-        status: user.isDisabled
-    }));
+          let buttonColor = "default";
+          let buttonText = "";
 
-    
-    const options = {
-        filterType: "dropdown",
-        responsive: "standard",
-        selectableRows: "none",
-        rowsPerPage: 10,
-        rowsPerPageOptions: [10, 20, 50]
-    };
+          if (status === "enabled") {
+            buttonColor = "error";
+            buttonText = "DISABLE";
+          } else if (status === "disabled") {
+            buttonColor = "success";
+            buttonText = "ENABLE";
+          } else if (status === "inactive") {
+            buttonColor = "warning";
+            buttonText = "ACTIVATE";
+          }
 
-    return (
-        <Box sx={{ width: "95%", margin: "20px auto", textAlign: "center" }}>
-            {loading && <Typography sx={{ color: "gray" }}>Loading users...</Typography>}
-            {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
+          return (
+            <Tooltip title={`${buttonText} this user`}>
+              <Button
+                variant="contained"
+                color={buttonColor}
+                size="small"
+                sx={{ fontWeight: 600 }}
+                onClick={() => updateUserStatus(user._id, status)}
+              >
+                {buttonText}
+              </Button>
+            </Tooltip>
+          );
+        }
+      }
+    }
+  ];
 
-            <Paper elevation={5} sx={{ borderRadius: 3 }}>
-                <MUIDataTable title="Registered Users" data={formattedUsers} columns={columns} options={options} />
-            </Paper>
-        </Box>
-    );
+  const formattedUsers = users.map((user) => ({
+    _id: user._id,
+    username: user.username || "Anonymous",
+    email: user.email,
+    isVerified: user.isVerified,
+    hasCompletedAssessment: user.hasCompletedAssessment,
+    status: user.isDisabled
+  }));
+
+  const options = {
+    selectableRows: "none",
+    elevation: 0,
+    rowsPerPage: 5,
+    rowsPerPageOptions: [5, 10, 20],
+    responsive: "standard",
+  };
+
+  return (
+    <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#fff", boxShadow: "none" }}>
+      <Typography
+        variant="h6"
+        sx={{
+          fontFamily: "Poppins",
+          mb: 2,
+          color: "#0457a4",
+        }}
+      >
+        Registered Users
+      </Typography>
+
+      <MUIDataTable
+        data={formattedUsers}
+        columns={columns}
+        options={options}
+      />
+    </Paper>
+  );
 };
 
 export default Users;

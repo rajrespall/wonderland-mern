@@ -4,7 +4,7 @@ const Card = require('../models/card.model');
 
 dotenv.config();
 
-const TARGET_USER_ID = '67ea4a59ed3d191822ee52aa';
+const TARGET_USER_ID = '67ea4a58ed3d191822ee52a4';
 
 const connectDB = async () => {
   try {

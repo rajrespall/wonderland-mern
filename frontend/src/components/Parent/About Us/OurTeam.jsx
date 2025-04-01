@@ -1,5 +1,7 @@
 import React from "react";
 import { Grid, Container, Typography, Box } from "@mui/material";
+import { motion } from "framer-motion";
+
 import popsImage from "../../../assets/OurTeam/MaamPops.jpg";
 import rajeshImage from "../../../assets/OurTeam/Rajesh.jpg";
 import dianaImage from "../../../assets/OurTeam/Diana.jpg";
@@ -18,6 +20,13 @@ const teamMembers = [
 
 const TeamSection = () => {
   return (
+    <>
+    <motion.div
+        initial={{ x: 100, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        viewport={{ once: true }}
+      >
     <Container sx={{ py: 8, textAlign: "center", fontFamily: "Poppins" }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: "#0457a4", fontFamily: 'Poppins', }}>
         Meet Our Team
@@ -82,6 +91,8 @@ const TeamSection = () => {
         ))}
       </Grid>
     </Container>
+      </motion.div>
+    </>
   );
 };
 

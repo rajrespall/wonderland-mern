@@ -9,6 +9,7 @@ import MyDonations from '../components/Donations/MyDonations';
 import TeamSection from '../components/Parent/About Us/OurTeam';
 import MissionVision from '../components/Parent/Home/OurMission';
 import Reviews from '../components/Parent/Home/AllReviews';
+import Feedback from '../components/Feedback';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -45,6 +46,10 @@ const Home = () => {
           <Reviews />
         </Box>
 
+        <Box>
+          <Feedback />
+        </Box>
+        
         <Box>
           <MissionVision />
         </Box>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {motion} from 'framer-motion';
 import { Card, CardContent, Typography, CircularProgress, Avatar, Box } from "@mui/material";
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
@@ -39,6 +40,13 @@ const Reviews = () => {
     if (error) return <Typography color="error">{error}</Typography>;
 
 return (
+    <>
+    <motion.div
+        initial={{ x: 100, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        viewport={{ once: true }}
+      >
     <Box 
         sx={{
             padding: 4,
@@ -182,6 +190,8 @@ return (
             )}
         </Box>
     </Box>
+    </motion.div>
+    </>
 );
 };
 

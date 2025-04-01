@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Box, Grid, Card, CardContent, Typography, TextField, Button } from "@mui/material";
+import { Box, Grid, Card, CardContent, Typography, TextField, Button, CardMedia } from "@mui/material";
 import StyledRating from "../components/Rating"; 
 import axios from "axios";
+import { motion } from "framer-motion";
 
 import sqheart from "../assets/sq_hearts.png"
 import pagkaki from "../assets/aboutus.png";
@@ -44,8 +45,17 @@ const Feedback = () => {
   
   return (
     <>
+    <motion.div
+        initial={{ x: 100, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        viewport={{ once: true }}
+      >
     <Grid container spacing={4} justifyContent="center" alignItems="center" position="relative" sx={{ px: 2, height: '95vh' }}>
       <Grid item xs={12} sm={10} md={6} lg={4} sx={{ marginRight: "300px" }}>
+        <CardMedia sx={{position: "absolute", top: "35%", left: "40%"}}>
+          <img src={sqheart} alt="Heart" style={{ width: "250px" }} />
+        </CardMedia>
         <Card
           sx={{
             height:'500px',
@@ -57,6 +67,7 @@ const Feedback = () => {
             p: 2,
           }}
         >  
+        
           <CardContent>
             <Typography variant="h6" fontWeight="bold" color="green" mb={2}>
               GIVE US YOUR FEEDBACK!
@@ -113,6 +124,7 @@ const Feedback = () => {
             >
               SEND FEEDBACK
             </Button>
+            
 
             {message && <Typography sx={{ mt: 2, color: message.includes("success") ? "green" : "red" }}>{message}</Typography>}
           </CardContent>
@@ -137,6 +149,7 @@ const Feedback = () => {
         </Box>
       </Grid>
     </Grid>
+      </motion.div>
       </>
   );
 };

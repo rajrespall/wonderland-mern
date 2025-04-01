@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Box, Typography, Container, IconButton, Paper } from '@mui/material';
 import { styled } from '@mui/system';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {motion} from 'framer-motion';
+
 import MissionIcon from '../../../assets/otherElements/Mission.png';
 import VisionIcon from '../../../assets/otherElements/Vision.png';
 
@@ -119,6 +121,14 @@ const MissionVision = () => {
   };
 
   return (
+    <>
+    <motion.div
+        initial={{ x: 100, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        viewport={{ once: true }}
+      >
+
     <StyledContainer>
       <TextSection>
         <Typography
@@ -210,6 +220,8 @@ const MissionVision = () => {
       ))}
     </Box>
   </StyledContainer>
+      </motion.div>
+    </>
 );  
 };
 

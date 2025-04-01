@@ -59,7 +59,7 @@ const HeroSection = () => {
                     fontWeight: 600,
                     letterSpacing: 1
                   }}>
-                    Professional Resources
+                    Professional Institutions
                   </Typography>
                 </Box>
                 
@@ -87,9 +87,9 @@ const HeroSection = () => {
                   lineHeight: 1.7,
                   fontFamily: "Georgia, serif"
                 }}>
-                  Access valuable resources tailored to high-priority areas, determined through 
-                  comprehensive evaluations to maximize effectiveness and results. Our carefully 
-                  vetted selection of institutions meets rigorous quality standards.
+                  Access a diverse selection of institutions that provide education and therapy for individuals with Autism Spectrum Disorder (ASD). 
+                  These institutions offer specialized programs, support services, and therapeutic interventions \
+                  designed to foster learning, development, and well-being.
                 </Typography>
               </Box>
             </Grid>

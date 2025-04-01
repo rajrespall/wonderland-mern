@@ -44,7 +44,7 @@ const Feedback = () => {
   
   return (
     <>
-    <Grid container spacing={4} justifyContent="center" alignItems="center" position="relative" sx={{ px: 2, height: '92vh' }}>
+    <Grid container spacing={4} justifyContent="center" alignItems="center" position="relative" sx={{ px: 2, height: '95vh' }}>
       <Grid item xs={12} sm={10} md={6} lg={4} sx={{ marginRight: "300px" }}>
         <Card
           sx={{
@@ -65,7 +65,7 @@ const Feedback = () => {
             <StyledRating
               value={rating}
               onChange={(event, newValue) => {
-                console.log("⭐ Rating Selected:", newValue);
+                console.log("Rating Selected:", newValue);
                 setRating(newValue);
               }}
             />

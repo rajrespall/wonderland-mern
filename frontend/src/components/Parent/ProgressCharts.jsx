@@ -12,12 +12,48 @@ const COLORS = ['#0457a4', '#ff8000', '#00C49F'];
 
 const getTotalGames = (data) => {
   if (!data.length) return [];
-  const lastMonth = data[data.length - 1];
-  return [
-    { name: 'WonderPuz', value: lastMonth.wonderPuz },
-    { name: 'WonderMatch', value: lastMonth.wonderMatch },
-    { name: 'WonderCard', value: lastMonth.wonderCard }
-  ];
+  
+  // Find the most recent month with game data
+  for (let i = data.length - 1; i >= 0; i--) {
+    const month = data[i];
+    const hasData = (month.wonderPuz || 0) + (month.wonderMatch || 0) + (month.wonderCard || 0) > 0;
+    
+    if (hasData) {
+      return [
+        { name: 'WonderPuz', value: month.wonderPuz || 0 },
+        { name: 'WonderMatch', value: month.wonderMatch || 0 },
+        { name: 'WonderCard', value: month.wonderCard || 0 }
+      ].filter(item => item.value > 0);
+    }
+  }
+  
+  // If no month has data, return empty array
+  return [];
+};
+
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }) => {
+  // Only show labels for segments that are at least 5% of the total
+  if (percent < 0.05) return null;
+  
+  const RADIAN = Math.PI / 180;
+  // Position the label further from the center for better spacing
+  const radius = outerRadius * 1.1;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text 
+      x={x} 
+      y={y} 
+      fill={COLORS[index % COLORS.length]}
+      textAnchor={x > cx ? 'start' : 'end'} 
+      dominantBaseline="central"
+      fontSize={12}
+      fontWeight="bold"
+    >
+      {`${name} ${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
 };
 
 // Helper function for radar chart data
@@ -196,17 +232,37 @@ const ProgressCharts = () => {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={100}
+                label={renderCustomizedLabel}
+                outerRadius={90}
+                innerRadius={30} // Adding innerRadius makes a donut chart which often looks better
                 fill="#8884d8"
                 dataKey="value"
+                paddingAngle={1} // Add small padding between segments
               >
                 {getTotalGames(progressData).map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={COLORS[index % COLORS.length]} 
+                    strokeWidth={1}
+                  />
                 ))}
               </Pie>
-              <Tooltip />
-              <Legend />
+              <Tooltip 
+                formatter={(value, name) => [`${value} games`, name]}
+                contentStyle={{
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                  padding: "8px 12px",
+                  fontSize: "12px"
+                }}
+              />
+              <Legend 
+                layout="horizontal"
+                verticalAlign="bottom"
+                align="center"
+                iconType="circle"
+                formatter={(value) => <span style={{fontSize: "12px", color: "#333"}}>{value}</span>}
+              />
             </PieChart>
           </ResponsiveContainer>
         </Card>

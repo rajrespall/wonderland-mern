@@ -126,7 +126,7 @@ const Assessment = () => {
               mr: 2
             }}
           >
-            Now that your eyes are open, make the sun jealous with your burning passion to start the day. Make the sun jealous or stay in bed.
+          We’d appreciate it if you could answer the following questions regarding your child’s information.          
           </Typography>
         </Box>
 

@@ -147,12 +147,12 @@ const Question5 = () => {
               variant="contained"
               sx={{
                 height: '60px',
-                backgroundColor: "#0457a4",
+                backgroundColor: answers[currentQuestion] === index ? "#5da802" : "#0457a4",
                 fontFamily: "Poppins",
                 fontSize: "20px",
                 textTransform: "none",
                 borderRadius: "10px",
-                "&:hover": { backgroundColor: "#034f99" },
+                "&:hover": { backgroundColor: "#5da802" },
               }}
               onClick={() => handleAnswer(index)}
             >

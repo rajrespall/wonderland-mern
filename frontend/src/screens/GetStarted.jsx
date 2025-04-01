@@ -23,9 +23,9 @@ const GetStarted = () => {
         padding: 8,
       }}
     >
-      <Box component="img" src={Logo} alt="Logo" sx={{ width: "500px", mb: 2 }} />
+      <Box component="img" src={Logo} alt="Logo" sx={{ width: "500px", mb: 5 }} />
 
-      <Box component="img" src={Squirrel} alt="Squirrel" sx={{ width: "250px", position: 'absolute', mt: '225px', marginRight: '540px'}} />
+      <Box component="img" src={Squirrel} alt="Squirrel" sx={{ width: "250px", position: 'absolute', mt: '240px', marginRight: '540px'}} />
       <Paper
         elevation={3}
         sx={{
@@ -45,7 +45,6 @@ const GetStarted = () => {
             backgroundColor:'transparent',
             boxShadow: 'none',
             width: '280px',
-            mt: '15px',
             ml: '20px'}}>
           <CardMedia component="img" image={Image} alt="Get Started" />
         </Card>
@@ -54,11 +53,24 @@ const GetStarted = () => {
             sx={{
               color: "#0457a4",
               marginBottom: "15px",
-              marginTop: '40px',
-              fontSize: '16px',
+              marginTop: '20px',
+              fontSize: '14px',
               fontFamily: 'Poppins',
               textAlign: 'justify' }}>
-                Every child is unique, and we’re here to support their journey! Answer a quick assessment about your child’s background, behavior, symptoms, and preferences. This helps us provide personalized resources, activities, and insights tailored to their needs.           </Typography>
+                Every child is unique, and we’re here to support their journey! Answer a quick assessment about your child’s background, behavior, symptoms, and preferences. This helps us provide personalized resources, activities, and insights tailored to their needs.           
+            </Typography>
+            <Typography 
+              variant="body2"
+              sx={{
+                color: "#666",
+                marginBottom: "15px",
+                fontSize: '10px',
+                fontFamily: 'Poppins',
+                fontStyle: 'italic',
+                textAlign: 'justify' }}>
+                Disclaimer: This assessment is not a diagnostic tool and should not be used as a substitute for professional medical evaluation. 
+                Results are based solely on user input and are intended for informational purposes only. 
+          </Typography>
 
           <Button
             href="/assessment"

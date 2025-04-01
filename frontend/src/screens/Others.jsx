@@ -241,7 +241,7 @@ const OtherSymptoms = () => {
             label={answer}
             sx={{
               width: "100%",
-              backgroundColor: answers.includes(answer) ? "#0457a4" : "white",
+              backgroundColor: answers.includes(answer) ? "#5da802" : "white",
               color: answers.includes(answer) ? "white" : "black",
               border: "2px solid #5da802",
               borderRadius: "30px",

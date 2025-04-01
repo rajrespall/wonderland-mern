@@ -10,6 +10,7 @@ import Donations from '../../components/Admin/Donations';
 import Charts from '../../components/Admin/Charts';
 import Institution from '../../components/Admin/Institution';
 import Users from '../../components/Admin/Users';
+import Stats from '../../components/Admin/Stats';
 
 const drawerWidth = 220;
 
@@ -35,7 +36,7 @@ const AdminHome = () => {
       case 'Users':
         return <Users />;
       default:
-        return <Charts />;
+        return <Stats />;
     }
   };
 

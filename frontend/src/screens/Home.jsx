@@ -10,6 +10,7 @@ import TeamSection from '../components/Parent/About Us/OurTeam';
 import MissionVision from '../components/Parent/Home/OurMission';
 import Reviews from '../components/Parent/Home/AllReviews';
 import Feedback from '../components/Feedback';
+import Footer from '../components/Parent/Footer';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -56,6 +57,9 @@ const Home = () => {
 
         <Box>
           <TeamSection />
+        </Box>
+        <Box sx={{ height: '20vh' }}>
+          <Footer />
         </Box>
     </>
   );

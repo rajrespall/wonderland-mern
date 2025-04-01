@@ -191,6 +191,7 @@ const InfoCard = ({ data }) => {
             sx={{
               color: "rgba(255,255,255,0.9)",
               fontSize: "15px",
+              fontFamily: 'Poppins',
               lineHeight: 1.6,
               fontWeight: 400,
               maxWidth: "90%",
@@ -251,6 +252,7 @@ const InfoCard = ({ data }) => {
           borderRadius: "30px",
           fontSize: "15px",
           fontWeight: 700,
+          fontFamily: 'Poppins',
           textTransform: "none",
           letterSpacing: "0.5px",
           transition: "all 0.4s ease",

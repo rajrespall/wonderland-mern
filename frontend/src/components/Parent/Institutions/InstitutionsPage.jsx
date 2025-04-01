@@ -155,7 +155,7 @@ export default function InstitutionsPage() {
   }
 
   // Generate random rating for demo purposes
-  const getRandomRating = () => (3 + Math.random() * 2).toFixed(1);
+  const getRandomRating = () => (5).toFixed(1);
   
   // Sample categories for demonstration
   const categories = ["Special Education", "Therapy Center", "Educational Center", "Research Institute"];

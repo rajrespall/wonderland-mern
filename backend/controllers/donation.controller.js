@@ -69,8 +69,6 @@ class DonationController {
                     select: "firstName lastName address profilePicture"
                 });
 
-            console.log("Fetched Donations:", donations);
-
             res.status(200).json(donations);
         } catch (error) {
             console.error("Error fetching donations:", error);

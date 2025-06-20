@@ -11,8 +11,6 @@ const calculateLogicalAbility = async (userId) => {
         const wondercards = await Card.find({ userId });
         const jigsawPuzzles = await Puz.find({ userId });
 
-        console.log(`📊 Found ${wondercards.length} wondercards and ${jigsawPuzzles.length} puzzles for user ${userId}`);
-
         let totalScore = 0;
         let totalGames = wondercards.length + jigsawPuzzles.length || 1; // Prevent division by zero
 
@@ -230,8 +228,6 @@ const predictiveMotor = async (userId) => {
         // Calculate the average percentage of the score
         const avgScore = totalDaysPlayed > 0 ? (totalScore / totalDaysPlayed).toFixed(1) : 0;
 
-        console.log("📊 Predictive Motor Analysis:", { trend, consistencyRatio, avgScore });
-
         return { 
             trend, 
             avgScore, 
@@ -321,9 +317,6 @@ const predictiveSocial = async (userId) => {
         let trend = "neutral";
         if (scoreChange > 0 || timeChange < 0) trend = "improving";
         else if (scoreChange < 0 || timeChange > 0) trend = "declining";
-        
-
-        console.log("📈 Predicted Social Trend:", { trend, scoreChange, percentageChange });
 
         return { trend, scoreChange, percentageChange };
     } catch (error) {
@@ -336,19 +329,14 @@ const predictiveSocial = async (userId) => {
 
 const currentColor = async (userId) => {
     try {
-      console.log("📌 Fetching Wondercolors for User:", userId);
   
       const colors = await Color.find({ userId });
   
       if (!colors || colors.length === 0) {
-        console.log("🚨 No Wondercolor Data Found for User:", userId);
         return 0;
       }
   
       const score = Math.min(colors.length * 10, 100); // 10 pts per upload
-  
-      console.log("🟢 Fetched Wondercolors:", colors.length, "entries");
-      console.log("🎨 Current Creativity Score:", score);
   
       return score;
     } catch (error) {
@@ -363,7 +351,6 @@ const currentColor = async (userId) => {
 
 const predictiveColor = async (userId) => {
     try {
-        console.log("📌 Fetching Predictive Creativity Data for User:", userId);
 
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -371,11 +358,8 @@ const predictiveColor = async (userId) => {
         const colors = await Color.find({ userId, createdAt: { $gte: thirtyDaysAgo } }).sort({ createdAt: 1 });
 
         if (!colors || colors.length === 0) {
-            console.log("🚨 No recent Wondercolor data found for trend analysis.");
             return { trend: "neutral", avgGap: 0 };
         }
-
-        console.log("🟡 Predictive Color Data Fetched:", colors.length, "entries");
 
         let totalGap = 0;
         for (let i = 1; i < colors.length; i++) {
@@ -389,7 +373,6 @@ const predictiveColor = async (userId) => {
         if (avgGap <= 1) trend = "improving";
         else if (avgGap >= 10) trend = "declining";
 
-        console.log("📊 Predictive Creativity Analysis:", { trend, avgGap });
         return { trend, avgGap };
     } catch (error) {
         console.error("❌ Error calculating predictive creativity trend:", error);

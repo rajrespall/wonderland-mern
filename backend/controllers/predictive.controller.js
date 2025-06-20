@@ -18,14 +18,9 @@ const getLogicalAbilityScore = async (req, res) => {
             userId = decoded._id;
         }
 
-        console.log("Fetching Logical Ability and Trend Analysis for user:", userId);
-
         // Fetch Scores
         const score = await calculateLogicalAbility(userId);
         const { growthPercentage, trend } = await calculateTrend(userId);
-
-        console.log("Calculated Logical Ability Score:", score);
-        console.log("Predicted Growth Percentage:", growthPercentage, "Trend:", trend);
 
         // Send response
         res.status(200).json({
@@ -56,14 +51,9 @@ const getMotorSkillsScore = async (req, res) => {
             userId = decoded._id;
         }
 
-        console.log("Fetching Motor Skills and Predictive Analysis for user:", userId);
-
         // Fetch Scores
         const score = await currentMotor(userId);
         const trend = await predictiveMotor(userId);
-
-        console.log("Calculated Motor Skills Score:", score);
-        console.log("Predicted Trend:", trend);
 
         // Send response
         res.status(200).json({
@@ -91,13 +81,8 @@ const getSocialCommunicationScore = async (req, res) => {
             userId = decoded._id;
         }
 
-        console.log("Fetching Social Communication Scores for user:", userId);
-
         const socialScore = await currentSocial(userId);
         const trend = await predictiveSocial(userId);
-
-        console.log("Social Communication Score:", socialScore);
-        console.log("Predicted Trend:", trend);
 
         res.status(200).json({
             socialCommunicationScore: socialScore,
@@ -125,13 +110,8 @@ const getCreativityScore = async (req, res) => {
             userId = decoded._id;
         }
 
-        console.log("📌 Fetching Creativity Scores for user:", userId); // Add log
-
         const creativityScore = await currentColor(userId);
         const trend = await predictiveColor(userId);
-
-        console.log("🎨 Creativity Score:", creativityScore);
-        console.log("📈 Predictive Creativity Trend:", trend);
 
         res.status(200).json({
             creativityScore,

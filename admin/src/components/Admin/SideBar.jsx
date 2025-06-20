@@ -5,6 +5,7 @@ import logo from '../../assets/logo_blue.png';
 import useAdminStore from '../../../Store/adminStore';
 import { useNavigate } from 'react-router-dom';
 import { HomeOutlined, ReviewsOutlined, AccountBalanceOutlined, VolunteerActivismOutlined, PeopleOutlined, BarChartOutlined, LogoutOutlined } from '@mui/icons-material';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 const SidebarContainer = styled(Box)({
   width: 220,
@@ -68,6 +69,9 @@ const Sidebar = ({ currentView, onButtonClick }) => {
         <StyledButton onClick={() => onButtonClick('Donations')} active={currentView === 'Donations'}>
           <VolunteerActivismOutlined sx={{ marginRight: 1 }} /> Donations
         </StyledButton>
+        <StyledButton onClick={() => onButtonClick('Resources')} active={currentView === 'Resources'}>
+          <LibraryBooksIcon sx={{ marginRight: 1 }} /> Resources
+        </StyledButton>    
         <Divider sx={{ width: '100%', mt: 2 }} />
         <StyledButton onClick={() => onButtonClick('Users')} active={currentView === 'Users'}>
           <PeopleOutlined sx={{ marginRight: 1 }} /> Users

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Card, CardContent, CardMedia, Button, CssBaseline, IconButton, Container } from "@mui/material";
-import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos, ArrowForward } from "@mui/icons-material";
 import NavigationBar from "../../components/NavigationBar";
 import HeroSection from "../../components/Parent/Resources/HeroSection";
 import Spinner from "../../components/Spinner";
@@ -24,6 +24,7 @@ const Resources = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const scrollContainerRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -49,6 +50,14 @@ const Resources = () => {
       if (scrollContainerRef.current.scrollLeft + scrollContainerRef.current.clientWidth >= scrollContainerRef.current.scrollWidth) {
         scrollContainerRef.current.scrollLeft = 0;
       }
+    }
+  };
+
+  const handleNextCard = () => {
+    setCurrentIndex((prev) => (prev + 1) % cardData.length);
+    if (scrollContainerRef.current) {
+      const cardWidth = 400; // Approximate card width including gap
+      scrollContainerRef.current.scrollLeft = ((currentIndex + 1) % cardData.length) * cardWidth;
     }
   };
 
@@ -79,12 +88,43 @@ const Resources = () => {
                   "&::-webkit-scrollbar": { display: "none" }
                 }}
               >
-                {cardData.map((card) => (
-                  <InfoCard key={card.type} data={card} />
+                {cardData.map((card, index) => (
+                  <InfoCard 
+                    key={card.type} 
+                    data={card} 
+                    isActive={index === currentIndex}
+                  />
                 ))}
               </Box>
               <IconButton onClick={scrollRight} sx={{ position: "absolute", right: -50, zIndex: 1 }}>
                 <ArrowForwardIos />
+              </IconButton>
+              
+              {/* Single Next Arrow on the right side */}
+              <IconButton
+                onClick={handleNextCard}
+                sx={{
+                  position: 'absolute',
+                  right: 20,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  color: '#0457a4',
+                  width: 50,
+                  height: 50,
+                  opacity: 0.4,
+                  transition: 'all 0.3s ease',
+                  zIndex: 2,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                  '&:hover': {
+                    backgroundColor: '#ffffff',
+                    transform: 'translateY(-50%) scale(1.1)',
+                    opacity: 1,
+                    boxShadow: '0 6px 16px rgba(0,0,0,0.3)',
+                  }
+                }}
+              >
+                <ArrowForward fontSize="medium" />
               </IconButton>
             </Box>
           </Box>
@@ -94,7 +134,7 @@ const Resources = () => {
   );
 };
 
-const InfoCard = ({ data }) => {
+const InfoCard = ({ data, isActive }) => {
   const navigate = useNavigate();
   
   return (
@@ -148,8 +188,6 @@ const InfoCard = ({ data }) => {
         }
       }}
     >
-      
-
       {/* Main Content */}
       <Box sx={{ position: "relative", zIndex: 2 }}>
         <CardMedia 
